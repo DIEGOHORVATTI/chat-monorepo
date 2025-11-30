@@ -96,4 +96,90 @@ export const makeUserRepository = (): UserRepository => ({
 
     return !!result
   },
+
+  async updatePrivacy(userId, privacy) {
+    const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+
+    if (!user) {
+      throw new Error(`User with id ${userId} not found`)
+    }
+
+    const updatedPrivacy = {
+      ...(user.privacy as any),
+      ...privacy,
+    }
+
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        privacy: updatedPrivacy,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning()
+
+    return UserMapper.toDomain(updatedUser!)
+  },
+
+  async updateStatus(userId, status) {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        status,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning()
+
+    if (!updatedUser) {
+      throw new Error(`User with id ${userId} not found`)
+    }
+
+    return UserMapper.toDomain(updatedUser)
+  },
+
+  async setCustomStatus(userId, customStatus, emoji, expiresAt) {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        customStatus,
+        customStatusEmoji: emoji,
+        customStatusExpiresAt: expiresAt,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning()
+
+    if (!updatedUser) {
+      throw new Error(`User with id ${userId} not found`)
+    }
+
+    return UserMapper.toDomain(updatedUser)
+  },
+
+  async clearCustomStatus(userId) {
+    await db
+      .update(users)
+      .set({
+        customStatus: null,
+        customStatusEmoji: null,
+        customStatusExpiresAt: null,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+  },
+
+  async getOnlineUsers() {
+    const onlineUsers = await db
+      .select()
+      .from(users)
+      .where(eq(users.status, 'ONLINE'))
+      .limit(100)
+
+    return onlineUsers.map(UserMapper.toDomain)
+  },
+
+  async deleteUser(userId) {
+    await db.delete(users).where(eq(users.id, userId))
+  },
 })

@@ -1,6 +1,8 @@
-import { text, uuid, pgEnum, boolean, pgTable, timestamp } from 'drizzle-orm/pg-core'
+import { text, uuid, jsonb, pgEnum, boolean, pgTable, timestamp } from 'drizzle-orm/pg-core'
 
 export const userRoleEnum = pgEnum('UserRole', ['ADMIN', 'USER'])
+
+export const userStatusEnum = pgEnum('UserStatus', ['ONLINE', 'AWAY', 'BUSY', 'OFFLINE'])
 
 export const permissionTypeEnum = pgEnum('PermissionType', [
   'USER_LIST',
@@ -44,6 +46,29 @@ export const users = pgTable('User', {
   isActive: boolean('isActive').notNull().default(true),
   lastLoginAt: timestamp('lastLoginAt', { withTimezone: true }),
   timezone: text('timezone'),
+  status: userStatusEnum('status').notNull().default('OFFLINE'),
+  customStatus: text('customStatus'),
+  customStatusEmoji: text('customStatusEmoji'),
+  customStatusExpiresAt: timestamp('customStatusExpiresAt', { withTimezone: true }),
+  privacy: jsonb('privacy').$type<{
+    profilePhoto: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+    lastSeen: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+    status: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+    readReceipts: boolean
+    allowMessagesFrom: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+    allowCallsFrom: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+    blockedUsers: string[]
+  }>()
+    .notNull()
+    .default({
+      profilePhoto: 'everyone',
+      lastSeen: 'everyone',
+      status: 'everyone',
+      readReceipts: true,
+      allowMessagesFrom: 'everyone',
+      allowCallsFrom: 'everyone',
+      blockedUsers: [],
+    }),
   createdAt: timestamp('createdAt', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updatedAt', { withTimezone: true }).notNull().defaultNow(),
 })
