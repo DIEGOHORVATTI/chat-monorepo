@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-type-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 📦 Install dependencies
+        run: bun install
+
+      - name: 📦(🎨) Install frontend dependencies
+        run: bun run setup:frontend
+
+      - name: 📦(⚙️) Install backend dependencies
+        run: bun run setup:backend
+
+      - name: 🏷️ Run TypeScript type checking
+        run: bun run type-check
+
+      - name: ✨ Run Prettier check
+        run: bun run prettier:check
+
+      - name: 🔍(⚙️) Run ESLint Backend
+        run: bun run lint:backend
+
+      - name: 🔍(🎨) Run ESLint Frontend
+        run: bun run lint:frontend
+
+      - name: 🎨 Build frontend
+        run: bun run build:frontend
+
+      - name: ⚙️ Build backend
+        run: bun run build:backend
