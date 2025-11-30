@@ -18,11 +18,12 @@
     "@react-email/components": "0.5.7"
   },
   "devDependencies": {
-    "@react-email/preview-server": "4.3.1",
+    "@repo/eslint": "catalog:",
+    "@repo/typescript": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "react-email": "4.3.1",
-    "@repo/eslint": "catalog:",
-    "@repo/typescript": "catalog:"
+    "@react-email/preview-server": "4.3.1",
+    "react-email": "4.3.1"
   }
 }
