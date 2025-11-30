@@ -106,10 +106,6 @@ Thumbs.db
 *.swo
 *~
 
-# Prisma
-prisma/migrations/
-**/prisma/migrations/
-
 # Generated files
 *.generated.ts
 *.generated.js
