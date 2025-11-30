@@ -7,6 +7,7 @@ import {
   notificationResponseSchema,
   notificationsListResponseSchema,
   notificationSettingsResponseSchema,
+  notificationUnreadCountResponseSchema,
 } from './notifications.schema'
 
 const prefix = oc.route({ tags: ['Notifications'] })
@@ -77,4 +78,13 @@ export const notifications = oc.prefix('/notifications').router({
       description: 'Unmute notifications for a specific chat',
     })
     .output(messageResponseSchema),
+
+  getUnreadCount: prefix
+    .route({
+      method: 'GET',
+      path: '/unread-count',
+      summary: 'Get unread count',
+      description: 'Get total unread notifications count',
+    })
+    .output(notificationUnreadCountResponseSchema),
 })

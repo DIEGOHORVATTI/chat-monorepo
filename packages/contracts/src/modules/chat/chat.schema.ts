@@ -33,6 +33,8 @@ import type {
   UpdateGroupPermissions,
   GenerateLinkPreview,
   LinkPreview,
+  LeaveChat,
+  UnreadCount,
   ChatMessageResponse,
   ChatMessagesListResponse,
   ChatResponse,
@@ -44,6 +46,7 @@ import type {
   ForwardMessageResponse,
   GroupPermissionsResponse,
   LinkPreviewResponse,
+  UnreadCountResponse,
 } from './types'
 
 const messageSchema = z.object({
@@ -298,3 +301,22 @@ export const linkPreviewResponseSchema = z.object({
   preview: linkPreviewSchema,
   meta,
 }) satisfies z.ZodType<LinkPreviewResponse>
+
+export const leaveChatSchema = z.object({
+  chatId: z.uuid(),
+}) satisfies z.ZodType<LeaveChat>
+
+const unreadCountSchema = z.object({
+  total: z.number(),
+  chats: z.array(
+    z.object({
+      chatId: z.uuid(),
+      unreadCount: z.number(),
+    })
+  ),
+}) satisfies z.ZodType<UnreadCount>
+
+export const unreadCountResponseSchema = z.object({
+  unreadCount: unreadCountSchema,
+  meta,
+}) satisfies z.ZodType<UnreadCountResponse>

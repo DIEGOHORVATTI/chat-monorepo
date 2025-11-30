@@ -51,10 +51,6 @@ export const rejectContactRequestSchema = z.object({
   requestId: z.uuid(),
 }) satisfies z.ZodType<RejectContactRequest>
 
-export const removeContactSchema = z.object({
-  contactId: z.uuid(),
-}) satisfies z.ZodType<RemoveContact>
-
 export const updateContactSchema = z.object({
   contactId: z.uuid(),
   nickname: z.string().min(1).max(50).optional(),

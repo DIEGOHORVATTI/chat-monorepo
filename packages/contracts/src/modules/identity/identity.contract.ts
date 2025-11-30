@@ -21,6 +21,11 @@ import {
   exportUserDataSchema,
   exportDataResponseSchema,
   deleteAccountSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  refreshTokenSchema,
+  refreshTokenResponseSchema,
+  userProfileResponseSchema,
 } from './identity.schema'
 
 const prefix = oc.route({ tags: ['Identity'] })
@@ -93,6 +98,15 @@ export const identity = oc.prefix('/identity').router({
     })
     .input(userQuerySchema)
     .output(usersListResponseSchema),
+
+  getUserById: prefix
+    .route({
+      method: 'GET',
+      path: '/users/:userId',
+      summary: 'Get user by ID',
+      description: 'Get a specific user profile by ID',
+    })
+    .output(userProfileResponseSchema),
 
   createUser: prefix
     .route({
@@ -209,4 +223,34 @@ export const identity = oc.prefix('/identity').router({
     })
     .input(deleteAccountSchema)
     .output(messageResponseSchema),
+
+  forgotPassword: prefix
+    .route({
+      method: 'POST',
+      path: '/forgot-password',
+      summary: 'Forgot password',
+      description: 'Request password reset email',
+    })
+    .input(forgotPasswordSchema)
+    .output(messageResponseSchema),
+
+  resetPassword: prefix
+    .route({
+      method: 'POST',
+      path: '/reset-password',
+      summary: 'Reset password',
+      description: 'Reset password with token from email',
+    })
+    .input(resetPasswordSchema)
+    .output(messageResponseSchema),
+
+  refreshToken: prefix
+    .route({
+      method: 'POST',
+      path: '/refresh-token',
+      summary: 'Refresh token',
+      description: 'Refresh access token using refresh token',
+    })
+    .input(refreshTokenSchema)
+    .output(refreshTokenResponseSchema),
 })

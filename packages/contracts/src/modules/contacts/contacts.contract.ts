@@ -4,7 +4,6 @@ import {
   addContactSchema,
   acceptContactRequestSchema,
   rejectContactRequestSchema,
-  removeContactSchema,
   updateContactSchema,
   contactsQuerySchema,
   contactResponseSchema,

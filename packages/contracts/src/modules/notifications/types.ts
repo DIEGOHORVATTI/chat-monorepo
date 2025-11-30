@@ -68,3 +68,12 @@ export interface NotificationSettingsResponse {
   data: NotificationSettings
   meta: Meta
 }
+
+export interface NotificationUnreadCount {
+  total: number
+}
+
+export interface NotificationUnreadCountResponse {
+  unreadCount: NotificationUnreadCount
+  meta: Meta
+}

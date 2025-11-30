@@ -140,3 +140,29 @@ export interface DeleteAccount {
   password: string
   confirmation: string
 }
+
+export interface ForgotPassword {
+  email: string
+}
+
+export interface ResetPassword {
+  token: string
+  newPassword: string
+  confirmPassword: string
+}
+
+export interface RefreshToken {
+  refreshToken: string
+}
+
+export interface RefreshTokenResponse {
+  accessToken: string
+  refreshToken: string
+  expiresIn: number
+  meta: Meta
+}
+
+export interface UserProfileResponse {
+  user: Omit<User, 'password'>
+  meta: Meta
+}

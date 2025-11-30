@@ -274,3 +274,20 @@ export interface LinkPreviewResponse {
   preview: LinkPreview
   meta: Meta
 }
+
+export interface LeaveChat {
+  chatId: string
+}
+
+export interface UnreadCount {
+  total: number
+  chats: Array<{
+    chatId: string
+    unreadCount: number
+  }>
+}
+
+export interface UnreadCountResponse {
+  unreadCount: UnreadCount
+  meta: Meta
+}

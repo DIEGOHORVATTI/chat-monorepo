@@ -36,6 +36,8 @@ import {
   groupPermissionsResponseSchema,
   generateLinkPreviewSchema,
   linkPreviewResponseSchema,
+  leaveChatSchema,
+  unreadCountResponseSchema,
 } from './chat.schema'
 import { messageResponseSchema as baseMessageResponseSchema } from '../identity/identity.schema'
 
@@ -344,4 +346,13 @@ export const chat = oc.prefix('/chat').router({
     })
     .input(generateLinkPreviewSchema)
     .output(linkPreviewResponseSchema),
+
+  getUnreadCount: prefix
+    .route({
+      method: 'GET',
+      path: '/chats/unread-count',
+      summary: 'Get unread count',
+      description: 'Get total unread message count across all chats',
+    })
+    .output(unreadCountResponseSchema),
 })

@@ -18,6 +18,9 @@ import type {
   OnlineUser,
   ExportUserData,
   DeleteAccount,
+  ForgotPassword,
+  ResetPassword,
+  RefreshToken,
   MessageResponse,
   RegisterResponse,
   UserResponse,
@@ -25,6 +28,8 @@ import type {
   OnlineUsersResponse,
   StatusResponse,
   ExportDataResponse,
+  RefreshTokenResponse,
+  UserProfileResponse,
 } from './types'
 
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
@@ -163,3 +168,29 @@ export const exportDataResponseSchema = z.object({
   expiresAt: z.coerce.date(),
   meta,
 }) satisfies z.ZodType<ExportDataResponse>
+
+export const forgotPasswordSchema = z.object({
+  email: z.email(),
+}) satisfies z.ZodType<ForgotPassword>
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  newPassword: z.string().min(8),
+  confirmPassword: z.string().min(8),
+}) satisfies z.ZodType<ResetPassword>
+
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string().min(1),
+}) satisfies z.ZodType<RefreshToken>
+
+export const refreshTokenResponseSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  expiresIn: z.number(),
+  meta,
+}) satisfies z.ZodType<RefreshTokenResponse>
+
+export const userProfileResponseSchema = z.object({
+  user: userSchema.omit({ password: true }),
+  meta,
+}) satisfies z.ZodType<UserProfileResponse>

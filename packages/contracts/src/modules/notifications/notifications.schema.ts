@@ -10,6 +10,8 @@ import type {
   NotificationResponse,
   NotificationsListResponse,
   NotificationSettingsResponse,
+  NotificationUnreadCount,
+  NotificationUnreadCountResponse,
 } from './types'
 
 const notificationTypeValues: [NotificationType, ...NotificationType[]] = [
@@ -81,3 +83,12 @@ export const notificationSettingsResponseSchema = z.object({
   data: notificationSettingsSchema,
   meta: metaSchema,
 }) satisfies z.ZodType<NotificationSettingsResponse>
+
+const notificationUnreadCountSchema = z.object({
+  total: z.number(),
+}) satisfies z.ZodType<NotificationUnreadCount>
+
+export const notificationUnreadCountResponseSchema = z.object({
+  unreadCount: notificationUnreadCountSchema,
+  meta: metaSchema,
+}) satisfies z.ZodType<NotificationUnreadCountResponse>
