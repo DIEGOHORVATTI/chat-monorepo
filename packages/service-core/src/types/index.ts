@@ -1,4 +1,4 @@
-import type { User } from '@repo/contracts'
+import type { EncodedJWTUser } from '@repo/contracts'
 import type {
   RequestHeadersPluginContext,
   ResponseHeadersPluginContext,
@@ -11,14 +11,6 @@ export * from './env'
  * Contexto básico do ORPC
  */
 export type ORPContext = RequestHeadersPluginContext & ResponseHeadersPluginContext
-
-/**
- * Estrutura do JWT do usuário
- */
-export type EncodedJWTUser = Pick<User, 'id' | 'email' | 'name' | 'permissions'> & {
-  exp?: number // Expiration time
-  iat?: number // Issued at time
-}
 
 /**
  * Contexto de requisição com usuário autenticado

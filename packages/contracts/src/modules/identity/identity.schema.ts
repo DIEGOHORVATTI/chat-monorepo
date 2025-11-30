@@ -23,13 +23,13 @@ import type {
   RefreshToken,
   MessageResponse,
   RegisterResponse,
-  UserResponse,
   UsersListResponse,
   OnlineUsersResponse,
   StatusResponse,
   ExportDataResponse,
   RefreshTokenResponse,
   UserProfileResponse,
+  EncodedJWTUser,
 } from './types'
 
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
@@ -117,9 +117,12 @@ export const registerResponseSchema = z.object({
   message: z.string(),
 }) satisfies z.ZodType<RegisterResponse>
 
-export const userResponseSchema = z.object({
-  user: userSchema.omit({ password: true }),
-}) satisfies z.ZodType<UserResponse>
+export const userResponseSchema = userSchema.pick({
+  id: true,
+  name: true,
+  email: true,
+  permissions: true,
+}) satisfies z.ZodType<EncodedJWTUser>
 
 export const usersListResponseSchema = z.object({
   users: z.array(userSchema.omit({ password: true })),

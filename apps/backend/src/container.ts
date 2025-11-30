@@ -4,7 +4,6 @@ import {
   makeUserRepository,
   makeEmailVerificationRepository,
 } from '@identity/infrastructure/repositories'
-// Identity Module Dependencies
 import {
   makeLogin,
   makeRegister,
@@ -13,18 +12,9 @@ import {
   makeResendVerification,
 } from '@identity/application'
 
-// Animal Module Dependencies
-
-// =================================================================
-// INSTANTIATE REPOSITORIES AND SERVICES
-// =================================================================
 const userRepository = makeUserRepository()
 const emailVerificationRepository = makeEmailVerificationRepository()
 const emailNotificationService = makeEmailNotificationService()
-
-// =================================================================
-// EXPORT USE CASES
-// =================================================================
 
 // Identity Use Cases
 export const login = makeLogin(userRepository, jwtService)

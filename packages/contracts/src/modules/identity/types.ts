@@ -132,8 +132,9 @@ export interface RegisterResponse {
   message: string
 }
 
-export interface UserResponse {
-  user: Omit<User, 'password'>
+export interface EncodedJWTUser extends Pick<User, 'id' | 'email' | 'name' | 'permissions'> {
+  exp?: number // Expiration time
+  iat?: number // Issued at time
 }
 
 export interface UsersListResponse {
