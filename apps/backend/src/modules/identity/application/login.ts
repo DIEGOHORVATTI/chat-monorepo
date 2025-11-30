@@ -29,7 +29,6 @@ export const makeLogin =
       id: updatedUser.id,
       email: updatedUser.email,
       name: updatedUser.name,
-      role: updatedUser.role,
       permissions: updatedUser.permissions,
     })
 

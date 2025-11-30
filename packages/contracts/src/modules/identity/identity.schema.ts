@@ -51,6 +51,7 @@ export const userSchema = z.object({
   password: z.string().min(6),
   avatarUrl: z.url().nullable().optional(),
   isEmailVerified: z.boolean().optional(),
+  isActive: z.boolean(),
   lastLoginAt: z.date().nullable().optional(),
   timezone: z.string().nullable().optional(),
   permissions: z.array(z.enum(PermissionType)),

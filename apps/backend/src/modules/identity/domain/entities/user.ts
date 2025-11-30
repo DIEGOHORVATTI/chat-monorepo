@@ -1,10 +1,5 @@
 import type { Entity } from '@/core/domain/entity'
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
-
 export enum PermissionType {
   USER_LIST = 'USER_LIST',
   USER_CREATE = 'USER_CREATE',
@@ -39,7 +34,6 @@ export type UserProps = {
   email: string
   name: string
   password: string
-  role: UserRole
   avatarUrl?: string | null
   isActive: boolean
   isEmailVerified?: boolean
@@ -54,8 +48,8 @@ export type User = Entity<UserProps>
 
 export type EncodedJWTUser = {
   id: string
+  name: string
   email: string
-  role: UserRole
   permissions: PermissionType[]
 }
 
