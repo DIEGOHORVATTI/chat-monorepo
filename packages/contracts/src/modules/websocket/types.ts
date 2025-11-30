@@ -211,6 +211,74 @@ export interface SyncMissedEventsEvent extends BaseWebSocketMessage {
   }
 }
 
+export interface CallIncomingEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.CALL_INCOMING
+  data: {
+    callId: string
+    chatId?: string | null
+    type: 'audio' | 'video'
+    initiatorId: string
+    initiatorName: string
+    initiatorAvatar?: string | null
+    participants: Array<{
+      userId: string
+      userName: string
+    }>
+  }
+}
+
+export interface CallStartedEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.CALL_STARTED
+  data: {
+    callId: string
+    startedAt: Date
+  }
+}
+
+export interface CallEndedEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.CALL_ENDED
+  data: {
+    callId: string
+    duration: number
+    endedBy?: string
+    endedAt: Date
+  }
+}
+
+export interface CallParticipantJoinedEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.CALL_PARTICIPANT_JOINED
+  data: {
+    callId: string
+    userId: string
+    userName: string
+    userAvatar?: string | null
+    joinedAt: Date
+  }
+}
+
+export interface CallParticipantLeftEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.CALL_PARTICIPANT_LEFT
+  data: {
+    callId: string
+    userId: string
+    userName: string
+    leftAt: Date
+    duration: number
+  }
+}
+
+export interface CallParticipantMediaChangedEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.CALL_PARTICIPANT_MEDIA_CHANGED
+  data: {
+    callId: string
+    userId: string
+    userName: string
+    isMuted: boolean
+    isVideoEnabled: boolean
+    isSharingScreen: boolean
+  }
+}
+
 export interface ConnectionAckEvent extends BaseWebSocketMessage {
   event: WebSocketEventType.CONNECTION_ACK
   data: {
@@ -266,3 +334,9 @@ export type WebSocketEvent =
   | MessageSeenEvent
   | ReconnectEvent
   | SyncMissedEventsEvent
+  | CallIncomingEvent
+  | CallStartedEvent
+  | CallEndedEvent
+  | CallParticipantJoinedEvent
+  | CallParticipantLeftEvent
+  | CallParticipantMediaChangedEvent

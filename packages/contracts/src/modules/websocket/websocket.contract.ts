@@ -130,12 +130,22 @@ export const websocket = oc.prefix('/ws').router({
  * - MESSAGE_UPDATED: Message was edited
  * - MESSAGE_DELETED: Message was deleted
  * - MESSAGE_STATUS_CHANGED: Message delivery/read status changed
+ * - MESSAGE_DELIVERED: Message delivered to server
+ * - MESSAGE_SEEN: Message seen by recipient
  * - USER_TYPING: Another user is typing
  * - USER_ONLINE: User came online
  * - USER_OFFLINE: User went offline
  * - CHAT_UPDATED: Chat details changed
  * - PARTICIPANT_JOINED: New participant joined
  * - PARTICIPANT_LEFT: Participant left chat
+ * - CALL_INCOMING: Incoming call notification
+ * - CALL_STARTED: Call has started
+ * - CALL_ENDED: Call has ended
+ * - CALL_PARTICIPANT_JOINED: Participant joined call
+ * - CALL_PARTICIPANT_LEFT: Participant left call
+ * - CALL_PARTICIPANT_MEDIA_CHANGED: Participant changed media settings
+ * - RECONNECT: Reconnection event
+ * - SYNC_MISSED_EVENTS: Sync events missed during disconnect
  * - ERROR: Error occurred
  * - PONG: Response to ping
  *
@@ -159,12 +169,22 @@ export const websocketEvents = {
     WebSocketEventType.MESSAGE_UPDATED,
     WebSocketEventType.MESSAGE_DELETED,
     WebSocketEventType.MESSAGE_STATUS_CHANGED,
+    WebSocketEventType.MESSAGE_DELIVERED,
+    WebSocketEventType.MESSAGE_SEEN,
     WebSocketEventType.USER_TYPING,
     WebSocketEventType.USER_ONLINE,
     WebSocketEventType.USER_OFFLINE,
     WebSocketEventType.CHAT_UPDATED,
     WebSocketEventType.PARTICIPANT_JOINED,
     WebSocketEventType.PARTICIPANT_LEFT,
+    WebSocketEventType.CALL_INCOMING,
+    WebSocketEventType.CALL_STARTED,
+    WebSocketEventType.CALL_ENDED,
+    WebSocketEventType.CALL_PARTICIPANT_JOINED,
+    WebSocketEventType.CALL_PARTICIPANT_LEFT,
+    WebSocketEventType.CALL_PARTICIPANT_MEDIA_CHANGED,
+    WebSocketEventType.RECONNECT,
+    WebSocketEventType.SYNC_MISSED_EVENTS,
     WebSocketEventType.ERROR,
     WebSocketEventType.PONG,
   ] as const,

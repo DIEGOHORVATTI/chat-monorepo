@@ -22,6 +22,13 @@ export enum WebSocketEventType {
   PARTICIPANT_JOINED = 'PARTICIPANT_JOINED',
   PARTICIPANT_LEFT = 'PARTICIPANT_LEFT',
 
+  CALL_INCOMING = 'CALL_INCOMING',
+  CALL_STARTED = 'CALL_STARTED',
+  CALL_ENDED = 'CALL_ENDED',
+  CALL_PARTICIPANT_JOINED = 'CALL_PARTICIPANT_JOINED',
+  CALL_PARTICIPANT_LEFT = 'CALL_PARTICIPANT_LEFT',
+  CALL_PARTICIPANT_MEDIA_CHANGED = 'CALL_PARTICIPANT_MEDIA_CHANGED',
+
   CONNECTION_ACK = 'CONNECTION_ACK',
   RECONNECT = 'RECONNECT',
   SYNC_MISSED_EVENTS = 'SYNC_MISSED_EVENTS',
@@ -278,6 +285,76 @@ export const syncMissedEventsEventSchema = baseWebSocketMessageSchema.extend({
   }),
 })
 
+export const callIncomingEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CALL_INCOMING),
+  data: z.object({
+    callId: z.string().uuid(),
+    chatId: z.string().uuid().nullable().optional(),
+    type: z.enum(['audio', 'video']),
+    initiatorId: z.string().uuid(),
+    initiatorName: z.string(),
+    initiatorAvatar: z.string().url().nullable().optional(),
+    participants: z.array(
+      z.object({
+        userId: z.string().uuid(),
+        userName: z.string(),
+      })
+    ),
+  }),
+})
+
+export const callStartedEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CALL_STARTED),
+  data: z.object({
+    callId: z.string().uuid(),
+    startedAt: z.coerce.date(),
+  }),
+})
+
+export const callEndedEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CALL_ENDED),
+  data: z.object({
+    callId: z.string().uuid(),
+    duration: z.number(),
+    endedBy: z.string().uuid().optional(),
+    endedAt: z.coerce.date(),
+  }),
+})
+
+export const callParticipantJoinedEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CALL_PARTICIPANT_JOINED),
+  data: z.object({
+    callId: z.string().uuid(),
+    userId: z.string().uuid(),
+    userName: z.string(),
+    userAvatar: z.string().url().nullable().optional(),
+    joinedAt: z.coerce.date(),
+  }),
+})
+
+export const callParticipantLeftEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CALL_PARTICIPANT_LEFT),
+  data: z.object({
+    callId: z.string().uuid(),
+    userId: z.string().uuid(),
+    userName: z.string(),
+    leftAt: z.coerce.date(),
+    duration: z.number(),
+  }),
+})
+
+export const callParticipantMediaChangedEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CALL_PARTICIPANT_MEDIA_CHANGED),
+  data: z.object({
+    callId: z.string().uuid(),
+    userId: z.string().uuid(),
+    userName: z.string(),
+    isMuted: z.boolean(),
+    isVideoEnabled: z.boolean(),
+    isSharingScreen: z.boolean(),
+  }),
+})
+
 export const webSocketEventSchema = z.discriminatedUnion('event', [
   joinChatEventSchema,
   leaveChatEventSchema,
@@ -305,4 +382,10 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
   messageSeenEventSchema,
   reconnectEventSchema,
   syncMissedEventsEventSchema,
+  callIncomingEventSchema,
+  callStartedEventSchema,
+  callEndedEventSchema,
+  callParticipantJoinedEventSchema,
+  callParticipantLeftEventSchema,
+  callParticipantMediaChangedEventSchema,
 ])
