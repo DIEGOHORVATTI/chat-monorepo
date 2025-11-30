@@ -1,5 +1,7 @@
 import { identity, chat, calls, websocket, notifications, media, moderation } from './modules'
 
+export * from './modules'
+
 export const contracts = {
   identity,
   chat,

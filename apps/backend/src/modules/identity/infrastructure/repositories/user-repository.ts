@@ -1,14 +1,14 @@
 import type { UserRepository } from '@identity/domain/repositories'
 
+import { eq, count } from 'drizzle-orm'
 import { paginate } from '@/utils/paginate'
-import { prisma } from '@/core/infra/db/prisma'
+import { db } from '@/core/infra/db/drizzle'
+import { users } from '@/core/infra/db/schema'
 import { UserMapper } from '@identity/infrastructure/mappers'
 
 export const makeUserRepository = (): UserRepository => ({
   async findByEmail(email) {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
+    const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1)
 
     if (!user) return null
 
@@ -16,9 +16,7 @@ export const makeUserRepository = (): UserRepository => ({
   },
 
   async findById(id) {
-    const user = await prisma.user.findUnique({
-      where: { id },
-    })
+    const [user] = await db.select().from(users).where(eq(users.id, id)).limit(1)
 
     if (!user) return null
 
@@ -26,45 +24,52 @@ export const makeUserRepository = (): UserRepository => ({
   },
 
   async findAll(page = 1, limit = 20) {
-    const [prismaUsers, total] = await Promise.all([
-      prisma.user.findMany({
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
+    const offset = (page - 1) * limit
 
-      prisma.user.count(),
+    const [allUsers, [totalResult]] = await Promise.all([
+      db.select().from(users).limit(limit).offset(offset),
+      db.select({ count: count() }).from(users),
     ])
 
-    return paginate(prismaUsers.map(UserMapper.toDomain), total, { page, limit })
+    return paginate(allUsers.map(UserMapper.toDomain), totalResult?.count ?? 0, { page, limit })
   },
 
   async save(user) {
     const data = UserMapper.toPersistence(user)
-    await prisma.user.upsert({
-      where: { id: user.id },
-      update: data,
-      create: data,
-    })
+
+    await db
+      .insert(users)
+      .values(data)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...data,
+          updatedAt: new Date(),
+        },
+      })
   },
 
   async updateLastLogin(id) {
-    const user = await prisma.user.update({
-      where: { id },
-      data: {
-        lastLoginAt: new Date(),
-      },
-    })
+    const [updatedUser] = await db
+      .update(users)
+      .set({ lastLoginAt: new Date() })
+      .where(eq(users.id, id))
+      .returning()
 
-    return UserMapper.toDomain(user)
+    if (!updatedUser) {
+      throw new Error(`User with id ${id} not found`)
+    }
+
+    return UserMapper.toDomain(updatedUser)
   },
 
   async markEmailAsVerified(id) {
-    await prisma.user.update({
-      where: { id },
-      data: {
+    await db
+      .update(users)
+      .set({
         isEmailVerified: true,
         updatedAt: new Date(),
-      },
-    })
+      })
+      .where(eq(users.id, id))
   },
 })

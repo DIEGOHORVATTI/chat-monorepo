@@ -15,7 +15,7 @@ export type ORPContext = RequestHeadersPluginContext & ResponseHeadersPluginCont
 /**
  * Estrutura do JWT do usuário
  */
-export type EncodedJWTUser = Pick<User, 'id' | 'email' | 'name' | 'role' | 'permissions'> & {
+export type EncodedJWTUser = Pick<User, 'id' | 'email' | 'name' | 'permissions'> & {
   exp?: number // Expiration time
   iat?: number // Issued at time
 }
