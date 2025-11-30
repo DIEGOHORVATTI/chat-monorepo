@@ -114,6 +114,70 @@ export interface TypingIndicator {
   isTyping: boolean
 }
 
+export interface SearchMessagesQuery extends PaginationQuery {
+  query: string
+  chatId?: string
+  fromDate?: Date
+  toDate?: Date
+}
+
+export interface SearchChatsQuery extends PaginationQuery {
+  query: string
+  type?: ChatType
+}
+
+export interface SearchUsersQuery extends PaginationQuery {
+  query: string
+  excludeBlocked?: boolean
+}
+
+export interface Reaction {
+  id: string
+  messageId: string
+  userId: string
+  emoji: string
+  createdAt: Date
+}
+
+export interface AddReaction {
+  messageId: string
+  emoji: string
+}
+
+export interface RemoveReaction {
+  messageId: string
+  reactionId: string
+}
+
+export interface PinMessage {
+  messageId: string
+  chatId: string
+}
+
+export interface UnpinMessage {
+  messageId: string
+  chatId: string
+}
+
+export interface UpdateParticipantRole {
+  chatId: string
+  participantId: string
+  role: 'admin' | 'member'
+}
+
+export interface ChatSettings {
+  description?: string
+  rules?: string
+  allowMemberInvites: boolean
+  allowMemberMessages: boolean
+  muteNotifications: boolean
+}
+
+export interface UpdateChatSettings {
+  chatId: string
+  settings: Partial<ChatSettings>
+}
+
 export interface ChatMessageResponse {
   message: Message
 }
@@ -134,4 +198,25 @@ export interface ChatsListResponse {
 
 export interface ChatParticipantsResponse {
   participants: ChatParticipant[]
+}
+
+export interface ReactionsResponse {
+  reactions: Reaction[]
+}
+
+export interface ChatSettingsResponse {
+  settings: ChatSettings
+}
+
+export interface UserSearchResult {
+  id: string
+  name: string
+  email: string
+  avatarUrl?: string | null
+  isOnline: boolean
+}
+
+export interface UsersSearchResponse {
+  users: UserSearchResult[]
+  meta: Meta
 }

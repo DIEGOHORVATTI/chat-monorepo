@@ -17,6 +17,18 @@ import {
   updateChatSchema,
   chatParticipantsResponseSchema,
   typingIndicatorSchema,
+  searchMessagesQuerySchema,
+  searchChatsQuerySchema,
+  searchUsersQuerySchema,
+  addReactionSchema,
+  removeReactionSchema,
+  pinMessageSchema,
+  unpinMessageSchema,
+  updateParticipantRoleSchema,
+  updateChatSettingsSchema,
+  reactionsResponseSchema,
+  chatSettingsResponseSchema,
+  usersSearchResponseSchema,
 } from './chat.schema'
 import { messageResponseSchema as baseMessageResponseSchema } from '../identity/identity.schema'
 
@@ -168,4 +180,112 @@ export const chat = oc.prefix('/chat').router({
     })
     .input(typingIndicatorSchema)
     .output(baseMessageResponseSchema),
+
+  searchMessages: prefix
+    .route({
+      method: 'GET',
+      path: '/search/messages',
+      summary: 'Search messages',
+      description: 'Search messages by content',
+    })
+    .input(searchMessagesQuerySchema)
+    .output(chatMessagesListResponseSchema),
+
+  searchChats: prefix
+    .route({
+      method: 'GET',
+      path: '/search/chats',
+      summary: 'Search chats',
+      description: 'Search chats by name',
+    })
+    .input(searchChatsQuerySchema)
+    .output(chatsListResponseSchema),
+
+  searchUsers: prefix
+    .route({
+      method: 'GET',
+      path: '/search/users',
+      summary: 'Search users',
+      description: 'Search users to start chat',
+    })
+    .input(searchUsersQuerySchema)
+    .output(usersSearchResponseSchema),
+
+  addReaction: prefix
+    .route({
+      method: 'POST',
+      path: '/messages/:messageId/reactions',
+      summary: 'Add reaction',
+      description: 'Add emoji reaction to message',
+    })
+    .input(addReactionSchema)
+    .output(reactionsResponseSchema),
+
+  removeReaction: prefix
+    .route({
+      method: 'DELETE',
+      path: '/messages/:messageId/reactions/:reactionId',
+      summary: 'Remove reaction',
+      description: 'Remove reaction from message',
+    })
+    .input(removeReactionSchema)
+    .output(baseMessageResponseSchema),
+
+  getReactions: prefix
+    .route({
+      method: 'GET',
+      path: '/messages/:messageId/reactions',
+      summary: 'Get reactions',
+      description: 'Get all reactions for a message',
+    })
+    .output(reactionsResponseSchema),
+
+  pinMessage: prefix
+    .route({
+      method: 'POST',
+      path: '/messages/:messageId/pin',
+      summary: 'Pin message',
+      description: 'Pin an important message in chat',
+    })
+    .input(pinMessageSchema)
+    .output(baseMessageResponseSchema),
+
+  unpinMessage: prefix
+    .route({
+      method: 'DELETE',
+      path: '/messages/:messageId/pin',
+      summary: 'Unpin message',
+      description: 'Unpin a message',
+    })
+    .input(unpinMessageSchema)
+    .output(baseMessageResponseSchema),
+
+  updateParticipantRole: prefix
+    .route({
+      method: 'PATCH',
+      path: '/chats/:chatId/participants/:participantId/role',
+      summary: 'Update participant role',
+      description: 'Promote or demote participant to/from admin',
+    })
+    .input(updateParticipantRoleSchema)
+    .output(baseMessageResponseSchema),
+
+  getChatSettings: prefix
+    .route({
+      method: 'GET',
+      path: '/chats/:chatId/settings',
+      summary: 'Get chat settings',
+      description: 'Get group chat settings',
+    })
+    .output(chatSettingsResponseSchema),
+
+  updateChatSettings: prefix
+    .route({
+      method: 'PATCH',
+      path: '/chats/:chatId/settings',
+      summary: 'Update chat settings',
+      description: 'Update group description, rules, permissions',
+    })
+    .input(updateChatSettingsSchema)
+    .output(chatSettingsResponseSchema),
 })

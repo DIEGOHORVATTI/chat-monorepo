@@ -143,3 +143,39 @@ export interface WebRTCSignalingResponse {
   success: boolean
   message?: string
 }
+
+export interface CallRecording {
+  id: string
+  callId: string
+  startedAt: Date
+  endedAt?: Date | null
+  duration?: number | null
+  fileUrl?: string | null
+  fileSize?: number | null
+  status: 'recording' | 'processing' | 'completed' | 'failed'
+  createdAt: Date
+}
+
+export interface StartRecording {
+  callId: string
+}
+
+export interface StopRecording {
+  callId: string
+  recordingId: string
+}
+
+export interface CallRecordingsQuery extends PaginationQuery {
+  callId?: string
+  startDate?: Date
+  endDate?: Date
+}
+
+export interface RecordingResponse {
+  recording: CallRecording
+}
+
+export interface RecordingsListResponse {
+  recordings: CallRecording[]
+  meta: Meta
+}

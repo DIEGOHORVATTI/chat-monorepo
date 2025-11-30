@@ -9,6 +9,10 @@ import type {
   EndCall,
   UpdateParticipantMedia,
   AddParticipantsToCall,
+  CallRecording,
+  StartRecording,
+  StopRecording,
+  CallRecordingsQuery,
   CallQuery,
   CallHistoryQuery,
   WebRTCOffer,
@@ -19,8 +23,9 @@ import type {
   CallParticipantResponse,
   CallParticipantsResponse,
   WebRTCSignalingResponse,
+  RecordingResponse,
+  RecordingsListResponse,
 } from './types'
-
 
 const callParticipantSchema = z.object({
   id: z.uuid(),
@@ -140,3 +145,39 @@ export const webRTCSignalingResponseSchema = z.object({
   success: z.boolean(),
   message: z.string().optional(),
 }) satisfies z.ZodType<WebRTCSignalingResponse>
+
+const callRecordingSchema = z.object({
+  id: z.uuid(),
+  callId: z.uuid(),
+  startedAt: z.date(),
+  endedAt: z.date().nullable().optional(),
+  duration: z.number().nullable().optional(),
+  fileUrl: z.url().nullable().optional(),
+  fileSize: z.number().nullable().optional(),
+  status: z.enum(['recording', 'processing', 'completed', 'failed']),
+  createdAt: z.date(),
+}) satisfies z.ZodType<CallRecording>
+
+export const startRecordingSchema = z.object({
+  callId: z.uuid(),
+}) satisfies z.ZodType<StartRecording>
+
+export const stopRecordingSchema = z.object({
+  callId: z.uuid(),
+  recordingId: z.uuid(),
+}) satisfies z.ZodType<StopRecording>
+
+export const callRecordingsQuerySchema = paginationSchema.extend({
+  callId: z.uuid().optional(),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+}) satisfies z.ZodType<CallRecordingsQuery>
+
+export const recordingResponseSchema = z.object({
+  recording: callRecordingSchema,
+}) satisfies z.ZodType<RecordingResponse>
+
+export const recordingsListResponseSchema = z.object({
+  recordings: z.array(callRecordingSchema),
+  meta,
+}) satisfies z.ZodType<RecordingsListResponse>

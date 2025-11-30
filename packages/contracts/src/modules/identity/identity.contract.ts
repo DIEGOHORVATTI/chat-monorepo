@@ -14,6 +14,10 @@ import {
   privacyUpdateSchema,
   updateProfileSchema,
   changePasswordSchema,
+  updateStatusSchema,
+  setCustomStatusSchema,
+  onlineUsersResponseSchema,
+  statusResponseSchema,
 } from './identity.schema'
 
 const prefix = oc.route({ tags: ['Identity'] })
@@ -144,4 +148,42 @@ export const identity = oc.prefix('/identity').router({
       description: 'Unblock previously blocked user',
     })
     .output(messageResponseSchema),
+
+  updateStatus: prefix
+    .route({
+      method: 'PATCH',
+      path: '/me/status',
+      summary: 'Update status',
+      description: 'Update user status (online/away/busy/offline)',
+    })
+    .input(updateStatusSchema)
+    .output(statusResponseSchema),
+
+  setCustomStatus: prefix
+    .route({
+      method: 'PATCH',
+      path: '/me/custom-status',
+      summary: 'Set custom status',
+      description: 'Set custom status message with optional emoji and expiration',
+    })
+    .input(setCustomStatusSchema)
+    .output(statusResponseSchema),
+
+  clearCustomStatus: prefix
+    .route({
+      method: 'DELETE',
+      path: '/me/custom-status',
+      summary: 'Clear custom status',
+      description: 'Remove custom status message',
+    })
+    .output(messageResponseSchema),
+
+  getOnlineUsers: prefix
+    .route({
+      method: 'GET',
+      path: '/users/online',
+      summary: 'Get online users',
+      description: 'List all online users',
+    })
+    .output(onlineUsersResponseSchema),
 })

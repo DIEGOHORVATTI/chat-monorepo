@@ -15,6 +15,11 @@ import {
   webRTCAnswerSchema,
   webRTCIceCandidateSchema,
   webRTCSignalingResponseSchema,
+  startRecordingSchema,
+  stopRecordingSchema,
+  callRecordingsQuerySchema,
+  recordingResponseSchema,
+  recordingsListResponseSchema,
 } from './calls.schema'
 import { messageResponseSchema } from '../identity/identity.schema'
 
@@ -138,4 +143,34 @@ export const calls = oc.prefix('/calls').router({
     })
     .input(webRTCIceCandidateSchema)
     .output(webRTCSignalingResponseSchema),
+
+  startRecording: prefix
+    .route({
+      method: 'POST',
+      path: '/:callId/recording/start',
+      summary: 'Start recording',
+      description: 'Start recording a call',
+    })
+    .input(startRecordingSchema)
+    .output(recordingResponseSchema),
+
+  stopRecording: prefix
+    .route({
+      method: 'POST',
+      path: '/:callId/recording/stop',
+      summary: 'Stop recording',
+      description: 'Stop recording a call',
+    })
+    .input(stopRecordingSchema)
+    .output(messageResponseSchema),
+
+  getRecordings: prefix
+    .route({
+      method: 'GET',
+      path: '/recordings',
+      summary: 'Get recordings',
+      description: 'Get call recordings with pagination',
+    })
+    .input(callRecordingsQuerySchema)
+    .output(recordingsListResponseSchema),
 })

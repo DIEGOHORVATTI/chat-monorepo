@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { meta, paginationSchema } from '../../shared/base.schema'
-import { PermissionType } from './types'
+import { PermissionType, UserStatus } from './types'
 import type {
   User,
   Login,
@@ -13,10 +13,15 @@ import type {
   ChangePassword,
   PrivacySettings,
   PrivacyUpdate,
+  UpdateStatus,
+  SetCustomStatus,
+  OnlineUser,
   MessageResponse,
   RegisterResponse,
   UserResponse,
   UsersListResponse,
+  OnlineUsersResponse,
+  StatusResponse,
 } from './types'
 
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
@@ -111,3 +116,32 @@ export const usersListResponseSchema = z.object({
   users: z.array(userSchema.omit({ password: true })),
   meta,
 }) satisfies z.ZodType<UsersListResponse>
+
+export const updateStatusSchema = z.object({
+  status: z.nativeEnum(UserStatus),
+}) satisfies z.ZodType<UpdateStatus>
+
+export const setCustomStatusSchema = z.object({
+  customStatus: z.string().max(100),
+  emoji: z.string().optional(),
+  expiresAt: z.date().optional(),
+}) satisfies z.ZodType<SetCustomStatus>
+
+const onlineUserSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  avatarUrl: z.url().nullable().optional(),
+  status: z.nativeEnum(UserStatus),
+  customStatus: z.string().optional(),
+  lastSeen: z.date(),
+}) satisfies z.ZodType<OnlineUser>
+
+export const onlineUsersResponseSchema = z.object({
+  users: z.array(onlineUserSchema),
+  meta,
+}) satisfies z.ZodType<OnlineUsersResponse>
+
+export const statusResponseSchema = z.object({
+  status: z.nativeEnum(UserStatus),
+  customStatus: z.string().optional(),
+}) satisfies z.ZodType<StatusResponse>

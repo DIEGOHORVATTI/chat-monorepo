@@ -16,13 +16,26 @@ import type {
   RemoveParticipant,
   UpdateChat,
   TypingIndicator,
+  SearchMessagesQuery,
+  SearchChatsQuery,
+  SearchUsersQuery,
+  Reaction,
+  AddReaction,
+  RemoveReaction,
+  PinMessage,
+  UnpinMessage,
+  UpdateParticipantRole,
+  ChatSettings,
+  UpdateChatSettings,
   ChatMessageResponse,
   ChatMessagesListResponse,
   ChatResponse,
   ChatsListResponse,
   ChatParticipantsResponse,
+  ReactionsResponse,
+  ChatSettingsResponse,
+  UsersSearchResponse,
 } from './types'
-
 
 const messageSchema = z.object({
   id: z.uuid(),
@@ -117,6 +130,70 @@ export const typingIndicatorSchema = z.object({
   isTyping: z.boolean(),
 }) satisfies z.ZodType<TypingIndicator>
 
+export const searchMessagesQuerySchema = paginationSchema.extend({
+  query: z.string().min(1),
+  chatId: z.uuid().optional(),
+  fromDate: z.date().optional(),
+  toDate: z.date().optional(),
+}) satisfies z.ZodType<SearchMessagesQuery>
+
+export const searchChatsQuerySchema = paginationSchema.extend({
+  query: z.string().min(1),
+  type: z.nativeEnum(ChatType).optional(),
+}) satisfies z.ZodType<SearchChatsQuery>
+
+export const searchUsersQuerySchema = paginationSchema.extend({
+  query: z.string().min(1),
+  excludeBlocked: z.boolean().optional(),
+}) satisfies z.ZodType<SearchUsersQuery>
+
+const reactionSchema = z.object({
+  id: z.uuid(),
+  messageId: z.uuid(),
+  userId: z.uuid(),
+  emoji: z.string(),
+  createdAt: z.date(),
+}) satisfies z.ZodType<Reaction>
+
+export const addReactionSchema = z.object({
+  messageId: z.uuid(),
+  emoji: z.string().min(1).max(10),
+}) satisfies z.ZodType<AddReaction>
+
+export const removeReactionSchema = z.object({
+  messageId: z.uuid(),
+  reactionId: z.uuid(),
+}) satisfies z.ZodType<RemoveReaction>
+
+export const pinMessageSchema = z.object({
+  messageId: z.uuid(),
+  chatId: z.uuid(),
+}) satisfies z.ZodType<PinMessage>
+
+export const unpinMessageSchema = z.object({
+  messageId: z.uuid(),
+  chatId: z.uuid(),
+}) satisfies z.ZodType<UnpinMessage>
+
+export const updateParticipantRoleSchema = z.object({
+  chatId: z.uuid(),
+  participantId: z.uuid(),
+  role: z.enum(['admin', 'member']),
+}) satisfies z.ZodType<UpdateParticipantRole>
+
+const chatSettingsSchema = z.object({
+  description: z.string().optional(),
+  rules: z.string().optional(),
+  allowMemberInvites: z.boolean(),
+  allowMemberMessages: z.boolean(),
+  muteNotifications: z.boolean(),
+}) satisfies z.ZodType<ChatSettings>
+
+export const updateChatSettingsSchema = z.object({
+  chatId: z.uuid(),
+  settings: chatSettingsSchema.partial(),
+}) satisfies z.ZodType<UpdateChatSettings>
+
 export const chatMessageResponseSchema = z.object({
   message: messageSchema,
 }) satisfies z.ZodType<ChatMessageResponse>
@@ -138,3 +215,24 @@ export const chatsListResponseSchema = z.object({
 export const chatParticipantsResponseSchema = z.object({
   participants: z.array(chatParticipantSchema),
 }) satisfies z.ZodType<ChatParticipantsResponse>
+
+export const reactionsResponseSchema = z.object({
+  reactions: z.array(reactionSchema),
+}) satisfies z.ZodType<ReactionsResponse>
+
+export const chatSettingsResponseSchema = z.object({
+  settings: chatSettingsSchema,
+}) satisfies z.ZodType<ChatSettingsResponse>
+
+const userSearchResultSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  email: z.email(),
+  avatarUrl: z.url().nullable().optional(),
+  isOnline: z.boolean(),
+})
+
+export const usersSearchResponseSchema = z.object({
+  users: z.array(userSearchResultSchema),
+  meta,
+}) satisfies z.ZodType<UsersSearchResponse>

@@ -73,6 +73,32 @@ export interface ChangePassword {
 
 export interface PrivacyUpdate extends Partial<PrivacySettings> {}
 
+export enum UserStatus {
+  ONLINE = 'ONLINE',
+  AWAY = 'AWAY',
+  BUSY = 'BUSY',
+  OFFLINE = 'OFFLINE',
+}
+
+export interface UpdateStatus {
+  status: UserStatus
+}
+
+export interface SetCustomStatus {
+  customStatus: string
+  emoji?: string
+  expiresAt?: Date
+}
+
+export interface OnlineUser {
+  id: string
+  name: string
+  avatarUrl?: string | null
+  status: UserStatus
+  customStatus?: string
+  lastSeen: Date
+}
+
 export interface MessageResponse {
   message: string
 }
@@ -88,4 +114,14 @@ export interface UserResponse {
 export interface UsersListResponse {
   users: Omit<User, 'password'>[]
   meta: Meta
+}
+
+export interface OnlineUsersResponse {
+  users: OnlineUser[]
+  meta: Meta
+}
+
+export interface StatusResponse {
+  status: UserStatus
+  customStatus?: string
 }
