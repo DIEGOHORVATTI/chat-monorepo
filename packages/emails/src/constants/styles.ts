@@ -1,0 +1,63 @@
+export const EmailStyles = {
+  colors: {
+    primary: '#1d4ed8',
+    secondary: '#374151',
+    background: '#ffffff',
+    backgroundSecondary: '#f1f1f1ff',
+    text: {
+      primary: '#000000ff',
+      secondary: '#374151',
+      muted: '#6b7280',
+      light: '#9ca3af',
+      white: '#ffffff',
+    },
+    success: '#10b981',
+    warning: '#f59e0b',
+    error: '#dc2626',
+    border: '#d1d5db',
+  },
+  typography: {
+    fontFamily: 'HelveticaNeue,Helvetica,Arial,sans-serif',
+    fontSize: {
+      xs: '12px',
+      sm: '14px',
+      base: '15px',
+      md: '16px',
+      lg: '18px',
+      xl: '20px',
+      '2xl': '22px',
+      '3xl': '24px',
+      '4xl': '30px',
+      '5xl': '32px',
+    },
+    fontWeight: {
+      normal: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+    },
+    lineHeight: {
+      tight: '1.2',
+      normal: '1.5',
+      relaxed: '1.6',
+    },
+  },
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+    xl: '20px',
+    '2xl': '24px',
+    '3xl': '32px',
+  },
+  radius: {
+    sm: '4px',
+    md: '8px',
+    lg: '10px',
+  },
+  shadows: {
+    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+    md: '0 5px 10px rgba(0, 0, 0, 0.1)',
+  },
+}
