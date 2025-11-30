@@ -3,7 +3,7 @@ import type { UserRepository } from '@identity/domain/repositories'
 import { createUser } from '@identity/domain/entities'
 import { it, vi, expect, describe, beforeEach } from 'vitest'
 
-import { makeGetMe } from './get-me'
+import { makeGetMe } from '../get-me'
 
 const mockUserRepository: UserRepository = {
   findByEmail: vi.fn(),
@@ -27,7 +27,6 @@ describe('GetMe Use Case', () => {
     const userId = 'user-id-123'
 
     const user = createUser({
-      id: userId,
       email: 'john@example.com',
       name: 'John Doe',
       password: 'hashed-password',

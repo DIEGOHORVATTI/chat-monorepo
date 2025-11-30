@@ -3,7 +3,7 @@ import type { UserRepository } from '@identity/domain/repositories'
 import { createUser } from '@identity/domain/entities'
 import { it, vi, expect, describe, beforeEach } from 'vitest'
 
-import { makeListUsers } from './list-users'
+import { makeListUsers } from '../list-users'
 
 const mockUserRepository: UserRepository = {
   findByEmail: vi.fn(),

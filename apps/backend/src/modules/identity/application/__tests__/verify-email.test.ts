@@ -3,7 +3,7 @@ import type { UserRepository, EmailVerificationRepository } from '@identity/doma
 import { it, vi, expect, describe, beforeEach } from 'vitest'
 import { createUser, createEmailVerification } from '@identity/domain/entities'
 
-import { makeVerifyEmail } from './verify-email'
+import { makeVerifyEmail } from '../verify-email'
 
 const mockUserRepository: UserRepository = {
   findByEmail: vi.fn(),
@@ -37,7 +37,6 @@ describe('VerifyEmail Use Case', () => {
     }
 
     const user = createUser({
-      id: verifyData.userId,
       email: 'john@example.com',
       name: 'John Doe',
       password: 'hashed-password',
@@ -100,7 +99,6 @@ describe('VerifyEmail Use Case', () => {
     }
 
     const user = createUser({
-      id: verifyData.userId,
       email: 'john@example.com',
       name: 'John Doe',
       password: 'hashed-password',
@@ -127,7 +125,6 @@ describe('VerifyEmail Use Case', () => {
     }
 
     const user = createUser({
-      id: verifyData.userId,
       email: 'john@example.com',
       name: 'John Doe',
       password: 'hashed-password',
@@ -159,7 +156,6 @@ describe('VerifyEmail Use Case', () => {
     }
 
     const user = createUser({
-      id: verifyData.userId,
       email: 'john@example.com',
       name: 'John Doe',
       password: 'hashed-password',

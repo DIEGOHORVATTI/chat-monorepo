@@ -4,7 +4,7 @@ import type { UserRepository, EmailVerificationRepository } from '@identity/doma
 import { it, vi, expect, describe, beforeEach } from 'vitest'
 import { createUser, createEmailVerification } from '@identity/domain/entities'
 
-import { makeResendVerification } from './resend-verification'
+import { makeResendVerification } from '../resend-verification'
 
 const mockUserRepository: UserRepository = {
   findByEmail: vi.fn(),
@@ -70,11 +70,13 @@ describe('ResendVerification Use Case', () => {
     expect(mockEmailNotificationService.sendVerificationEmail).toHaveBeenCalledOnce()
 
     // Verify that the email service was called with the user data and a code
-    const emailCall = vi.mocked(mockEmailNotificationService.sendVerificationEmail).mock.calls[0][0]
-    expect(emailCall.email).toBe(user.email)
-    expect(emailCall.name).toBe(user.name)
-    expect(emailCall.code).toBeDefined()
-    expect(emailCall.code).toHaveLength(6) // Verification codes are 6 digits
+    const emailCall = vi.mocked(mockEmailNotificationService.sendVerificationEmail).mock
+      .calls[0]?.[0]
+    expect(emailCall).toBeDefined()
+    expect(emailCall!.email).toBe(user.email)
+    expect(emailCall!.name).toBe(user.name)
+    expect(emailCall!.code).toBeDefined()
+    expect(emailCall!.code).toHaveLength(6) // Verification codes are 6 digits
   })
 
   it('should throw error if user not found', async () => {
