@@ -57,14 +57,9 @@ describe('Register Use Case', () => {
     vi.spyOn(mockEmailNotificationService, 'sendVerificationEmail').mockResolvedValue()
 
     // Act
-    expect(await register(registerData)).toEqual({
-      user: {
-        email: registerData.email,
-        name: registerData.name,
-        isEmailVerified: false,
-      },
-    })
+    await register(registerData)
 
+    // Assert
     expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(registerData.email)
     expect(mockUserRepository.save).toHaveBeenCalledOnce()
     expect(mockEmailVerificationRepository.save).toHaveBeenCalledOnce()

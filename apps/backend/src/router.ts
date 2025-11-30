@@ -9,5 +9,10 @@ export const router = {
     logout: identityRoutes.logoutRoute,
     me: identityRoutes.meRoute,
     listUsers: identityRoutes.listUsersRoute,
+    getUserById: identityRoutes.getUserByIdRoute,
+    updateProfile: identityRoutes.updateProfileRoute,
+    changePassword: identityRoutes.changePasswordRoute,
+    blockUser: identityRoutes.blockUserRoute,
+    unblockUser: identityRoutes.unblockUserRoute,
   },
 }

@@ -5,10 +5,16 @@ import {
   makeEmailVerificationRepository,
 } from '@identity/infrastructure/repositories'
 import {
+  makeGetMe,
   makeLogin,
   makeRegister,
+  makeBlockUser,
   makeListUsers,
+  makeGetUserById,
+  makeUnblockUser,
   makeVerifyEmail,
+  makeUpdateProfile,
+  makeChangePassword,
   makeResendVerification,
 } from '@identity/application'
 
@@ -30,3 +36,9 @@ export const resendVerification = makeResendVerification(
   emailNotificationService
 )
 export const listUsers = makeListUsers(userRepository)
+export const getMe = makeGetMe(userRepository)
+export const getUserById = makeGetUserById(userRepository)
+export const updateProfile = makeUpdateProfile(userRepository)
+export const changePassword = makeChangePassword(userRepository)
+export const blockUser = makeBlockUser(userRepository)
+export const unblockUser = makeUnblockUser(userRepository)

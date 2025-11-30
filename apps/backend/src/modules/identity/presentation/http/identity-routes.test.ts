@@ -2,6 +2,7 @@ import type { JwtService } from '@repo/service-core'
 import type { EmailNotificationService } from '@identity/domain/services'
 import type { UserRepository, EmailVerificationRepository } from '@identity/domain/repositories'
 
+import { hash } from 'bcrypt'
 import { it, vi, expect, describe, beforeEach } from 'vitest'
 import { makeLogin } from '@/modules/identity/application/login'
 import { makeGetMe } from '@/modules/identity/application/get-me'
@@ -51,10 +52,13 @@ describe('Identity Routes - Login', () => {
       password: 'password123',
     }
 
+    // Create a real bcrypt hash for 'password123'
+    const hashedPassword = await hash('password123', 10)
+
     const user = createUser({
       email: loginData.email,
       name: 'John Doe',
-      password: '$2b$10$K8BQq9XfJXXJz6W5i1K5t.H1yL3h9hG5L6W7L8H9K0L1M2N3O4P5Q', // hash of 'password123'
+      password: hashedPassword,
       isEmailVerified: true,
       isActive: true,
       permissions: [],

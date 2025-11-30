@@ -10,4 +10,7 @@ export type UserRepository = {
   save(user: User): Promise<void>
   updateLastLogin(id: string): Promise<User | null>
   markEmailAsVerified(id: string): Promise<void>
+  blockUser(userId: string, blockedUserId: string): Promise<void>
+  unblockUser(userId: string, blockedUserId: string): Promise<void>
+  isUserBlocked(userId: string, blockedUserId: string): Promise<boolean>
 }

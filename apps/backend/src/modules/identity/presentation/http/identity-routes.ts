@@ -3,8 +3,13 @@ import { pub, ENV, auth } from '@repo/service-core'
 import {
   login,
   register,
+  blockUser,
   listUsers,
+  getUserById,
+  unblockUser,
   verifyEmail,
+  updateProfile,
+  changePassword,
   resendVerification,
 } from '@/modules/identity/di/container'
 
@@ -69,3 +74,62 @@ export const listUsersRoute = auth.identity.listUsers.handler(async ({ input }) 
     meta: result.meta,
   }
 })
+
+export const getUserByIdRoute = auth.identity.getUserById.handler(async ({ input }) => {
+  const user = await getUserById(input.userId)
+
+  return {
+    user,
+    meta: {
+      total: 1,
+      page: 1,
+      limit: 1,
+      pages: 1,
+    },
+  }
+})
+
+export const updateProfileRoute = auth.identity.updateProfile.handler(
+  async ({ input, context: { user } }) => {
+    const updatedUser = await updateProfile(user.id, input)
+
+    return {
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        permissions: updatedUser.permissions,
+      },
+    }
+  }
+)
+
+export const changePasswordRoute = auth.identity.changePassword.handler(
+  async ({ input, context: { user } }) => {
+    await changePassword(user.id, input)
+
+    return {
+      message: 'Password changed successfully',
+    }
+  }
+)
+
+export const blockUserRoute = auth.identity.blockUser.handler(
+  async ({ input, context: { user } }) => {
+    await blockUser(user.id, input.userId)
+
+    return {
+      message: 'User blocked successfully',
+    }
+  }
+)
+
+export const unblockUserRoute = auth.identity.unblockUser.handler(
+  async ({ input, context: { user } }) => {
+    await unblockUser(user.id, input.userId)
+
+    return {
+      message: 'User unblocked successfully',
+    }
+  }
+)

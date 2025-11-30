@@ -1,9 +1,9 @@
 import type { UserRepository } from '@identity/domain/repositories'
 
-import { eq, count } from 'drizzle-orm'
 import { paginate } from '@/utils/paginate'
+import { eq, and, count } from 'drizzle-orm'
 import { db } from '@/core/infra/db/drizzle'
-import { users } from '@/core/infra/db/schema'
+import { users, blockedUsers } from '@/core/infra/db/schema'
 import { UserMapper } from '@identity/infrastructure/mappers'
 
 export const makeUserRepository = (): UserRepository => ({
@@ -71,5 +71,29 @@ export const makeUserRepository = (): UserRepository => ({
         updatedAt: new Date(),
       })
       .where(eq(users.id, id))
+  },
+
+  async blockUser(userId, blockedUserId) {
+    await db.insert(blockedUsers).values({
+      userId,
+      blockedUserId,
+      createdAt: new Date(),
+    })
+  },
+
+  async unblockUser(userId, blockedUserId) {
+    await db
+      .delete(blockedUsers)
+      .where(and(eq(blockedUsers.userId, userId), eq(blockedUsers.blockedUserId, blockedUserId)))
+  },
+
+  async isUserBlocked(userId, blockedUserId) {
+    const [result] = await db
+      .select()
+      .from(blockedUsers)
+      .where(and(eq(blockedUsers.userId, userId), eq(blockedUsers.blockedUserId, blockedUserId)))
+      .limit(1)
+
+    return !!result
   },
 })
