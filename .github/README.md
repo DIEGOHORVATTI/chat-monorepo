@@ -7,16 +7,19 @@ Este diretório contém instruções personalizadas para o GitHub Copilot, crian
 > 💡 **[Ver Índice Completo](./INDEX.md)** - Navegação completa de toda documentação
 
 ### 🚀 Começando
+
 - [👋 Onboarding](./ONBOARDING.md) - **Novo no projeto? Comece aqui!**
 - [⚡ Referência Rápida](./QUICK-REFERENCE.md) - Comandos e padrões essenciais
 
 ### 📚 Documentação Principal
+
 - [📖 Esta Página](#-agentes-disponíveis) - Visão geral dos agentes
 - [💡 Exemplos Práticos](./EXAMPLES.md) - Casos de uso reais
 - [🎨 Guia de Fluxo](./WORKFLOW-GUIDE.md) - Diagramas e fluxos visuais
 - [❓ FAQ](./FAQ.md) - Perguntas frequentes
 
 ### 🤖 Agentes Especializados
+
 - [🎯 Agente Geral](./copilot-instructions.md) - Arquitetura e padrões gerais
 - [📦 Agente de Contratos](../packages/contracts/.github/copilot-instructions.md) - Schemas e rotas
 - [🔌 Agente WebSocket](../packages/contracts/.github/copilot-websocket-instructions.md) - Eventos tempo real

@@ -8,25 +8,25 @@ Diagramas e fluxos visuais para trabalhar com os agentes de IA.
 graph TD
     A[💡 Ideia: Novo Módulo] --> B[📋 Planejar]
     B --> C{Tipo de Módulo?}
-    
+
     C -->|REST API| D[🎯 Usar Agente de Contratos]
     C -->|WebSocket| E[🔌 Usar Agente WebSocket]
     C -->|Misto| F[🎯🔌 Usar Ambos]
-    
+
     D --> G[1️⃣ Criar types.ts]
     E --> G
     F --> G
-    
+
     G --> H[2️⃣ Criar *.schema.ts]
     H --> I[3️⃣ Criar *.contract.ts]
     I --> J[4️⃣ Criar index.ts]
     J --> K[5️⃣ Integrar em src/index.ts]
-    
+
     K --> L{✅ Checklist OK?}
     L -->|Sim| M[🎉 Pronto!]
     L -->|Não| N[🔧 Ajustar]
     N --> G
-    
+
     style A fill:#FFD700
     style M fill:#98FB98
     style L fill:#87CEEB
@@ -40,20 +40,20 @@ graph LR
     subgraph "Camada de Abstração (types.ts)"
         A[Interface User]
     end
-    
+
     subgraph "Camada de Implementação"
         B[Zod Schema]
         C[ORPC Contract]
         D[Backend Implementation]
         E[Frontend Consumer]
     end
-    
+
     A -.->|satisfies| B
     A -.->|implementa| D
     A -.->|usa tipos de| E
     B -->|valida| D
     C -->|usa schemas| B
-    
+
     style A fill:#FFD700,stroke:#333,stroke-width:3px
     style B fill:#87CEEB
     style C fill:#87CEEB
@@ -68,23 +68,23 @@ sequenceDiagram
     participant Dev as 👨‍💻 Desenvolvedor
     participant Agent as 🤖 Agente WebSocket
     participant Code as 📝 Código Gerado
-    
+
     Dev->>Agent: "Crie evento USER_TYPING"
-    
+
     Agent->>Code: 1. Adiciona ao enum
     Note over Code: WebSocketEventType.USER_TYPING
-    
+
     Agent->>Code: 2. Cria interface
     Note over Code: interface UserTypingEvent
-    
+
     Agent->>Code: 3. Cria schema Zod
     Note over Code: userTypingEventSchema
-    
+
     Agent->>Code: 4. Adiciona ao union
     Note over Code: discriminatedUnion
-    
+
     Code->>Dev: ✅ Código completo!
-    
+
     Dev->>Agent: "Revise o código"
     Agent->>Dev: ✅ Validações OK<br/>✅ Padrões OK<br/>✅ Type-safe
 ```
@@ -94,46 +94,46 @@ sequenceDiagram
 ```mermaid
 graph TD
     A[🤔 O que preciso criar?] --> B{Tipo?}
-    
+
     B -->|Entidade/Model| C[📄 types.ts]
     B -->|Validação| D[🔍 *.schema.ts]
     B -->|Rota API| E[🌐 *.contract.ts]
     B -->|Evento Tempo Real| F[⚡ websocket.schema.ts]
-    
+
     C --> G[Define Interface]
     D --> H[Cria Schema Zod<br/>com satisfies]
     E --> I[Define Rota ORPC<br/>com docs]
     F --> J[Define Evento<br/>discriminated union]
-    
+
     G --> K{Precisa validação?}
     K -->|Sim| D
     K -->|Não| L[✅ Pronto]
-    
+
     H --> M{Precisa API?}
     M -->|Sim| E
     M -->|Não| L
-    
+
     I --> N{Precisa evento?}
     N -->|Sim| F
     N -->|Não| L
-    
+
     J --> L
-    
+
     style A fill:#FFD700
     style L fill:#98FB98
 ```
 
 ## 📊 Matriz de Decisão: Qual Agente Usar?
 
-| Necessidade | Agente | Arquivo Alvo | Exemplo |
-|------------|---------|--------------|---------|
+| Necessidade            | Agente       | Arquivo Alvo     | Exemplo           |
+| ---------------------- | ------------ | ---------------- | ----------------- |
 | Criar novo módulo REST | 📦 Contratos | `src/modules/*/` | Produtos, Pedidos |
-| Adicionar validações | 📦 Contratos | `*.schema.ts` | Email, CPF, UUID |
-| Definir rotas API | 📦 Contratos | `*.contract.ts` | GET, POST, PATCH |
-| Eventos de chat | 🔌 WebSocket | `websocket/` | MESSAGE_RECEIVED |
-| Eventos de chamada | 🔌 WebSocket | `calls/` | CALL_STARTED |
-| Sinalização WebRTC | 🔌 WebSocket | `calls/` | OFFER, ANSWER |
-| Arquitetura geral | 🎯 Geral | Qualquer | Estrutura, DDD |
+| Adicionar validações   | 📦 Contratos | `*.schema.ts`    | Email, CPF, UUID  |
+| Definir rotas API      | 📦 Contratos | `*.contract.ts`  | GET, POST, PATCH  |
+| Eventos de chat        | 🔌 WebSocket | `websocket/`     | MESSAGE_RECEIVED  |
+| Eventos de chamada     | 🔌 WebSocket | `calls/`         | CALL_STARTED      |
+| Sinalização WebRTC     | 🔌 WebSocket | `calls/`         | OFFER, ANSWER     |
+| Arquitetura geral      | 🎯 Geral     | Qualquer         | Estrutura, DDD    |
 
 ## 🎨 Padrão de Codificação Visual
 
@@ -202,7 +202,7 @@ graph LR
     D -->|Não| F[🔧 Ajustar]
     F --> B
     E --> G[🚀 Deploy]
-    
+
     style A fill:#FFE4B5
     style B fill:#87CEEB
     style C fill:#DDA0DD
@@ -291,27 +291,27 @@ graph LR
     A[Nível 1<br/>Simple] --> B[Nível 2<br/>Intermediário]
     B --> C[Nível 3<br/>Avançado]
     C --> D[Nível 4<br/>Expert]
-    
+
     subgraph "Nível 1: Entidades Básicas"
         A1[Interface]
         A2[Schema]
     end
-    
+
     subgraph "Nível 2: APIs REST"
         B1[+ Contratos ORPC]
         B2[+ Validações]
     end
-    
+
     subgraph "Nível 3: Tempo Real"
         C1[+ WebSocket]
         C2[+ Eventos]
     end
-    
+
     subgraph "Nível 4: WebRTC"
         D1[+ Sinalização]
         D2[+ Controle Mídia]
     end
-    
+
     style A fill:#98FB98
     style B fill:#87CEEB
     style C fill:#DDA0DD
@@ -327,21 +327,21 @@ graph LR
     ├─ Aprender satisfies
     ├─ Criar primeiro módulo
     └─ Usar Pick/Omit/Extend
-    
+
 👨‍🎓 Intermediário
     │
     ├─ Criar rotas ORPC completas
     ├─ Adicionar validações customizadas
     ├─ Implementar eventos WebSocket
     └─ Usar discriminated unions
-    
+
 👨‍💻 Avançado
     │
     ├─ Arquitetar módulos complexos
     ├─ Implementar WebRTC
     ├─ Otimizar schemas
     └─ Contribuir com agentes
-    
+
 🧙 Expert
     │
     ├─ Criar novos padrões
@@ -356,19 +356,19 @@ graph LR
 gantt
     title Evolução do Desenvolvimento
     dateFormat  YYYY-MM-DD
-    
+
     section Sprint 1
     Aprender Padrões      :a1, 2025-11-30, 7d
     Criar Primeiro Módulo :a2, after a1, 5d
-    
+
     section Sprint 2
     Adicionar Validações  :b1, after a2, 7d
     Implementar WebSocket :b2, after b1, 7d
-    
+
     section Sprint 3
     Dominar ORPC          :c1, after b2, 7d
     Criar Módulo Complexo :c2, after c1, 7d
-    
+
     section Sprint 4
     Implementar WebRTC    :d1, after c2, 14d
     Otimizações          :d2, after d1, 7d

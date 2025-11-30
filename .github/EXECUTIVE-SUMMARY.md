@@ -10,12 +10,12 @@ Acelerar o desenvolvimento e manter a consistência arquitetural através de ass
 
 ### 1. Produtividade
 
-| Métrica | Antes | Depois | Ganho |
-|---------|-------|--------|-------|
-| Tempo para criar módulo | 4-6 horas | 1-2 horas | **60-70%** ⬆️ |
-| Tempo para adicionar rota | 30-45 min | 10-15 min | **65%** ⬆️ |
-| Tempo de onboarding | 2-3 semanas | 1 semana | **50%** ⬆️ |
-| Code review ciclos | 3-4 | 1-2 | **50%** ⬇️ |
+| Métrica                   | Antes       | Depois    | Ganho         |
+| ------------------------- | ----------- | --------- | ------------- |
+| Tempo para criar módulo   | 4-6 horas   | 1-2 horas | **60-70%** ⬆️ |
+| Tempo para adicionar rota | 30-45 min   | 10-15 min | **65%** ⬆️    |
+| Tempo de onboarding       | 2-3 semanas | 1 semana  | **50%** ⬆️    |
+| Code review ciclos        | 3-4         | 1-2       | **50%** ⬇️    |
 
 ### 2. Qualidade
 
@@ -51,10 +51,12 @@ Acelerar o desenvolvimento e manter a consistência arquitetural através de ass
 ### Princípios Arquiteturais Ensinados
 
 1. **Inversão de Dependência (DIP)**
+
    - Interface → Schema → Contract
    - Desacoplamento de bibliotecas
 
 2. **Type Safety End-to-End**
+
    - TypeScript + Zod + ORPC
    - `satisfies` para garantir compatibilidade
 
@@ -66,22 +68,22 @@ Acelerar o desenvolvimento e manter a consistência arquitetural através de ass
 
 ### Custos
 
-| Item | Valor/Mês |
-|------|-----------|
-| GitHub Copilot (5 devs) | $100 |
+| Item                         | Valor/Mês    |
+| ---------------------------- | ------------ |
+| GitHub Copilot (5 devs)      | $100         |
 | Tempo de criação dos agentes | $0 (uma vez) |
-| Manutenção dos agentes | $50 (2h/mês) |
-| **Total** | **$150/mês** |
+| Manutenção dos agentes       | $50 (2h/mês) |
+| **Total**                    | **$150/mês** |
 
 ### Retorno
 
-| Item | Economia/Mês |
-|------|--------------|
-| Redução tempo dev (60%) | $4,800 |
-| Menos bugs (30% menos) | $1,200 |
-| Menos retrabalho (50%) | $2,000 |
-| Onboarding mais rápido | $1,500 |
-| **Total** | **$9,500/mês** |
+| Item                    | Economia/Mês   |
+| ----------------------- | -------------- |
+| Redução tempo dev (60%) | $4,800         |
+| Menos bugs (30% menos)  | $1,200         |
+| Menos retrabalho (50%)  | $2,000         |
+| Onboarding mais rápido  | $1,500         |
+| **Total**               | **$9,500/mês** |
 
 **ROI: +6,233% ou 63x investimento** 🚀
 
@@ -90,14 +92,17 @@ Acelerar o desenvolvimento e manter a consistência arquitetural através de ass
 ### KPIs Primários
 
 1. **Velocidade de Desenvolvimento**
+
    - Meta: Reduzir 50% tempo para novos módulos
    - Medição: Story points / sprint
 
 2. **Qualidade de Código**
+
    - Meta: 0 violações de padrões arquiteturais
    - Medição: Code review comments
 
 3. **Onboarding**
+
    - Meta: Primeiro commit produtivo em 3 dias
    - Medição: Time to first meaningful PR
 
@@ -167,12 +172,12 @@ Acelerar o desenvolvimento e manter a consistência arquitetural através de ass
 
 ## 🛡️ Riscos e Mitigações
 
-| Risco | Probabilidade | Impacto | Mitigação |
-|-------|---------------|---------|-----------|
-| Dependência excessiva de IA | Média | Médio | Code review obrigatório, testes |
-| Agentes desatualizados | Baixa | Alto | Revisão mensal, versionamento |
-| Resistência do time | Baixa | Médio | Treinamento, demonstrações |
-| Custo do Copilot | Baixa | Baixo | ROI comprovado, budget aprovado |
+| Risco                       | Probabilidade | Impacto | Mitigação                       |
+| --------------------------- | ------------- | ------- | ------------------------------- |
+| Dependência excessiva de IA | Média         | Médio   | Code review obrigatório, testes |
+| Agentes desatualizados      | Baixa         | Alto    | Revisão mensal, versionamento   |
+| Resistência do time         | Baixa         | Médio   | Treinamento, demonstrações      |
+| Custo do Copilot            | Baixa         | Baixo   | ROI comprovado, budget aprovado |
 
 ## 🎯 Recomendações
 

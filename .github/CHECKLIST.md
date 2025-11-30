@@ -309,14 +309,14 @@ Todos os componentes foram implementados e testados. Os agentes estão prontos p
 
 ### Critérios de Aceitação
 
-| Critério | Status | Notas |
-|----------|--------|-------|
-| Todos arquivos criados | ✅ | 11/11 |
-| Agentes funcionando | ✅ | 3/3 |
-| Links válidos | ✅ | 100% |
-| Exemplos testados | ✅ | 50+ |
-| Documentação completa | ✅ | 100% |
-| Pronto para produção | ✅ | Sim |
+| Critério               | Status | Notas |
+| ---------------------- | ------ | ----- |
+| Todos arquivos criados | ✅     | 11/11 |
+| Agentes funcionando    | ✅     | 3/3   |
+| Links válidos          | ✅     | 100%  |
+| Exemplos testados      | ✅     | 50+   |
+| Documentação completa  | ✅     | 100%  |
+| Pronto para produção   | ✅     | Sim   |
 
 ---
 

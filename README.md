@@ -15,11 +15,11 @@ Este projeto possui agentes de IA personalizados que aceleram o desenvolvimento 
 
 ### 🤖 Agentes Disponíveis
 
-| Agente | Escopo | Quando Usar |
-|--------|--------|-------------|
-| 🎯 [Geral](.github/copilot-instructions.md) | Todo projeto | Arquitetura, DDD, padrões gerais |
-| 📦 [Contratos](packages/contracts/.github/copilot-instructions.md) | APIs | Schemas Zod, rotas ORPC |
-| 🔌 [WebSocket](packages/contracts/.github/copilot-websocket-instructions.md) | Tempo Real | Eventos, WebRTC |
+| Agente                                                                       | Escopo       | Quando Usar                      |
+| ---------------------------------------------------------------------------- | ------------ | -------------------------------- |
+| 🎯 [Geral](.github/copilot-instructions.md)                                  | Todo projeto | Arquitetura, DDD, padrões gerais |
+| 📦 [Contratos](packages/contracts/.github/copilot-instructions.md)           | APIs         | Schemas Zod, rotas ORPC          |
+| 🔌 [WebSocket](packages/contracts/.github/copilot-websocket-instructions.md) | Tempo Real   | Eventos, WebRTC                  |
 
 **📚 [Documentação Completa](.github/README.md)** | **📑 [Índice Completo](.github/INDEX.md)**
 
