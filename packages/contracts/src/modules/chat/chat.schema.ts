@@ -27,6 +27,12 @@ import type {
   UpdateParticipantRole,
   ChatSettings,
   UpdateChatSettings,
+  SendVoiceMessage,
+  ForwardMessage,
+  GroupPermissions,
+  UpdateGroupPermissions,
+  GenerateLinkPreview,
+  LinkPreview,
   ChatMessageResponse,
   ChatMessagesListResponse,
   ChatResponse,
@@ -35,6 +41,9 @@ import type {
   ReactionsResponse,
   ChatSettingsResponse,
   UsersSearchResponse,
+  ForwardMessageResponse,
+  GroupPermissionsResponse,
+  LinkPreviewResponse,
 } from './types'
 
 const messageSchema = z.object({
@@ -236,3 +245,56 @@ export const usersSearchResponseSchema = z.object({
   users: z.array(userSearchResultSchema),
   meta,
 }) satisfies z.ZodType<UsersSearchResponse>
+
+export const sendVoiceMessageSchema = z.object({
+  chatId: z.string().uuid(),
+  audioUrl: z.string().url(),
+  duration: z.number().positive(),
+  waveform: z.array(z.number()).optional(),
+}) satisfies z.ZodType<SendVoiceMessage>
+
+export const forwardMessageSchema = z.object({
+  messageId: z.string().uuid(),
+  toChatIds: z.array(z.string().uuid()).min(1),
+}) satisfies z.ZodType<ForwardMessage>
+
+export const forwardMessageResponseSchema = z.object({
+  forwardedMessages: z.array(messageSchema),
+  meta,
+}) satisfies z.ZodType<ForwardMessageResponse>
+
+const groupPermissionsSchema = z.object({
+  canSendMessages: z.boolean(),
+  canAddMembers: z.boolean(),
+  canRemoveMembers: z.boolean(),
+  canEditGroupInfo: z.boolean(),
+  canPinMessages: z.boolean(),
+  canDeleteMessages: z.boolean(),
+}) satisfies z.ZodType<GroupPermissions>
+
+export const updateGroupPermissionsSchema = z.object({
+  chatId: z.string().uuid(),
+  permissions: groupPermissionsSchema.partial(),
+}) satisfies z.ZodType<UpdateGroupPermissions>
+
+export const groupPermissionsResponseSchema = z.object({
+  permissions: groupPermissionsSchema,
+  meta,
+}) satisfies z.ZodType<GroupPermissionsResponse>
+
+const linkPreviewSchema = z.object({
+  url: z.string().url(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  image: z.string().url().optional(),
+  siteName: z.string().optional(),
+}) satisfies z.ZodType<LinkPreview>
+
+export const generateLinkPreviewSchema = z.object({
+  url: z.string().url(),
+}) satisfies z.ZodType<GenerateLinkPreview>
+
+export const linkPreviewResponseSchema = z.object({
+  preview: linkPreviewSchema,
+  meta,
+}) satisfies z.ZodType<LinkPreviewResponse>

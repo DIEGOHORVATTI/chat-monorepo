@@ -13,6 +13,8 @@ export enum WebSocketEventType {
   MESSAGE_UPDATED = 'MESSAGE_UPDATED',
   MESSAGE_DELETED = 'MESSAGE_DELETED',
   MESSAGE_STATUS_CHANGED = 'MESSAGE_STATUS_CHANGED',
+  MESSAGE_DELIVERED = 'MESSAGE_DELIVERED',
+  MESSAGE_SEEN = 'MESSAGE_SEEN',
   USER_TYPING = 'USER_TYPING',
   USER_ONLINE = 'USER_ONLINE',
   USER_OFFLINE = 'USER_OFFLINE',
@@ -21,6 +23,8 @@ export enum WebSocketEventType {
   PARTICIPANT_LEFT = 'PARTICIPANT_LEFT',
 
   CONNECTION_ACK = 'CONNECTION_ACK',
+  RECONNECT = 'RECONNECT',
+  SYNC_MISSED_EVENTS = 'SYNC_MISSED_EVENTS',
   ERROR = 'ERROR',
   PING = 'PING',
   PONG = 'PONG',
@@ -224,6 +228,56 @@ export const pongEventSchema = baseWebSocketMessageSchema.extend({
     .optional(),
 })
 
+export const messageDeliveredEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.MESSAGE_DELIVERED),
+  data: z.object({
+    messageId: z.uuid(),
+    chatId: z.uuid(),
+    deliveredAt: z.date(),
+  }),
+})
+
+export const messageSeenEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.MESSAGE_SEEN),
+  data: z.object({
+    messageId: z.uuid(),
+    chatId: z.uuid(),
+    seenAt: z.date(),
+    seenBy: z.uuid(),
+  }),
+})
+
+export const reconnectEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.RECONNECT),
+  data: z.object({
+    lastEventId: z.string().optional(),
+    disconnectedAt: z.date(),
+  }),
+})
+
+export const syncMissedEventsEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.SYNC_MISSED_EVENTS),
+  data: z.object({
+    events: z.array(
+      z.union([
+        messageReceivedEventSchema,
+        messageUpdatedEventSchema,
+        messageDeletedEventSchema,
+        messageStatusChangedEventSchema,
+        messageDeliveredEventSchema,
+        messageSeenEventSchema,
+        userTypingEventSchema,
+        userOnlineEventSchema,
+        userOfflineEventSchema,
+        chatUpdatedEventSchema,
+        participantJoinedEventSchema,
+        participantLeftEventSchema,
+      ])
+    ),
+    lastEventId: z.string(),
+  }),
+})
+
 export const webSocketEventSchema = z.discriminatedUnion('event', [
   joinChatEventSchema,
   leaveChatEventSchema,
@@ -247,4 +301,8 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
   errorEventSchema,
   pingEventSchema,
   pongEventSchema,
+  messageDeliveredEventSchema,
+  messageSeenEventSchema,
+  reconnectEventSchema,
+  syncMissedEventsEventSchema,
 ])

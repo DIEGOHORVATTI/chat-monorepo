@@ -18,6 +18,9 @@ import {
   setCustomStatusSchema,
   onlineUsersResponseSchema,
   statusResponseSchema,
+  exportUserDataSchema,
+  exportDataResponseSchema,
+  deleteAccountSchema,
 } from './identity.schema'
 
 const prefix = oc.route({ tags: ['Identity'] })
@@ -186,4 +189,24 @@ export const identity = oc.prefix('/identity').router({
       description: 'List all online users',
     })
     .output(onlineUsersResponseSchema),
+
+  exportUserData: prefix
+    .route({
+      method: 'POST',
+      path: '/me/export',
+      summary: 'Export user data',
+      description: 'Request export of all user data (GDPR compliance)',
+    })
+    .input(exportUserDataSchema)
+    .output(exportDataResponseSchema),
+
+  deleteAccount: prefix
+    .route({
+      method: 'DELETE',
+      path: '/me/account',
+      summary: 'Delete account',
+      description: 'Permanently delete user account and all associated data',
+    })
+    .input(deleteAccountSchema)
+    .output(messageResponseSchema),
 })

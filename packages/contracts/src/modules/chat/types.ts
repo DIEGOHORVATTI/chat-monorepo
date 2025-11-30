@@ -6,6 +6,7 @@ export enum MessageType {
   VIDEO = 'VIDEO',
   AUDIO = 'AUDIO',
   FILE = 'FILE',
+  VOICE = 'VOICE',
   LOCATION = 'LOCATION',
 }
 
@@ -218,5 +219,58 @@ export interface UserSearchResult {
 
 export interface UsersSearchResponse {
   users: UserSearchResult[]
+  meta: Meta
+}
+
+export interface SendVoiceMessage {
+  chatId: string
+  audioUrl: string
+  duration: number
+  waveform?: number[]
+}
+
+export interface ForwardMessage {
+  messageId: string
+  toChatIds: string[]
+}
+
+export interface ForwardMessageResponse {
+  forwardedMessages: Message[]
+  meta: Meta
+}
+
+export interface GroupPermissions {
+  canSendMessages: boolean
+  canAddMembers: boolean
+  canRemoveMembers: boolean
+  canEditGroupInfo: boolean
+  canPinMessages: boolean
+  canDeleteMessages: boolean
+}
+
+export interface UpdateGroupPermissions {
+  chatId: string
+  permissions: Partial<GroupPermissions>
+}
+
+export interface GroupPermissionsResponse {
+  permissions: GroupPermissions
+  meta: Meta
+}
+
+export interface GenerateLinkPreview {
+  url: string
+}
+
+export interface LinkPreview {
+  url: string
+  title?: string
+  description?: string
+  image?: string
+  siteName?: string
+}
+
+export interface LinkPreviewResponse {
+  preview: LinkPreview
   meta: Meta
 }

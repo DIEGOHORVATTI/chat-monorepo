@@ -21,7 +21,7 @@ packages/contracts/
 │       ├── calls.ts             # Rotas de chamadas
 │       ├── websocket.ts         # Rotas WebSocket
 │       └── index.ts
-├── WEBSOCKET.md         # Documentação WebSocket (chat)
+├── WEBSOCKET.md        # Documentação WebSocket (chat)
 ├── CALLS.md            # Documentação de chamadas
 └── README.md           # Este arquivo
 ```

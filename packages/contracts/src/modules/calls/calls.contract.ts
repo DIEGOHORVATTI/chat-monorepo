@@ -20,6 +20,8 @@ import {
   callRecordingsQuerySchema,
   recordingResponseSchema,
   recordingsListResponseSchema,
+  reportCallQualitySchema,
+  callStatisticsResponseSchema,
 } from './calls.schema'
 import { messageResponseSchema } from '../identity/identity.schema'
 
@@ -173,4 +175,23 @@ export const calls = oc.prefix('/calls').router({
     })
     .input(callRecordingsQuerySchema)
     .output(recordingsListResponseSchema),
+
+  reportCallQuality: prefix
+    .route({
+      method: 'POST',
+      path: '/:callId/quality',
+      summary: 'Report call quality',
+      description: 'Report issues and rating for a call',
+    })
+    .input(reportCallQualitySchema)
+    .output(messageResponseSchema),
+
+  getCallStatistics: prefix
+    .route({
+      method: 'GET',
+      path: '/:callId/statistics',
+      summary: 'Get call statistics',
+      description: 'Get detailed statistics for a call',
+    })
+    .output(callStatisticsResponseSchema),
 })

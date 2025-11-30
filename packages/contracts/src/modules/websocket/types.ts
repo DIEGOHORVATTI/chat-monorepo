@@ -163,6 +163,54 @@ export interface ParticipantLeftEvent extends BaseWebSocketMessage {
   }
 }
 
+export interface MessageDeliveredEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.MESSAGE_DELIVERED
+  data: {
+    messageId: string
+    chatId: string
+    deliveredAt: Date
+  }
+}
+
+export interface MessageSeenEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.MESSAGE_SEEN
+  data: {
+    messageId: string
+    chatId: string
+    seenAt: Date
+    seenBy: string
+  }
+}
+
+export interface ReconnectEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.RECONNECT
+  data: {
+    lastEventId?: string
+    disconnectedAt: Date
+  }
+}
+
+export interface SyncMissedEventsEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.SYNC_MISSED_EVENTS
+  data: {
+    events: Array<
+      | MessageReceivedEvent
+      | MessageUpdatedEvent
+      | MessageDeletedEvent
+      | MessageStatusChangedEvent
+      | MessageDeliveredEvent
+      | MessageSeenEvent
+      | UserTypingEvent
+      | UserOnlineEvent
+      | UserOfflineEvent
+      | ChatUpdatedEvent
+      | ParticipantJoinedEvent
+      | ParticipantLeftEvent
+    >
+    lastEventId: string
+  }
+}
+
 export interface ConnectionAckEvent extends BaseWebSocketMessage {
   event: WebSocketEventType.CONNECTION_ACK
   data: {
@@ -214,3 +262,7 @@ export type WebSocketEvent =
   | ErrorEvent
   | PingEvent
   | PongEvent
+  | MessageDeliveredEvent
+  | MessageSeenEvent
+  | ReconnectEvent
+  | SyncMissedEventsEvent

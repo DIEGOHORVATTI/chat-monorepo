@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { meta, paginationSchema } from '../../shared/base.schema'
-import { CallType, CallStatus, ParticipantStatus } from './types'
+import { CallType, CallStatus, ParticipantStatus, CallQualityIssue } from './types'
 import type {
   Call,
   CallParticipant,
@@ -13,6 +13,8 @@ import type {
   StartRecording,
   StopRecording,
   CallRecordingsQuery,
+  ReportCallQuality,
+  CallStatistics,
   CallQuery,
   CallHistoryQuery,
   WebRTCOffer,
@@ -25,6 +27,7 @@ import type {
   WebRTCSignalingResponse,
   RecordingResponse,
   RecordingsListResponse,
+  CallStatisticsResponse,
 } from './types'
 
 const callParticipantSchema = z.object({
@@ -181,3 +184,25 @@ export const recordingsListResponseSchema = z.object({
   recordings: z.array(callRecordingSchema),
   meta,
 }) satisfies z.ZodType<RecordingsListResponse>
+
+export const reportCallQualitySchema = z.object({
+  callId: z.string().uuid(),
+  rating: z.number().min(1).max(5),
+  issues: z.array(z.nativeEnum(CallQualityIssue)).optional(),
+  feedback: z.string().max(500).optional(),
+}) satisfies z.ZodType<ReportCallQuality>
+
+const callStatisticsSchema = z.object({
+  callId: z.string().uuid(),
+  duration: z.number(),
+  audioLatency: z.number(),
+  videoLatency: z.number(),
+  packetLoss: z.number(),
+  jitter: z.number(),
+  bitrate: z.number(),
+}) satisfies z.ZodType<CallStatistics>
+
+export const callStatisticsResponseSchema = z.object({
+  statistics: callStatisticsSchema,
+  meta,
+}) satisfies z.ZodType<CallStatisticsResponse>

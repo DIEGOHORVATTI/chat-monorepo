@@ -125,3 +125,18 @@ export interface StatusResponse {
   status: UserStatus
   customStatus?: string
 }
+
+export interface ExportUserData {
+  format?: 'json' | 'csv'
+}
+
+export interface ExportDataResponse {
+  downloadUrl: string
+  expiresAt: Date
+  meta: Meta
+}
+
+export interface DeleteAccount {
+  password: string
+  confirmation: string
+}

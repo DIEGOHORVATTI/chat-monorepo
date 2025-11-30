@@ -179,3 +179,34 @@ export interface RecordingsListResponse {
   recordings: CallRecording[]
   meta: Meta
 }
+
+export enum CallQualityIssue {
+  POOR_CONNECTION = 'poor_connection',
+  AUDIO_ISSUES = 'audio_issues',
+  VIDEO_ISSUES = 'video_issues',
+  ECHO = 'echo',
+  DROPPED_CALL = 'dropped_call',
+  OTHER = 'other',
+}
+
+export interface ReportCallQuality {
+  callId: string
+  rating: number
+  issues?: CallQualityIssue[]
+  feedback?: string
+}
+
+export interface CallStatistics {
+  callId: string
+  duration: number
+  audioLatency: number
+  videoLatency: number
+  packetLoss: number
+  jitter: number
+  bitrate: number
+}
+
+export interface CallStatisticsResponse {
+  statistics: CallStatistics
+  meta: Meta
+}

@@ -16,12 +16,15 @@ import type {
   UpdateStatus,
   SetCustomStatus,
   OnlineUser,
+  ExportUserData,
+  DeleteAccount,
   MessageResponse,
   RegisterResponse,
   UserResponse,
   UsersListResponse,
   OnlineUsersResponse,
   StatusResponse,
+  ExportDataResponse,
 } from './types'
 
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
@@ -145,3 +148,18 @@ export const statusResponseSchema = z.object({
   status: z.nativeEnum(UserStatus),
   customStatus: z.string().optional(),
 }) satisfies z.ZodType<StatusResponse>
+
+export const exportUserDataSchema = z.object({
+  format: z.enum(['json', 'csv']).optional().default('json'),
+}) satisfies z.ZodType<ExportUserData>
+
+export const deleteAccountSchema = z.object({
+  password: z.string().min(8),
+  confirmation: z.literal('DELETE_MY_ACCOUNT'),
+}) satisfies z.ZodType<DeleteAccount>
+
+export const exportDataResponseSchema = z.object({
+  downloadUrl: z.string().url(),
+  expiresAt: z.coerce.date(),
+  meta,
+}) satisfies z.ZodType<ExportDataResponse>

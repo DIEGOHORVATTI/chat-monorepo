@@ -29,6 +29,13 @@ import {
   reactionsResponseSchema,
   chatSettingsResponseSchema,
   usersSearchResponseSchema,
+  sendVoiceMessageSchema,
+  forwardMessageSchema,
+  forwardMessageResponseSchema,
+  updateGroupPermissionsSchema,
+  groupPermissionsResponseSchema,
+  generateLinkPreviewSchema,
+  linkPreviewResponseSchema,
 } from './chat.schema'
 import { messageResponseSchema as baseMessageResponseSchema } from '../identity/identity.schema'
 
@@ -288,4 +295,53 @@ export const chat = oc.prefix('/chat').router({
     })
     .input(updateChatSettingsSchema)
     .output(chatSettingsResponseSchema),
+
+  sendVoiceMessage: prefix
+    .route({
+      method: 'POST',
+      path: '/messages/voice',
+      summary: 'Send voice message',
+      description: 'Send a voice message in a chat',
+    })
+    .input(sendVoiceMessageSchema)
+    .output(chatMessageResponseSchema),
+
+  forwardMessage: prefix
+    .route({
+      method: 'POST',
+      path: '/messages/:messageId/forward',
+      summary: 'Forward message',
+      description: 'Forward a message to one or more chats',
+    })
+    .input(forwardMessageSchema)
+    .output(forwardMessageResponseSchema),
+
+  updateGroupPermissions: prefix
+    .route({
+      method: 'PATCH',
+      path: '/chats/:chatId/permissions',
+      summary: 'Update group permissions',
+      description: 'Update permissions for group chat',
+    })
+    .input(updateGroupPermissionsSchema)
+    .output(groupPermissionsResponseSchema),
+
+  getGroupPermissions: prefix
+    .route({
+      method: 'GET',
+      path: '/chats/:chatId/permissions',
+      summary: 'Get group permissions',
+      description: 'Get current permissions for group chat',
+    })
+    .output(groupPermissionsResponseSchema),
+
+  generateLinkPreview: prefix
+    .route({
+      method: 'POST',
+      path: '/messages/link-preview',
+      summary: 'Generate link preview',
+      description: 'Generate preview metadata for a URL',
+    })
+    .input(generateLinkPreviewSchema)
+    .output(linkPreviewResponseSchema),
 })
