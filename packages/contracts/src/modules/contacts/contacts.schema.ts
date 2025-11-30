@@ -1,9 +1,6 @@
-import { z } from 'zod'
-import { metaSchema, paginationSchema } from '../../shared/base.schema'
 import type {
   Contact,
   ContactRequest,
-  ContactRequestStatus,
   AddContact,
   AcceptContactRequest,
   RejectContactRequest,
@@ -15,12 +12,16 @@ import type {
   ContactsListResponse,
   ContactRequestsListResponse,
 } from './types'
-import { ContactRequestStatus as ContactRequestStatusEnum } from './types'
+
+import { z } from 'zod'
+import { metaSchema, paginationSchema } from '../../shared/base.schema'
+
+import { ContactRequestStatus } from './types'
 
 const contactSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string().uuid(),
-  contactId: z.string().uuid(),
+  id: z.uuid(),
+  userId: z.uuid(),
+  contactId: z.uuid(),
   nickname: z.string().optional(),
   favorite: z.boolean(),
   createdAt: z.coerce.date(),
@@ -28,34 +29,34 @@ const contactSchema = z.object({
 }) satisfies z.ZodType<Contact>
 
 const contactRequestSchema = z.object({
-  id: z.string().uuid(),
-  senderId: z.string().uuid(),
-  receiverId: z.string().uuid(),
-  status: z.nativeEnum(ContactRequestStatusEnum),
+  id: z.uuid(),
+  senderId: z.uuid(),
+  receiverId: z.uuid(),
+  status: z.enum(ContactRequestStatus),
   message: z.string().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 }) satisfies z.ZodType<ContactRequest>
 
 export const addContactSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid(),
   message: z.string().max(200).optional(),
 }) satisfies z.ZodType<AddContact>
 
 export const acceptContactRequestSchema = z.object({
-  requestId: z.string().uuid(),
+  requestId: z.uuid(),
 }) satisfies z.ZodType<AcceptContactRequest>
 
 export const rejectContactRequestSchema = z.object({
-  requestId: z.string().uuid(),
+  requestId: z.uuid(),
 }) satisfies z.ZodType<RejectContactRequest>
 
 export const removeContactSchema = z.object({
-  contactId: z.string().uuid(),
+  contactId: z.uuid(),
 }) satisfies z.ZodType<RemoveContact>
 
 export const updateContactSchema = z.object({
-  contactId: z.string().uuid(),
+  contactId: z.uuid(),
   nickname: z.string().min(1).max(50).optional(),
   favorite: z.boolean().optional(),
 }) satisfies z.ZodType<UpdateContact>

@@ -51,8 +51,8 @@ const messageSchema = z.object({
   chatId: z.uuid(),
   senderId: z.uuid(),
   content: z.string(),
-  type: z.nativeEnum(MessageType),
-  status: z.nativeEnum(MessageStatus),
+  type: z.enum(MessageType),
+  status: z.enum(MessageStatus),
   replyToId: z.uuid().nullable().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
   createdAt: z.date(),
@@ -62,9 +62,9 @@ const messageSchema = z.object({
 
 const chatSchema = z.object({
   id: z.uuid(),
-  type: z.nativeEnum(ChatType),
+  type: z.enum(ChatType),
   name: z.string().nullable().optional(),
-  avatarUrl: z.string().url().nullable().optional(),
+  avatarUrl: z.url().nullable().optional(),
   participantIds: z.array(z.uuid()),
   createdBy: z.uuid(),
   lastMessageAt: z.date().nullable().optional(),
@@ -82,7 +82,7 @@ const chatParticipantSchema = z.object({
 }) satisfies z.ZodType<ChatParticipant>
 
 export const createChatSchema = z.object({
-  type: z.nativeEnum(ChatType),
+  type: z.enum(ChatType),
   name: z.string().min(1).max(100).optional(),
   participantIds: z.array(z.uuid()).min(1),
 }) satisfies z.ZodType<CreateChat>
@@ -90,7 +90,7 @@ export const createChatSchema = z.object({
 export const sendMessageSchema = z.object({
   chatId: z.uuid(),
   content: z.string().min(1),
-  type: z.nativeEnum(MessageType).default(MessageType.TEXT),
+  type: z.enum(MessageType).default(MessageType.TEXT),
   replyToId: z.uuid().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
 }) satisfies z.ZodType<SendMessage>
@@ -109,7 +109,7 @@ export const markMessageAsReadSchema = z.object({
 }) satisfies z.ZodType<MarkMessageAsRead>
 
 export const chatQuerySchema = paginationSchema.extend({
-  type: z.nativeEnum(ChatType).optional(),
+  type: z.enum(ChatType).optional(),
 }) satisfies z.ZodType<ChatQuery>
 
 export const messagesQuerySchema = paginationSchema.extend({
@@ -131,7 +131,7 @@ export const removeParticipantSchema = z.object({
 export const updateChatSchema = z.object({
   chatId: z.uuid(),
   name: z.string().min(1).max(100).optional(),
-  avatarUrl: z.string().url().optional(),
+  avatarUrl: z.url().optional(),
 }) satisfies z.ZodType<UpdateChat>
 
 export const typingIndicatorSchema = z.object({
@@ -148,7 +148,7 @@ export const searchMessagesQuerySchema = paginationSchema.extend({
 
 export const searchChatsQuerySchema = paginationSchema.extend({
   query: z.string().min(1),
-  type: z.nativeEnum(ChatType).optional(),
+  type: z.enum(ChatType).optional(),
 }) satisfies z.ZodType<SearchChatsQuery>
 
 export const searchUsersQuerySchema = paginationSchema.extend({
@@ -247,15 +247,15 @@ export const usersSearchResponseSchema = z.object({
 }) satisfies z.ZodType<UsersSearchResponse>
 
 export const sendVoiceMessageSchema = z.object({
-  chatId: z.string().uuid(),
-  audioUrl: z.string().url(),
+  chatId: z.uuid(),
+  audioUrl: z.url(),
   duration: z.number().positive(),
   waveform: z.array(z.number()).optional(),
 }) satisfies z.ZodType<SendVoiceMessage>
 
 export const forwardMessageSchema = z.object({
-  messageId: z.string().uuid(),
-  toChatIds: z.array(z.string().uuid()).min(1),
+  messageId: z.uuid(),
+  toChatIds: z.array(z.uuid()).min(1),
 }) satisfies z.ZodType<ForwardMessage>
 
 export const forwardMessageResponseSchema = z.object({
@@ -273,7 +273,7 @@ const groupPermissionsSchema = z.object({
 }) satisfies z.ZodType<GroupPermissions>
 
 export const updateGroupPermissionsSchema = z.object({
-  chatId: z.string().uuid(),
+  chatId: z.uuid(),
   permissions: groupPermissionsSchema.partial(),
 }) satisfies z.ZodType<UpdateGroupPermissions>
 
@@ -283,15 +283,15 @@ export const groupPermissionsResponseSchema = z.object({
 }) satisfies z.ZodType<GroupPermissionsResponse>
 
 const linkPreviewSchema = z.object({
-  url: z.string().url(),
+  url: z.url(),
   title: z.string().optional(),
   description: z.string().optional(),
-  image: z.string().url().optional(),
+  image: z.url().optional(),
   siteName: z.string().optional(),
 }) satisfies z.ZodType<LinkPreview>
 
 export const generateLinkPreviewSchema = z.object({
-  url: z.string().url(),
+  url: z.url(),
 }) satisfies z.ZodType<GenerateLinkPreview>
 
 export const linkPreviewResponseSchema = z.object({

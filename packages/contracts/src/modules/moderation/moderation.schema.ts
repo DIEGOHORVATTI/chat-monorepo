@@ -31,11 +31,11 @@ const reportStatusValues: [ReportStatus, ...ReportStatus[]] = [
 ]
 
 const reportSchema = z.object({
-  id: z.string().uuid(),
-  reporterId: z.string().uuid(),
-  reportedUserId: z.string().uuid().optional(),
-  reportedMessageId: z.string().uuid().optional(),
-  chatId: z.string().uuid().optional(),
+  id: z.uuid(),
+  reporterId: z.uuid(),
+  reportedUserId: z.uuid().optional(),
+  reportedMessageId: z.uuid().optional(),
+  chatId: z.uuid().optional(),
   reason: z.enum(reportReasonValues),
   description: z.string().optional(),
   status: z.enum(reportStatusValues),
@@ -44,24 +44,24 @@ const reportSchema = z.object({
 }) satisfies z.ZodType<Report>
 
 export const createReportSchema = z.object({
-  reportedUserId: z.string().uuid().optional(),
-  reportedMessageId: z.string().uuid().optional(),
-  chatId: z.string().uuid().optional(),
+  reportedUserId: z.uuid().optional(),
+  reportedMessageId: z.uuid().optional(),
+  chatId: z.uuid().optional(),
   reason: z.enum(reportReasonValues),
   description: z.string().max(500).optional(),
 }) satisfies z.ZodType<CreateReport>
 
 export const muteChatSchema = z.object({
-  chatId: z.string().uuid(),
+  chatId: z.uuid(),
   duration: z.number().positive().optional(),
 }) satisfies z.ZodType<MuteChat>
 
 export const archiveChatSchema = z.object({
-  chatId: z.string().uuid(),
+  chatId: z.uuid(),
 }) satisfies z.ZodType<ArchiveChat>
 
 export const blockUserSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid(),
 }) satisfies z.ZodType<BlockUser>
 
 export const getReportsQuerySchema = paginationSchema.extend({

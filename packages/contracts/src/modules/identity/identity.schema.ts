@@ -36,7 +36,7 @@ export const privacySettingsSchema = z.object({
   readReceipts: z.boolean(),
   allowMessagesFrom: privacyVisibility,
   allowCallsFrom: privacyVisibility,
-  blockedUsers: z.array(z.string().uuid()),
+  blockedUsers: z.array(z.uuid()),
 }) satisfies z.ZodType<PrivacySettings>
 
 export const userSchema = z.object({
@@ -48,7 +48,7 @@ export const userSchema = z.object({
   isEmailVerified: z.boolean().optional(),
   lastLoginAt: z.date().nullable().optional(),
   timezone: z.string().nullable().optional(),
-  permissions: z.array(z.nativeEnum(PermissionType)),
+  permissions: z.array(z.enum(PermissionType)),
   privacy: privacySettingsSchema.default({
     profilePhoto: 'everyone',
     lastSeen: 'everyone',
@@ -121,7 +121,7 @@ export const usersListResponseSchema = z.object({
 }) satisfies z.ZodType<UsersListResponse>
 
 export const updateStatusSchema = z.object({
-  status: z.nativeEnum(UserStatus),
+  status: z.enum(UserStatus),
 }) satisfies z.ZodType<UpdateStatus>
 
 export const setCustomStatusSchema = z.object({
@@ -134,7 +134,7 @@ const onlineUserSchema = z.object({
   id: z.uuid(),
   name: z.string(),
   avatarUrl: z.url().nullable().optional(),
-  status: z.nativeEnum(UserStatus),
+  status: z.enum(UserStatus),
   customStatus: z.string().optional(),
   lastSeen: z.date(),
 }) satisfies z.ZodType<OnlineUser>
@@ -145,7 +145,7 @@ export const onlineUsersResponseSchema = z.object({
 }) satisfies z.ZodType<OnlineUsersResponse>
 
 export const statusResponseSchema = z.object({
-  status: z.nativeEnum(UserStatus),
+  status: z.enum(UserStatus),
   customStatus: z.string().optional(),
 }) satisfies z.ZodType<StatusResponse>
 
@@ -159,7 +159,7 @@ export const deleteAccountSchema = z.object({
 }) satisfies z.ZodType<DeleteAccount>
 
 export const exportDataResponseSchema = z.object({
-  downloadUrl: z.string().url(),
+  downloadUrl: z.url(),
   expiresAt: z.coerce.date(),
   meta,
 }) satisfies z.ZodType<ExportDataResponse>

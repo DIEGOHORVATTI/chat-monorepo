@@ -91,7 +91,7 @@ packages/contracts/
 ```typescript
 // Sempre use z.object() para schemas complexos
 export const userSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   email: z.email(),
   name: z.string(),
 })
@@ -142,9 +142,9 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
 
 // Base event schema para consistência
 const baseEventSchema = z.object({
-  event: z.nativeEnum(EventType),
+  event: z.enum(EventType),
   timestamp: z.date(),
-  requestId: z.string().uuid().optional(),
+  requestId: z.uuid().optional(),
 })
 ```
 

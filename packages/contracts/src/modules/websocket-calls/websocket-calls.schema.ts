@@ -117,7 +117,7 @@ export const callIncomingEventSchema = baseCallEventSchema.extend({
     type: z.enum(CallType),
     initiatorId: z.uuid(),
     initiatorName: z.string(),
-    initiatorAvatar: z.string().url().nullable().optional(),
+    initiatorAvatar: z.url().nullable().optional(),
     participants: z.array(
       z.object({
         userId: z.uuid(),
@@ -137,7 +137,7 @@ export const callStartedEventSchema = baseCallEventSchema.extend({
       z.object({
         userId: z.uuid(),
         userName: z.string(),
-        userAvatar: z.string().url().nullable().optional(),
+        userAvatar: z.url().nullable().optional(),
         status: z.enum(ParticipantStatus),
       })
     ),
@@ -160,7 +160,7 @@ export const callParticipantJoinedEventSchema = baseCallEventSchema.extend({
     callId: z.uuid(),
     userId: z.uuid(),
     userName: z.string(),
-    userAvatar: z.string().url().nullable().optional(),
+    userAvatar: z.url().nullable().optional(),
     joinedAt: z.date(),
   }),
 })

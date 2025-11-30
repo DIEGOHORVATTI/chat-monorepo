@@ -24,8 +24,8 @@ const notificationTypeValues: [NotificationType, ...NotificationType[]] = [
 ]
 
 const notificationSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.uuid(),
+  userId: z.uuid(),
   type: z.enum(notificationTypeValues),
   title: z.string(),
   body: z.string(),
@@ -35,7 +35,7 @@ const notificationSchema = z.object({
 }) satisfies z.ZodType<Notification>
 
 const notificationSettingsSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid(),
   pushEnabled: z.boolean(),
   emailEnabled: z.boolean(),
   messageNotifications: z.boolean(),
@@ -43,7 +43,7 @@ const notificationSettingsSchema = z.object({
   callNotifications: z.boolean(),
   reactionNotifications: z.boolean(),
   muteAll: z.boolean(),
-  mutedChats: z.array(z.string().uuid()),
+  mutedChats: z.array(z.uuid()),
   mutedUntil: z.coerce.date().optional(),
 }) satisfies z.ZodType<NotificationSettings>
 
@@ -53,7 +53,7 @@ export const getNotificationsQuerySchema = paginationSchema.extend({
 }) satisfies z.ZodType<GetNotificationsQuery>
 
 export const markAsReadSchema = z.object({
-  notificationIds: z.array(z.string().uuid()).min(1),
+  notificationIds: z.array(z.uuid()).min(1),
 }) satisfies z.ZodType<MarkAsRead>
 
 export const updateNotificationSettingsSchema = z.object({

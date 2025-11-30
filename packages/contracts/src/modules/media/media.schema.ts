@@ -9,16 +9,16 @@ import type {
 } from './types'
 
 const mediaFileSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string(),
   mimeType: z.string(),
   size: z.number().positive(),
-  url: z.string().url(),
-  thumbnailUrl: z.string().url().optional(),
-  uploadedBy: z.string().uuid(),
+  url: z.url(),
+  thumbnailUrl: z.url().optional(),
+  uploadedBy: z.uuid(),
   uploadedAt: z.coerce.date(),
-  chatId: z.string().uuid().optional(),
-  messageId: z.string().uuid().optional(),
+  chatId: z.uuid().optional(),
+  messageId: z.uuid().optional(),
 }) satisfies z.ZodType<MediaFile>
 
 export const uploadFileSchema = z.object({
@@ -28,11 +28,11 @@ export const uploadFileSchema = z.object({
     .number()
     .positive()
     .max(100 * 1024 * 1024),
-  chatId: z.string().uuid().optional(),
+  chatId: z.uuid().optional(),
 }) satisfies z.ZodType<UploadFile>
 
 export const generateThumbnailSchema = z.object({
-  fileId: z.string().uuid(),
+  fileId: z.uuid(),
   width: z.number().positive().max(1920).optional(),
   height: z.number().positive().max(1920).optional(),
 }) satisfies z.ZodType<GenerateThumbnail>

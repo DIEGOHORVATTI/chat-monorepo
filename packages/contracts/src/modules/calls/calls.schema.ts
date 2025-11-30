@@ -1,6 +1,3 @@
-import { z } from 'zod'
-import { meta, paginationSchema } from '../../shared/base.schema'
-import { CallType, CallStatus, ParticipantStatus, CallQualityIssue } from './types'
 import type {
   Call,
   CallParticipant,
@@ -30,13 +27,18 @@ import type {
   CallStatisticsResponse,
 } from './types'
 
+import { z } from 'zod'
+import { meta, paginationSchema } from '../../shared/base.schema'
+
+import { CallType, CallStatus, ParticipantStatus, CallQualityIssue } from './types'
+
 const callParticipantSchema = z.object({
   id: z.uuid(),
   callId: z.uuid(),
   userId: z.uuid(),
   userName: z.string(),
   userAvatar: z.url().nullable().optional(),
-  status: z.nativeEnum(ParticipantStatus),
+  status: z.enum(ParticipantStatus),
   joinedAt: z.date().nullable().optional(),
   leftAt: z.date().nullable().optional(),
   isMuted: z.boolean().default(false),
@@ -47,8 +49,8 @@ const callParticipantSchema = z.object({
 const callSchema = z.object({
   id: z.uuid(),
   chatId: z.uuid().nullable().optional(),
-  type: z.nativeEnum(CallType),
-  status: z.nativeEnum(CallStatus),
+  type: z.enum(CallType),
+  status: z.enum(CallStatus),
   initiatorId: z.uuid(),
   participants: z.array(callParticipantSchema),
   startedAt: z.date(),
@@ -63,7 +65,7 @@ const callSchema = z.object({
 export const initiateCallSchema = z.object({
   chatId: z.uuid().optional(),
   participantIds: z.array(z.uuid()).min(1),
-  type: z.nativeEnum(CallType),
+  type: z.enum(CallType),
 }) satisfies z.ZodType<InitiateCall>
 
 export const answerCallSchema = z.object({
@@ -88,15 +90,15 @@ export const addParticipantsToCallSchema = z.object({
 }) satisfies z.ZodType<AddParticipantsToCall>
 
 export const callQuerySchema = paginationSchema.extend({
-  status: z.nativeEnum(CallStatus).optional(),
-  type: z.nativeEnum(CallType).optional(),
+  status: z.enum(CallStatus).optional(),
+  type: z.enum(CallType).optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
 }) satisfies z.ZodType<CallQuery>
 
 export const callHistoryQuerySchema = paginationSchema.extend({
   chatId: z.uuid().optional(),
-  type: z.nativeEnum(CallType).optional(),
+  type: z.enum(CallType).optional(),
 }) satisfies z.ZodType<CallHistoryQuery>
 
 export const webRTCOfferSchema = z.object({
@@ -186,14 +188,14 @@ export const recordingsListResponseSchema = z.object({
 }) satisfies z.ZodType<RecordingsListResponse>
 
 export const reportCallQualitySchema = z.object({
-  callId: z.string().uuid(),
+  callId: z.uuid(),
   rating: z.number().min(1).max(5),
-  issues: z.array(z.nativeEnum(CallQualityIssue)).optional(),
+  issues: z.array(z.enum(CallQualityIssue)).optional(),
   feedback: z.string().max(500).optional(),
 }) satisfies z.ZodType<ReportCallQuality>
 
 const callStatisticsSchema = z.object({
-  callId: z.string().uuid(),
+  callId: z.uuid(),
   duration: z.number(),
   audioLatency: z.number(),
   videoLatency: z.number(),
