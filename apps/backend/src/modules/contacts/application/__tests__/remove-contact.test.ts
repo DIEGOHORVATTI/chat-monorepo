@@ -35,7 +35,7 @@ describe('RemoveContact Use Case', () => {
   })
 
   it('should remove bidirectional contact successfully', async () => {
-    await expect(removeContact('user-1', 'contact-1')).resolves.not.toThrow()
+    await expect(removeContact('user-1', 'contact-1')).resolves.toBeUndefined()
   })
 
   it('should throw error when contact does not exist', async () => {
@@ -55,6 +55,6 @@ describe('RemoveContact Use Case', () => {
   it('should handle case when reverse contact does not exist', async () => {
     contactRepository.findByUserAndContact = async () => null
 
-    await expect(removeContact('user-1', 'contact-1')).resolves.not.toThrow()
+    await expect(removeContact('user-1', 'contact-1')).resolves.toBeUndefined()
   })
 })

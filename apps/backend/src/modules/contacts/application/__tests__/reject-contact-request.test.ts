@@ -38,7 +38,7 @@ describe('RejectContactRequest Use Case', () => {
   })
 
   it('should reject contact request successfully', async () => {
-    await expect(rejectContactRequest('user-2', 'request-1')).resolves.not.toThrow()
+    await expect(rejectContactRequest('user-2', 'request-1')).resolves.toBeUndefined()
   })
 
   it('should throw error when contact request does not exist', async () => {
