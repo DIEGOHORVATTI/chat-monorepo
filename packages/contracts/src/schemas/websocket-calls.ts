@@ -31,32 +31,32 @@ export enum CallWebSocketEventType {
 
 // Base WebSocket call event
 const baseCallEventSchema = z.object({
-  event: z.nativeEnum(CallWebSocketEventType),
+  event: z.enum(CallWebSocketEventType),
   timestamp: z.date(),
-  requestId: z.string().uuid().optional(),
+  requestId: z.uuid().optional(),
 })
 
 // Client to Server Events
 export const callInitiateEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_INITIATE),
   data: z.object({
-    chatId: z.string().uuid().optional(),
-    participantIds: z.array(z.string().uuid()).min(1),
-    type: z.nativeEnum(CallType),
+    chatId: z.uuid().optional(),
+    participantIds: z.array(z.uuid()).min(1),
+    type: z.enum(CallType),
   }),
 })
 
 export const callAnswerEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_ANSWER),
   data: z.object({
-    callId: z.string().uuid(),
+    callId: z.uuid(),
   }),
 })
 
 export const callDeclineEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_DECLINE),
   data: z.object({
-    callId: z.string().uuid(),
+    callId: z.uuid(),
     reason: z.string().optional(),
   }),
 })
@@ -64,14 +64,14 @@ export const callDeclineEventSchema = baseCallEventSchema.extend({
 export const callEndEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_END),
   data: z.object({
-    callId: z.string().uuid(),
+    callId: z.uuid(),
   }),
 })
 
 export const callParticipantMediaUpdateEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_PARTICIPANT_MEDIA_UPDATE),
   data: z.object({
-    callId: z.string().uuid(),
+    callId: z.uuid(),
     isMuted: z.boolean().optional(),
     isVideoEnabled: z.boolean().optional(),
     isSharingScreen: z.boolean().optional(),
@@ -82,8 +82,8 @@ export const callParticipantMediaUpdateEventSchema = baseCallEventSchema.extend(
 export const webRTCOfferEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_OFFER),
   data: z.object({
-    callId: z.string().uuid(),
-    targetUserId: z.string().uuid(),
+    callId: z.uuid(),
+    targetUserId: z.uuid(),
     offer: z.object({
       type: z.literal('offer'),
       sdp: z.string(),
@@ -94,8 +94,8 @@ export const webRTCOfferEventSchema = baseCallEventSchema.extend({
 export const webRTCAnswerEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_ANSWER),
   data: z.object({
-    callId: z.string().uuid(),
-    targetUserId: z.string().uuid(),
+    callId: z.uuid(),
+    targetUserId: z.uuid(),
     answer: z.object({
       type: z.literal('answer'),
       sdp: z.string(),
@@ -106,8 +106,8 @@ export const webRTCAnswerEventSchema = baseCallEventSchema.extend({
 export const webRTCIceCandidateEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_ICE_CANDIDATE),
   data: z.object({
-    callId: z.string().uuid(),
-    targetUserId: z.string().uuid().optional(),
+    callId: z.uuid(),
+    targetUserId: z.uuid().optional(),
     candidate: z.object({
       candidate: z.string(),
       sdpMid: z.string().nullable(),
@@ -120,15 +120,15 @@ export const webRTCIceCandidateEventSchema = baseCallEventSchema.extend({
 export const callIncomingEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_INCOMING),
   data: z.object({
-    callId: z.string().uuid(),
-    chatId: z.string().uuid().nullable().optional(),
-    type: z.nativeEnum(CallType),
-    initiatorId: z.string().uuid(),
+    callId: z.uuid(),
+    chatId: z.uuid().nullable().optional(),
+    type: z.enum(CallType),
+    initiatorId: z.uuid(),
     initiatorName: z.string(),
     initiatorAvatar: z.string().url().nullable().optional(),
     participants: z.array(
       z.object({
-        userId: z.string().uuid(),
+        userId: z.uuid(),
         userName: z.string(),
       })
     ),
@@ -139,14 +139,14 @@ export const callIncomingEventSchema = baseCallEventSchema.extend({
 export const callStartedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_STARTED),
   data: z.object({
-    callId: z.string().uuid(),
+    callId: z.uuid(),
     roomId: z.string(),
     participants: z.array(
       z.object({
-        userId: z.string().uuid(),
+        userId: z.uuid(),
         userName: z.string(),
         userAvatar: z.string().url().nullable().optional(),
-        status: z.nativeEnum(ParticipantStatus),
+        status: z.enum(ParticipantStatus),
       })
     ),
   }),
@@ -155,9 +155,9 @@ export const callStartedEventSchema = baseCallEventSchema.extend({
 export const callEndedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_ENDED),
   data: z.object({
-    callId: z.string().uuid(),
+    callId: z.uuid(),
     duration: z.number(), // in seconds
-    endedBy: z.string().uuid().optional(),
+    endedBy: z.uuid().optional(),
     reason: z.string().optional(),
   }),
 })
@@ -165,8 +165,8 @@ export const callEndedEventSchema = baseCallEventSchema.extend({
 export const callParticipantJoinedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_PARTICIPANT_JOINED),
   data: z.object({
-    callId: z.string().uuid(),
-    userId: z.string().uuid(),
+    callId: z.uuid(),
+    userId: z.uuid(),
     userName: z.string(),
     userAvatar: z.string().url().nullable().optional(),
     joinedAt: z.date(),
@@ -176,8 +176,8 @@ export const callParticipantJoinedEventSchema = baseCallEventSchema.extend({
 export const callParticipantLeftEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_PARTICIPANT_LEFT),
   data: z.object({
-    callId: z.string().uuid(),
-    userId: z.string().uuid(),
+    callId: z.uuid(),
+    userId: z.uuid(),
     userName: z.string(),
     leftAt: z.date(),
     duration: z.number(), // in seconds
@@ -187,8 +187,8 @@ export const callParticipantLeftEventSchema = baseCallEventSchema.extend({
 export const callParticipantMediaChangedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_PARTICIPANT_MEDIA_CHANGED),
   data: z.object({
-    callId: z.string().uuid(),
-    userId: z.string().uuid(),
+    callId: z.uuid(),
+    userId: z.uuid(),
     userName: z.string(),
     isMuted: z.boolean(),
     isVideoEnabled: z.boolean(),
@@ -199,8 +199,8 @@ export const callParticipantMediaChangedEventSchema = baseCallEventSchema.extend
 export const callStatusChangedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_STATUS_CHANGED),
   data: z.object({
-    callId: z.string().uuid(),
-    status: z.nativeEnum(CallStatus),
+    callId: z.uuid(),
+    status: z.enum(CallStatus),
     changedAt: z.date(),
   }),
 })
@@ -209,8 +209,8 @@ export const callStatusChangedEventSchema = baseCallEventSchema.extend({
 export const webRTCOfferReceivedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_OFFER_RECEIVED),
   data: z.object({
-    callId: z.string().uuid(),
-    fromUserId: z.string().uuid(),
+    callId: z.uuid(),
+    fromUserId: z.uuid(),
     fromUserName: z.string(),
     offer: z.object({
       type: z.literal('offer'),
@@ -222,8 +222,8 @@ export const webRTCOfferReceivedEventSchema = baseCallEventSchema.extend({
 export const webRTCAnswerReceivedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_ANSWER_RECEIVED),
   data: z.object({
-    callId: z.string().uuid(),
-    fromUserId: z.string().uuid(),
+    callId: z.uuid(),
+    fromUserId: z.uuid(),
     fromUserName: z.string(),
     answer: z.object({
       type: z.literal('answer'),
@@ -235,8 +235,8 @@ export const webRTCAnswerReceivedEventSchema = baseCallEventSchema.extend({
 export const webRTCIceCandidateReceivedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_ICE_CANDIDATE_RECEIVED),
   data: z.object({
-    callId: z.string().uuid(),
-    fromUserId: z.string().uuid(),
+    callId: z.uuid(),
+    fromUserId: z.uuid(),
     candidate: z.object({
       candidate: z.string(),
       sdpMid: z.string().nullable(),

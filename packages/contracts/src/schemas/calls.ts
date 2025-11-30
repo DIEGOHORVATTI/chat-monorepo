@@ -27,12 +27,12 @@ export enum ParticipantStatus {
 }
 
 const callParticipantSchema = z.object({
-  id: z.string().uuid(),
-  callId: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.uuid(),
+  callId: z.uuid(),
+  userId: z.uuid(),
   userName: z.string(),
-  userAvatar: z.string().url().nullable().optional(),
-  status: z.nativeEnum(ParticipantStatus),
+  userAvatar: z.url().nullable().optional(),
+  status: z.enum(ParticipantStatus),
   joinedAt: z.date().nullable().optional(),
   leftAt: z.date().nullable().optional(),
   isMuted: z.boolean().default(false),
@@ -41,11 +41,11 @@ const callParticipantSchema = z.object({
 })
 
 const callSchema = z.object({
-  id: z.string().uuid(),
-  chatId: z.string().uuid().nullable().optional(),
-  type: z.nativeEnum(CallType),
-  status: z.nativeEnum(CallStatus),
-  initiatorId: z.string().uuid(),
+  id: z.uuid(),
+  chatId: z.uuid().nullable().optional(),
+  type: z.enum(CallType),
+  status: z.enum(CallStatus),
+  initiatorId: z.uuid(),
   participants: z.array(callParticipantSchema),
   startedAt: z.date(),
   endedAt: z.date().nullable().optional(),
@@ -58,48 +58,48 @@ const callSchema = z.object({
 
 // Input Schemas
 export const initiateCallSchema = z.object({
-  chatId: z.string().uuid().optional(),
-  participantIds: z.array(z.string().uuid()).min(1),
-  type: z.nativeEnum(CallType),
+  chatId: z.uuid().optional(),
+  participantIds: z.array(z.uuid()).min(1),
+  type: z.enum(CallType),
 })
 
 export const answerCallSchema = z.object({
-  callId: z.string().uuid(),
+  callId: z.uuid(),
   accept: z.boolean(),
 })
 
 export const endCallSchema = z.object({
-  callId: z.string().uuid(),
+  callId: z.uuid(),
 })
 
 export const updateParticipantMediaSchema = z.object({
-  callId: z.string().uuid(),
+  callId: z.uuid(),
   isMuted: z.boolean().optional(),
   isVideoEnabled: z.boolean().optional(),
   isSharingScreen: z.boolean().optional(),
 })
 
 export const addParticipantsToCallSchema = z.object({
-  callId: z.string().uuid(),
-  participantIds: z.array(z.string().uuid()).min(1),
+  callId: z.uuid(),
+  participantIds: z.array(z.uuid()).min(1),
 })
 
 export const callQuerySchema = paginationSchema.extend({
-  status: z.nativeEnum(CallStatus).optional(),
-  type: z.nativeEnum(CallType).optional(),
+  status: z.enum(CallStatus).optional(),
+  type: z.enum(CallType).optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
 })
 
 export const callHistoryQuerySchema = paginationSchema.extend({
-  chatId: z.string().uuid().optional(),
-  type: z.nativeEnum(CallType).optional(),
+  chatId: z.uuid().optional(),
+  type: z.enum(CallType).optional(),
 })
 
 // WebRTC Signaling Schemas
 export const webRTCOfferSchema = z.object({
-  callId: z.string().uuid(),
-  targetUserId: z.string().uuid(),
+  callId: z.uuid(),
+  targetUserId: z.uuid(),
   offer: z.object({
     type: z.literal('offer'),
     sdp: z.string(),
@@ -107,8 +107,8 @@ export const webRTCOfferSchema = z.object({
 })
 
 export const webRTCAnswerSchema = z.object({
-  callId: z.string().uuid(),
-  targetUserId: z.string().uuid(),
+  callId: z.uuid(),
+  targetUserId: z.uuid(),
   answer: z.object({
     type: z.literal('answer'),
     sdp: z.string(),
@@ -116,8 +116,8 @@ export const webRTCAnswerSchema = z.object({
 })
 
 export const webRTCIceCandidateSchema = z.object({
-  callId: z.string().uuid(),
-  targetUserId: z.string().uuid().optional(),
+  callId: z.uuid(),
+  targetUserId: z.uuid().optional(),
   candidate: z.object({
     candidate: z.string(),
     sdpMid: z.string().nullable(),
