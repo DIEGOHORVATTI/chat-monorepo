@@ -17,19 +17,50 @@ describe('AddContact Use Case', () => {
 
   beforeEach(() => {
     userRepository = {
-      findById: async () => ({ id: 'user-2', email: 'user@example.com' } as any),
+      findById: async (id: string) => {
+        if (id === 'user-2') {
+          return { id: 'user-2', email: 'user@example.com' } as any
+        }
+        return null
+      },
+      findByEmail: async () => null,
+      save: async (user) => user as any,
+      findAll: async () => ({ data: [], meta: { total: 0, page: 1, limit: 10, pages: 0 } }),
+      updatePrivacy: async (id, privacy) => ({ id, privacy } as any),
+      updateStatus: async (id, status) => ({ id, status } as any),
+      setCustomStatus: async (id, status, emoji, expiresAt) => ({ id } as any),
+      clearCustomStatus: async (id) => ({ id } as any),
+      getOnlineUsers: async () => ({ data: [], meta: { total: 0, page: 1, limit: 10, pages: 0 } }),
+      deleteUser: async () => undefined,
     } as UserRepository
 
     contactRepository = {
+      findById: async () => null,
       findByUserAndContact: async () => null,
+      findAllByUserId: async () => ({ data: [], meta: { total: 0, page: 1, limit: 10, pages: 0 } }),
+      save: async (contact) => contact as Contact,
+      delete: async () => undefined,
     } as ContactRepository
 
     contactRequestRepository = {
+      findById: async () => null,
       findByUsers: async () => null,
+      findPendingByReceiver: async () => ({
+        data: [],
+        meta: { total: 0, page: 1, limit: 10, pages: 0 },
+      }),
+      findBySender: async () => ({ data: [], meta: { total: 0, page: 1, limit: 10, pages: 0 } }),
       save: async (request) => request as ContactRequest,
+      updateStatus: async (id, status) =>
+        ({
+          id,
+          status,
+          senderId: 'user-1',
+          receiverId: 'user-2',
+        } as ContactRequest),
     } as ContactRequestRepository
 
-    addContact = makeAddContact(userRepository, contactRepository, contactRequestRepository)
+    addContact = makeAddContact(contactRepository, contactRequestRepository, userRepository)
   })
 
   it('should create a contact request successfully', async () => {
@@ -59,19 +90,31 @@ describe('AddContact Use Case', () => {
   })
 
   it('should throw error when users are already contacts', async () => {
+    userRepository.findById = async (id: string) => {
+      if (id === 'user-2') {
+        return { id: 'user-2', email: 'user@example.com' } as any
+      }
+      return null
+    }
     contactRepository.findByUserAndContact = async () => ({ id: 'contact-1' } as Contact)
 
     await expect(addContact('user-1', { userId: 'user-2', message: 'Hi' })).rejects.toThrow(
-      badRequest('You are already contacts with this user')
+      badRequest('User is already in your contacts')
     )
   })
 
   it('should throw error when contact request already exists', async () => {
+    userRepository.findById = async (id: string) => {
+      if (id === 'user-2') {
+        return { id: 'user-2', email: 'user@example.com' } as any
+      }
+      return null
+    }
     contactRequestRepository.findByUsers = async () =>
       ({ id: 'request-1', status: 'pending' } as ContactRequest)
 
     await expect(addContact('user-1', { userId: 'user-2', message: 'Hi' })).rejects.toThrow(
-      badRequest('A contact request already exists between these users')
+      badRequest('Contact request already exists')
     )
   })
 })
