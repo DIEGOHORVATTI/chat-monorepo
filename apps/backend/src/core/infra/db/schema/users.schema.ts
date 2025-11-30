@@ -50,15 +50,16 @@ export const users = pgTable('User', {
   customStatus: text('customStatus'),
   customStatusEmoji: text('customStatusEmoji'),
   customStatusExpiresAt: timestamp('customStatusExpiresAt', { withTimezone: true }),
-  privacy: jsonb('privacy').$type<{
-    profilePhoto: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
-    lastSeen: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
-    status: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
-    readReceipts: boolean
-    allowMessagesFrom: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
-    allowCallsFrom: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
-    blockedUsers: string[]
-  }>()
+  privacy: jsonb('privacy')
+    .$type<{
+      profilePhoto: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+      lastSeen: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+      status: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+      readReceipts: boolean
+      allowMessagesFrom: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+      allowCallsFrom: 'everyone' | 'contacts' | 'contacts_except' | 'nobody'
+      blockedUsers: string[]
+    }>()
     .notNull()
     .default({
       profilePhoto: 'everyone',

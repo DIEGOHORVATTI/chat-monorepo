@@ -170,11 +170,7 @@ export const makeUserRepository = (): UserRepository => ({
   },
 
   async getOnlineUsers() {
-    const onlineUsers = await db
-      .select()
-      .from(users)
-      .where(eq(users.status, 'ONLINE'))
-      .limit(100)
+    const onlineUsers = await db.select().from(users).where(eq(users.status, 'ONLINE')).limit(100)
 
     return onlineUsers.map(UserMapper.toDomain)
   },

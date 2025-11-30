@@ -3,7 +3,8 @@ import type { UserRepository } from '@identity/domain/repositories'
 import { notFound } from '@repo/service-core'
 
 export const makeExportUserData =
-  (userRepository: UserRepository) => async (userId: string, format: 'json' | 'csv' = 'json') => {
+  (userRepository: UserRepository) =>
+  async (userId: string, format: 'json' | 'csv' = 'json') => {
     const user = await userRepository.findById(userId)
 
     if (!user) {
