@@ -1,11 +1,6 @@
 import { z } from 'zod'
 import { meta, paginationSchema } from './base'
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
-
 export enum PermissionType {
   READ = 'READ',
   WRITE = 'WRITE',
@@ -29,7 +24,6 @@ const userSchema = z.object({
   email: z.email(),
   name: z.string(),
   password: z.string().min(6),
-  role: z.enum([UserRole.ADMIN, UserRole.USER]),
   avatarUrl: z.url().nullable().optional(),
   isEmailVerified: z.boolean().optional(),
   lastLoginAt: z.date().nullable().optional(),
@@ -77,6 +71,17 @@ export const userCreateSchema = userSchema.pick({
   email: true,
 })
 
+export const updateProfileSchema = z.object({
+  name: z.string().optional(),
+  avatarUrl: z.url().optional(),
+  timezone: z.string().optional(),
+})
+
+export const changePasswordSchema = z.object({
+  oldPassword: z.string(),
+  newPassword: z.string().min(6),
+})
+
 export const messageResponseSchema = z.object({
   message: z.string(),
 })
@@ -99,6 +104,8 @@ export type Register = z.infer<typeof registerSchema>
 export type VerifyEmail = z.infer<typeof verifyEmailSchema>
 export type Email = z.infer<typeof emailSchema>
 export type UserCreate = z.infer<typeof userCreateSchema>
+export type UpdateProfile = z.infer<typeof updateProfileSchema>
+export type ChangePassword = z.infer<typeof changePasswordSchema>
 export type MessageResponse = z.infer<typeof messageResponseSchema>
 export type User = z.infer<typeof userSchema>
 export type RegisterResponse = z.infer<typeof registerResponseSchema>

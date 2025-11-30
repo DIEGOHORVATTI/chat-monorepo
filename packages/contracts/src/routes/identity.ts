@@ -11,6 +11,9 @@ import {
   messageResponseSchema,
   registerResponseSchema,
   usersListResponseSchema,
+  privacyUpdateSchema,
+  updateProfileSchema,
+  changePasswordSchema,
 } from '../schemas/identity'
 
 const prefix = oc.route({ tags: ['Identity'] })
@@ -93,4 +96,52 @@ export const identity = oc.prefix('/identity').router({
     })
     .input(userCreateSchema)
     .output(userResponseSchema),
+
+  updatePrivacy: prefix
+    .route({
+      method: 'PATCH',
+      path: '/me/privacy',
+      summary: 'Update privacy settings',
+      description: 'Update authenticated user privacy settings',
+    })
+    .input(privacyUpdateSchema)
+    .output(userResponseSchema),
+
+  updateProfile: prefix
+    .route({
+      method: 'PATCH',
+      path: '/me/profile',
+      summary: 'Update profile info',
+      description: 'Update name, avatar or timezone',
+    })
+    .input(updateProfileSchema)
+    .output(userResponseSchema),
+
+  changePassword: prefix
+    .route({
+      method: 'PATCH',
+      path: '/me/change-password',
+      summary: 'Change password',
+      description: 'Update the user password',
+    })
+    .input(changePasswordSchema)
+    .output(messageResponseSchema),
+
+  blockUser: prefix
+    .route({
+      method: 'POST',
+      path: '/me/block/:userId',
+      summary: 'Block user',
+      description: 'Block another user',
+    })
+    .output(messageResponseSchema),
+
+  unblockUser: prefix
+    .route({
+      method: 'DELETE',
+      path: '/me/block/:userId',
+      summary: 'Unblock user',
+      description: 'Unblock previously blocked user',
+    })
+    .output(messageResponseSchema),
 })
