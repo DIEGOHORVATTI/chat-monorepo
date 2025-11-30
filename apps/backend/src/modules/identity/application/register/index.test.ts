@@ -6,7 +6,7 @@ import type {
 
 import { conflict } from '@repo/service-core'
 import { it, vi, expect, describe, beforeEach } from 'vitest'
-import { UserRole, createUser } from '@/modules/identity/domain/entities'
+import { createUser } from '@/modules/identity/domain/entities'
 
 import { makeRegister, type RegisterData } from './index'
 
@@ -62,7 +62,6 @@ describe('Register Use Case', () => {
         email: registerData.email,
         name: registerData.name,
         isEmailVerified: false,
-        role: UserRole.USER,
       },
     })
 
@@ -87,7 +86,6 @@ describe('Register Use Case', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       permissions: [],
-      role: UserRole.USER,
     })
 
     vi.spyOn(mockUserRepository, 'findByEmail').mockResolvedValue(existingUser)
