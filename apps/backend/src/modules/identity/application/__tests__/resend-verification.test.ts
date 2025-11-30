@@ -70,8 +70,7 @@ describe('ResendVerification Use Case', () => {
     expect(mockEmailNotificationService.sendVerificationEmail).toHaveBeenCalledOnce()
 
     // Verify that the email service was called with the user data and a code
-    const emailCall = (mockEmailNotificationService.sendVerificationEmail as any).mock
-      .calls[0]?.[0]
+    const emailCall = (mockEmailNotificationService.sendVerificationEmail as any).mock.calls[0]?.[0]
     expect(emailCall).toBeDefined()
     expect(emailCall!.email).toBe(user.email)
     expect(emailCall!.name).toBe(user.name)
