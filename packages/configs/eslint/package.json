@@ -1,0 +1,23 @@
+{
+  "name": "@repo/eslint",
+  "main": "eslint.config.mjs",
+  "version": "0.1.0",
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "eslint": "catalog:",
+    "@typescript-eslint/parser": "8.33.0",
+    "eslint-import-resolver-typescript": "4.4.1",
+    "eslint-plugin-boundaries": "^5.0.1",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-perfectionist": "4.13.0",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-unused-imports": "4.1.4",
+    "typescript": "^5.8.4",
+    "typescript-eslint": "8.41.0"
+  },
+  "dependencies": {
+    "globals": "^16.3.0"
+  }
+}

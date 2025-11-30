@@ -1,0 +1,11 @@
+{
+  "name": "@repo/typescript",
+  "type": "module",
+  "version": "0.1.0",
+  "devDependencies": {
+    "typescript": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
