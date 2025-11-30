@@ -17,8 +17,8 @@ import {
   updateChatSchema,
   chatParticipantsResponseSchema,
   typingIndicatorSchema,
-} from '../schemas/chat'
-import { messageResponseSchema as baseMessageResponseSchema } from '../schemas/identity'
+} from './chat.schema'
+import { messageResponseSchema as baseMessageResponseSchema } from '../identity/identity.schema'
 
 const prefix = oc.route({ tags: ['Chat'] })
 

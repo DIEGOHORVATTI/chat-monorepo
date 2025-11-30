@@ -13,7 +13,7 @@ import {
   pingEventSchema,
   pongEventSchema,
   WebSocketEventType,
-} from '../schemas/websocket'
+} from './websocket.schema'
 
 const prefix = oc.route({ tags: ['WebSocket'] })
 

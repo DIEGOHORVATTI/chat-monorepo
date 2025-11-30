@@ -1,30 +1,30 @@
 import { z } from 'zod'
-import { meta, paginationSchema } from './base'
+import { meta, paginationSchema } from '../../shared/base.schema'
+import { CallType, CallStatus, ParticipantStatus } from './types'
+import type {
+  Call,
+  CallParticipant,
+  InitiateCall,
+  AnswerCall,
+  EndCall,
+  UpdateParticipantMedia,
+  AddParticipantsToCall,
+  CallQuery,
+  CallHistoryQuery,
+  WebRTCOffer,
+  WebRTCAnswer,
+  WebRTCIceCandidate,
+  CallResponse,
+  CallsListResponse,
+  CallParticipantResponse,
+  CallParticipantsResponse,
+  WebRTCSignalingResponse,
+} from './types'
 
-export enum CallType {
-  AUDIO = 'AUDIO',
-  VIDEO = 'VIDEO',
-}
-
-export enum CallStatus {
-  RINGING = 'RINGING',
-  CONNECTING = 'CONNECTING',
-  CONNECTED = 'CONNECTED',
-  ENDED = 'ENDED',
-  MISSED = 'MISSED',
-  DECLINED = 'DECLINED',
-  FAILED = 'FAILED',
-  BUSY = 'BUSY',
-}
-
-export enum ParticipantStatus {
-  INVITED = 'INVITED',
-  RINGING = 'RINGING',
-  JOINED = 'JOINED',
-  LEFT = 'LEFT',
-  DECLINED = 'DECLINED',
-  MISSED = 'MISSED',
-}
+/**
+ * Calls schemas using Zod
+ * Implements the interfaces defined in types.ts
+ */
 
 const callParticipantSchema = z.object({
   id: z.uuid(),
@@ -32,69 +32,69 @@ const callParticipantSchema = z.object({
   userId: z.uuid(),
   userName: z.string(),
   userAvatar: z.url().nullable().optional(),
-  status: z.enum(ParticipantStatus),
+  status: z.nativeEnum(ParticipantStatus),
   joinedAt: z.date().nullable().optional(),
   leftAt: z.date().nullable().optional(),
   isMuted: z.boolean().default(false),
   isVideoEnabled: z.boolean().default(false),
   isSharingScreen: z.boolean().default(false),
-})
+}) satisfies z.ZodType<CallParticipant>
 
 const callSchema = z.object({
   id: z.uuid(),
   chatId: z.uuid().nullable().optional(),
-  type: z.enum(CallType),
-  status: z.enum(CallStatus),
+  type: z.nativeEnum(CallType),
+  status: z.nativeEnum(CallStatus),
   initiatorId: z.uuid(),
   participants: z.array(callParticipantSchema),
   startedAt: z.date(),
   endedAt: z.date().nullable().optional(),
-  duration: z.number().nullable().optional(), // in seconds
-  roomId: z.string(), // WebRTC room identifier
+  duration: z.number().nullable().optional(),
+  roomId: z.string(),
   metadata: z.record(z.string(), z.unknown()).optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
-})
+}) satisfies z.ZodType<Call>
 
 // Input Schemas
 export const initiateCallSchema = z.object({
   chatId: z.uuid().optional(),
   participantIds: z.array(z.uuid()).min(1),
-  type: z.enum(CallType),
-})
+  type: z.nativeEnum(CallType),
+}) satisfies z.ZodType<InitiateCall>
 
 export const answerCallSchema = z.object({
   callId: z.uuid(),
   accept: z.boolean(),
-})
+}) satisfies z.ZodType<AnswerCall>
 
 export const endCallSchema = z.object({
   callId: z.uuid(),
-})
+}) satisfies z.ZodType<EndCall>
 
 export const updateParticipantMediaSchema = z.object({
   callId: z.uuid(),
   isMuted: z.boolean().optional(),
   isVideoEnabled: z.boolean().optional(),
   isSharingScreen: z.boolean().optional(),
-})
+}) satisfies z.ZodType<UpdateParticipantMedia>
 
 export const addParticipantsToCallSchema = z.object({
   callId: z.uuid(),
   participantIds: z.array(z.uuid()).min(1),
-})
+}) satisfies z.ZodType<AddParticipantsToCall>
 
 export const callQuerySchema = paginationSchema.extend({
-  status: z.enum(CallStatus).optional(),
-  type: z.enum(CallType).optional(),
+  status: z.nativeEnum(CallStatus).optional(),
+  type: z.nativeEnum(CallType).optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
-})
+}) satisfies z.ZodType<CallQuery>
 
 export const callHistoryQuerySchema = paginationSchema.extend({
   chatId: z.uuid().optional(),
-  type: z.enum(CallType).optional(),
-})
+  type: z.nativeEnum(CallType).optional(),
+}) satisfies z.ZodType<CallHistoryQuery>
 
 // WebRTC Signaling Schemas
 export const webRTCOfferSchema = z.object({
@@ -104,7 +104,7 @@ export const webRTCOfferSchema = z.object({
     type: z.literal('offer'),
     sdp: z.string(),
   }),
-})
+}) satisfies z.ZodType<WebRTCOffer>
 
 export const webRTCAnswerSchema = z.object({
   callId: z.uuid(),
@@ -113,7 +113,7 @@ export const webRTCAnswerSchema = z.object({
     type: z.literal('answer'),
     sdp: z.string(),
   }),
-})
+}) satisfies z.ZodType<WebRTCAnswer>
 
 export const webRTCIceCandidateSchema = z.object({
   callId: z.uuid(),
@@ -123,46 +123,27 @@ export const webRTCIceCandidateSchema = z.object({
     sdpMid: z.string().nullable(),
     sdpMLineIndex: z.number().nullable(),
   }),
-})
+}) satisfies z.ZodType<WebRTCIceCandidate>
 
 // Response Schemas
 export const callResponseSchema = z.object({
   call: callSchema,
-})
+}) satisfies z.ZodType<CallResponse>
 
 export const callsListResponseSchema = z.object({
   calls: z.array(callSchema),
   meta,
-})
+}) satisfies z.ZodType<CallsListResponse>
 
 export const callParticipantResponseSchema = z.object({
   participant: callParticipantSchema,
-})
+}) satisfies z.ZodType<CallParticipantResponse>
 
 export const callParticipantsResponseSchema = z.object({
   participants: z.array(callParticipantSchema),
-})
+}) satisfies z.ZodType<CallParticipantsResponse>
 
 export const webRTCSignalingResponseSchema = z.object({
   success: z.boolean(),
   message: z.string().optional(),
-})
-
-// Type exports
-export type Call = z.infer<typeof callSchema>
-export type CallParticipant = z.infer<typeof callParticipantSchema>
-export type InitiateCall = z.infer<typeof initiateCallSchema>
-export type AnswerCall = z.infer<typeof answerCallSchema>
-export type EndCall = z.infer<typeof endCallSchema>
-export type UpdateParticipantMedia = z.infer<typeof updateParticipantMediaSchema>
-export type AddParticipantsToCall = z.infer<typeof addParticipantsToCallSchema>
-export type CallQuery = z.infer<typeof callQuerySchema>
-export type CallHistoryQuery = z.infer<typeof callHistoryQuerySchema>
-export type WebRTCOffer = z.infer<typeof webRTCOfferSchema>
-export type WebRTCAnswer = z.infer<typeof webRTCAnswerSchema>
-export type WebRTCIceCandidate = z.infer<typeof webRTCIceCandidateSchema>
-export type CallResponse = z.infer<typeof callResponseSchema>
-export type CallsListResponse = z.infer<typeof callsListResponseSchema>
-export type CallParticipantResponse = z.infer<typeof callParticipantResponseSchema>
-export type CallParticipantsResponse = z.infer<typeof callParticipantsResponseSchema>
-export type WebRTCSignalingResponse = z.infer<typeof webRTCSignalingResponseSchema>
+}) satisfies z.ZodType<WebRTCSignalingResponse>

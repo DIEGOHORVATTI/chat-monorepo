@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CallType, CallStatus, ParticipantStatus } from './calls'
+import { CallType, CallStatus, ParticipantStatus } from '../calls/types'
 
 export enum CallWebSocketEventType {
   // Client to Server events

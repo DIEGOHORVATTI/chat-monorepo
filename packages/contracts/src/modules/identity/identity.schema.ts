@@ -1,15 +1,33 @@
 import { z } from 'zod'
-import { meta, paginationSchema } from './base'
+import { meta, paginationSchema } from '../../shared/base.schema'
+import { PermissionType } from './types'
+import type {
+  User,
+  Login,
+  Register,
+  VerifyEmail,
+  UserQuery,
+  Email,
+  UserCreate,
+  UpdateProfile,
+  ChangePassword,
+  PrivacySettings,
+  PrivacyUpdate,
+  MessageResponse,
+  RegisterResponse,
+  UserResponse,
+  UsersListResponse,
+} from './types'
 
-export enum PermissionType {
-  READ = 'READ',
-  WRITE = 'WRITE',
-  DELETE = 'DELETE',
-}
+/**
+ * Identity schemas using Zod
+ * Implements the interfaces defined in types.ts
+ * Uses 'satisfies' to ensure type compatibility
+ */
 
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
 
-const privacySettingsSchema = z.object({
+export const privacySettingsSchema = z.object({
   profilePhoto: privacyVisibility,
   lastSeen: privacyVisibility,
   status: privacyVisibility,
@@ -17,9 +35,9 @@ const privacySettingsSchema = z.object({
   allowMessagesFrom: privacyVisibility,
   allowCallsFrom: privacyVisibility,
   blockedUsers: z.array(z.string().uuid()),
-})
+}) satisfies z.ZodType<PrivacySettings>
 
-const userSchema = z.object({
+export const userSchema = z.object({
   id: z.string(),
   email: z.email(),
   name: z.string(),
@@ -28,7 +46,7 @@ const userSchema = z.object({
   isEmailVerified: z.boolean().optional(),
   lastLoginAt: z.date().nullable().optional(),
   timezone: z.string().nullable().optional(),
-  permissions: z.array(z.enum(Object.values(PermissionType))),
+  permissions: z.array(z.nativeEnum(PermissionType)),
   privacy: privacySettingsSchema.default({
     profilePhoto: 'everyone',
     lastSeen: 'everyone',
@@ -40,74 +58,62 @@ const userSchema = z.object({
   }),
   createdAt: z.date(),
   updatedAt: z.date(),
-})
+}) satisfies z.ZodType<User>
 
-export const privacyUpdateSchema = privacySettingsSchema.partial()
+export const privacyUpdateSchema =
+  privacySettingsSchema.partial() satisfies z.ZodType<PrivacyUpdate>
 
 export const loginSchema = userSchema.pick({
   email: true,
   password: true,
-})
+}) satisfies z.ZodType<Login>
 
 export const registerSchema = userSchema.pick({
   name: true,
   email: true,
   password: true,
-})
+}) satisfies z.ZodType<Register>
 
 export const verifyEmailSchema = z.object({
   userId: z.string(),
   code: z.string().length(6),
-})
+}) satisfies z.ZodType<VerifyEmail>
 
-export const userQuerySchema = paginationSchema
+export const userQuerySchema = paginationSchema satisfies z.ZodType<UserQuery>
 
 export const emailSchema = userSchema.pick({
   email: true,
-})
+}) satisfies z.ZodType<Email>
 
 export const userCreateSchema = userSchema.pick({
   name: true,
   email: true,
-})
+}) satisfies z.ZodType<UserCreate>
 
 export const updateProfileSchema = z.object({
   name: z.string().optional(),
   avatarUrl: z.url().optional(),
   timezone: z.string().optional(),
-})
+}) satisfies z.ZodType<UpdateProfile>
 
 export const changePasswordSchema = z.object({
   oldPassword: z.string(),
   newPassword: z.string().min(6),
-})
+}) satisfies z.ZodType<ChangePassword>
 
 export const messageResponseSchema = z.object({
   message: z.string(),
-})
+}) satisfies z.ZodType<MessageResponse>
 
 export const registerResponseSchema = z.object({
   message: z.string(),
-})
+}) satisfies z.ZodType<RegisterResponse>
 
 export const userResponseSchema = z.object({
   user: userSchema.omit({ password: true }),
-})
+}) satisfies z.ZodType<UserResponse>
 
 export const usersListResponseSchema = z.object({
   users: z.array(userSchema.omit({ password: true })),
   meta,
-})
-
-export type Login = z.infer<typeof loginSchema>
-export type Register = z.infer<typeof registerSchema>
-export type VerifyEmail = z.infer<typeof verifyEmailSchema>
-export type Email = z.infer<typeof emailSchema>
-export type UserCreate = z.infer<typeof userCreateSchema>
-export type UpdateProfile = z.infer<typeof updateProfileSchema>
-export type ChangePassword = z.infer<typeof changePasswordSchema>
-export type MessageResponse = z.infer<typeof messageResponseSchema>
-export type User = z.infer<typeof userSchema>
-export type RegisterResponse = z.infer<typeof registerResponseSchema>
-export type UserResponse = z.infer<typeof userResponseSchema>
-export type UsersListResponse = z.infer<typeof usersListResponseSchema>
+}) satisfies z.ZodType<UsersListResponse>

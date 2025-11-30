@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { MessageType, MessageStatus } from './chat'
+import { MessageType, MessageStatus } from '../chat/types'
 
 export enum WebSocketEventType {
   // Client to Server events
@@ -260,25 +260,6 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
   pongEventSchema,
 ])
 
-// Type exports
-export type JoinChatEvent = z.infer<typeof joinChatEventSchema>
-export type LeaveChatEvent = z.infer<typeof leaveChatEventSchema>
-export type TypingStartEvent = z.infer<typeof typingStartEventSchema>
-export type TypingStopEvent = z.infer<typeof typingStopEventSchema>
-export type MessageSendEvent = z.infer<typeof messageSendEventSchema>
-export type MessageReadEvent = z.infer<typeof messageReadEventSchema>
-export type MessageReceivedEvent = z.infer<typeof messageReceivedEventSchema>
-export type MessageUpdatedEvent = z.infer<typeof messageUpdatedEventSchema>
-export type MessageDeletedEvent = z.infer<typeof messageDeletedEventSchema>
-export type MessageStatusChangedEvent = z.infer<typeof messageStatusChangedEventSchema>
-export type UserTypingEvent = z.infer<typeof userTypingEventSchema>
-export type UserOnlineEvent = z.infer<typeof userOnlineEventSchema>
-export type UserOfflineEvent = z.infer<typeof userOfflineEventSchema>
-export type ChatUpdatedEvent = z.infer<typeof chatUpdatedEventSchema>
-export type ParticipantJoinedEvent = z.infer<typeof participantJoinedEventSchema>
-export type ParticipantLeftEvent = z.infer<typeof participantLeftEventSchema>
-export type ConnectionAckEvent = z.infer<typeof connectionAckEventSchema>
-export type ErrorEvent = z.infer<typeof errorEventSchema>
-export type PingEvent = z.infer<typeof pingEventSchema>
-export type PongEvent = z.infer<typeof pongEventSchema>
-export type WebSocketEvent = z.infer<typeof webSocketEventSchema>
+// Type exports removed - use types.ts instead
+// This maintains backwards compatibility for inferred types
+// but prefer importing from './types' for the pure TypeScript interfaces

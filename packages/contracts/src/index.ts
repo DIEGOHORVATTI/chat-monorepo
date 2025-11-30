@@ -1,19 +1,14 @@
-// Export schemas for reuse
-export * from './schemas'
+import { identity, chat, calls, websocket } from './modules'
 
-// Export routes for ORPC
-import * as routes from './routes'
-
-/**
- * @title Contracts - Horvatti Champ
- * @description This package defines the contracts for the Horvatti Champ application using ORPC (Open RPC).
- * It includes schemas and routes for identity management and animal management.
- * @see https://orpc.dev/docs/quick-start
- */
-export const contracts = routes
+export const contracts = {
+  identity,
+  chat,
+  calls,
+  websocket,
+}
 
 /**
- * @title App Router - Horvatti Champ
- * @description This type represents the app router for the Horvatti Champ application.
+ * @title App Router - Chat Monorepo
+ * @description Type-safe router for the entire application
  */
 export type AppRouter = typeof contracts

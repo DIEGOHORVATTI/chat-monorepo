@@ -15,8 +15,8 @@ import {
   webRTCAnswerSchema,
   webRTCIceCandidateSchema,
   webRTCSignalingResponseSchema,
-} from '../schemas/calls'
-import { messageResponseSchema } from '../schemas/identity'
+} from './calls.schema'
+import { messageResponseSchema } from '../identity/identity.schema'
 
 const prefix = oc.route({ tags: ['Calls'] })
 

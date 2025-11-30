@@ -14,7 +14,7 @@ import {
   privacyUpdateSchema,
   updateProfileSchema,
   changePasswordSchema,
-} from '../schemas/identity'
+} from './identity.schema'
 
 const prefix = oc.route({ tags: ['Identity'] })
 
