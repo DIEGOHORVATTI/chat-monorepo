@@ -31,7 +31,7 @@ export const refreshTokenService = {
    */
   verify: async (token: string): Promise<EncodedJWTUser | null> => {
     try {
-      const { payload } = await jwtVerify(
+      const { payload } = await jwtVerify<EncodedJWTUser>(
         token,
         new TextEncoder().encode(ENV.JWT.JWT_REFRESH_SECRET || ENV.JWT.JWT_SECRET)
       )
@@ -39,7 +39,7 @@ export const refreshTokenService = {
       const now = Math.floor(Date.now() / 1000)
       if (payload.exp && payload.exp < now) return null
 
-      return payload as EncodedJWTUser
+      return payload
     } catch {
       return null
     }
