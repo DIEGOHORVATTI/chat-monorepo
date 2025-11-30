@@ -1,6 +1,12 @@
 import { setCookie } from '@orpc/server/helpers'
 import { pub, ENV, auth } from '@repo/service-core'
-import { login, register, listUsers, verifyEmail, resendVerification } from '@/container'
+import {
+  login,
+  register,
+  listUsers,
+  verifyEmail,
+  resendVerification,
+} from '@/modules/identity/container'
 
 export const loginRoute = pub.identity.login.handler(async ({ input, context }) => {
   const token = await login(input)
