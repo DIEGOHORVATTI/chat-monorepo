@@ -1,8 +1,8 @@
+import type { EncodedJWTUser } from '@repo/contracts'
+
 import { SignJWT, jwtVerify } from 'jose'
 
 import { ENV } from '../config/env'
-
-import type { EncodedJWTUser } from '../types'
 
 /**
  * Serviço para lidar com tokens de atualização (refresh tokens)

@@ -8,7 +8,6 @@ import type {
 import { hash } from 'bcrypt'
 import { conflict } from '@repo/service-core'
 import {
-  UserRole,
   createUser,
   createEmailVerification,
   createVerificationExpiry,
@@ -19,7 +18,6 @@ export type RegisterData = {
   name: string
   email: string
   password: string
-  role?: UserRole
   permissions?: PermissionType[]
 }
 
@@ -42,7 +40,6 @@ export const makeRegister =
       email: data.email,
       name: data.name,
       password: hashedPassword,
-      role: data.role || UserRole.USER,
       permissions: data.permissions || [],
       isActive: true,
       isEmailVerified: false,
