@@ -56,7 +56,6 @@ export interface ChatParticipant {
   leftAt?: Date | null
 }
 
-// Input types
 export interface CreateChat {
   type: ChatType
   name?: string
@@ -115,7 +114,6 @@ export interface TypingIndicator {
   isTyping: boolean
 }
 
-// Response types
 export interface ChatMessageResponse {
   message: Message
 }

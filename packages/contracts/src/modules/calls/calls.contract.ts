@@ -21,7 +21,6 @@ import { messageResponseSchema } from '../identity/identity.schema'
 const prefix = oc.route({ tags: ['Calls'] })
 
 export const calls = oc.prefix('/calls').router({
-  // Call Management
   initiateCall: prefix
     .route({
       method: 'POST',
@@ -81,7 +80,6 @@ export const calls = oc.prefix('/calls').router({
     .input(callHistoryQuerySchema)
     .output(callsListResponseSchema),
 
-  // Participant Management
   addParticipants: prefix
     .route({
       method: 'POST',
@@ -111,7 +109,6 @@ export const calls = oc.prefix('/calls').router({
     })
     .output(callParticipantsResponseSchema),
 
-  // WebRTC Signaling
   sendOffer: prefix
     .route({
       method: 'POST',

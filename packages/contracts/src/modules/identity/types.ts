@@ -1,8 +1,3 @@
-/**
- * Identity module types
- * Pure TypeScript interfaces - no dependencies on validation libraries
- */
-
 import type { Meta, PaginationQuery } from '../../shared/types'
 
 export enum PermissionType {
@@ -78,7 +73,6 @@ export interface ChangePassword {
 
 export interface PrivacyUpdate extends Partial<PrivacySettings> {}
 
-// Response types
 export interface MessageResponse {
   message: string
 }

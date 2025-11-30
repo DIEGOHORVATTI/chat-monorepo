@@ -2,19 +2,16 @@ import { z } from 'zod'
 import { CallType, CallStatus, ParticipantStatus } from '../calls/types'
 
 export enum CallWebSocketEventType {
-  // Client to Server events
   CALL_INITIATE = 'CALL_INITIATE',
   CALL_ANSWER = 'CALL_ANSWER',
   CALL_DECLINE = 'CALL_DECLINE',
   CALL_END = 'CALL_END',
   CALL_PARTICIPANT_MEDIA_UPDATE = 'CALL_PARTICIPANT_MEDIA_UPDATE',
 
-  // WebRTC Signaling events
   WEBRTC_OFFER = 'WEBRTC_OFFER',
   WEBRTC_ANSWER = 'WEBRTC_ANSWER',
   WEBRTC_ICE_CANDIDATE = 'WEBRTC_ICE_CANDIDATE',
 
-  // Server to Client events
   CALL_INCOMING = 'CALL_INCOMING',
   CALL_STARTED = 'CALL_STARTED',
   CALL_ENDED = 'CALL_ENDED',
@@ -23,20 +20,17 @@ export enum CallWebSocketEventType {
   CALL_PARTICIPANT_MEDIA_CHANGED = 'CALL_PARTICIPANT_MEDIA_CHANGED',
   CALL_STATUS_CHANGED = 'CALL_STATUS_CHANGED',
 
-  // WebRTC Signaling events (received)
   WEBRTC_OFFER_RECEIVED = 'WEBRTC_OFFER_RECEIVED',
   WEBRTC_ANSWER_RECEIVED = 'WEBRTC_ANSWER_RECEIVED',
   WEBRTC_ICE_CANDIDATE_RECEIVED = 'WEBRTC_ICE_CANDIDATE_RECEIVED',
 }
 
-// Base WebSocket call event
 const baseCallEventSchema = z.object({
   event: z.enum(CallWebSocketEventType),
   timestamp: z.date(),
   requestId: z.uuid().optional(),
 })
 
-// Client to Server Events
 export const callInitiateEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_INITIATE),
   data: z.object({
@@ -78,7 +72,6 @@ export const callParticipantMediaUpdateEventSchema = baseCallEventSchema.extend(
   }),
 })
 
-// WebRTC Signaling Events (Client to Server)
 export const webRTCOfferEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_OFFER),
   data: z.object({
@@ -116,7 +109,6 @@ export const webRTCIceCandidateEventSchema = baseCallEventSchema.extend({
   }),
 })
 
-// Server to Client Events
 export const callIncomingEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.CALL_INCOMING),
   data: z.object({
@@ -205,7 +197,6 @@ export const callStatusChangedEventSchema = baseCallEventSchema.extend({
   }),
 })
 
-// WebRTC Signaling Events (Server to Client)
 export const webRTCOfferReceivedEventSchema = baseCallEventSchema.extend({
   event: z.literal(CallWebSocketEventType.WEBRTC_OFFER_RECEIVED),
   data: z.object({
@@ -245,9 +236,7 @@ export const webRTCIceCandidateReceivedEventSchema = baseCallEventSchema.extend(
   }),
 })
 
-// Union type for all call WebSocket events
 export const callWebSocketEventSchema = z.discriminatedUnion('event', [
-  // Client to Server
   callInitiateEventSchema,
   callAnswerEventSchema,
   callDeclineEventSchema,
@@ -257,7 +246,6 @@ export const callWebSocketEventSchema = z.discriminatedUnion('event', [
   webRTCAnswerEventSchema,
   webRTCIceCandidateEventSchema,
 
-  // Server to Client
   callIncomingEventSchema,
   callStartedEventSchema,
   callEndedEventSchema,
@@ -270,7 +258,6 @@ export const callWebSocketEventSchema = z.discriminatedUnion('event', [
   webRTCIceCandidateReceivedEventSchema,
 ])
 
-// Type exports
 export type CallInitiateEvent = z.infer<typeof callInitiateEventSchema>
 export type CallAnswerEvent = z.infer<typeof callAnswerEventSchema>
 export type CallDeclineEvent = z.infer<typeof callDeclineEventSchema>

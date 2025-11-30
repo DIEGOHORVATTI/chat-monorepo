@@ -23,10 +23,6 @@ import type {
   ChatParticipantsResponse,
 } from './types'
 
-/**
- * Chat schemas using Zod
- * Implements the interfaces defined in types.ts
- */
 
 const messageSchema = z.object({
   id: z.uuid(),
@@ -63,7 +59,6 @@ const chatParticipantSchema = z.object({
   leftAt: z.date().nullable().optional(),
 }) satisfies z.ZodType<ChatParticipant>
 
-// Input Schemas
 export const createChatSchema = z.object({
   type: z.nativeEnum(ChatType),
   name: z.string().min(1).max(100).optional(),
@@ -122,7 +117,6 @@ export const typingIndicatorSchema = z.object({
   isTyping: z.boolean(),
 }) satisfies z.ZodType<TypingIndicator>
 
-// Response Schemas
 export const chatMessageResponseSchema = z.object({
   message: messageSchema,
 }) satisfies z.ZodType<ChatMessageResponse>

@@ -1,14 +1,12 @@
 import type { MessageType, MessageStatus } from '../chat/types'
 import type { WebSocketEventType } from './websocket.schema'
 
-// Base interface for all WebSocket messages
 export interface BaseWebSocketMessage {
   event: WebSocketEventType
   timestamp: Date
   requestId?: string
 }
 
-// Client to Server Events
 export interface JoinChatEvent extends BaseWebSocketMessage {
   event: WebSocketEventType.JOIN_CHAT
   data: {
@@ -56,7 +54,6 @@ export interface MessageReadEvent extends BaseWebSocketMessage {
   }
 }
 
-// Server to Client Events
 export interface MessageReceivedEvent extends BaseWebSocketMessage {
   event: WebSocketEventType.MESSAGE_RECEIVED
   data: {
@@ -166,7 +163,6 @@ export interface ParticipantLeftEvent extends BaseWebSocketMessage {
   }
 }
 
-// System Events
 export interface ConnectionAckEvent extends BaseWebSocketMessage {
   event: WebSocketEventType.CONNECTION_ACK
   data: {
@@ -197,7 +193,6 @@ export interface PongEvent extends BaseWebSocketMessage {
   }
 }
 
-// Union type
 export type WebSocketEvent =
   | JoinChatEvent
   | LeaveChatEvent

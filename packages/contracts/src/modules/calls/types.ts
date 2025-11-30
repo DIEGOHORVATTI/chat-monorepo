@@ -1,8 +1,3 @@
-/**
- * Calls module types
- * Pure TypeScript interfaces - no dependencies on validation libraries
- */
-
 import type { Meta, PaginationQuery } from '../../shared/types'
 
 export enum CallType {
@@ -60,7 +55,6 @@ export interface Call {
   updatedAt: Date
 }
 
-// Input types
 export interface InitiateCall {
   chatId?: string
   participantIds: string[]
@@ -100,7 +94,6 @@ export interface CallHistoryQuery extends PaginationQuery {
   type?: CallType
 }
 
-// WebRTC Signaling types
 export interface WebRTCOffer {
   callId: string
   targetUserId: string
@@ -129,7 +122,6 @@ export interface WebRTCIceCandidate {
   }
 }
 
-// Response types
 export interface CallResponse {
   call: Call
 }

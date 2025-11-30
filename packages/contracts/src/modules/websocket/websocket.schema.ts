@@ -2,7 +2,6 @@ import { z } from 'zod'
 import { MessageType, MessageStatus } from '../chat/types'
 
 export enum WebSocketEventType {
-  // Client to Server events
   JOIN_CHAT = 'JOIN_CHAT',
   LEAVE_CHAT = 'LEAVE_CHAT',
   TYPING_START = 'TYPING_START',
@@ -10,7 +9,6 @@ export enum WebSocketEventType {
   MESSAGE_SEND = 'MESSAGE_SEND',
   MESSAGE_READ = 'MESSAGE_READ',
 
-  // Server to Client events
   MESSAGE_RECEIVED = 'MESSAGE_RECEIVED',
   MESSAGE_UPDATED = 'MESSAGE_UPDATED',
   MESSAGE_DELETED = 'MESSAGE_DELETED',
@@ -22,21 +20,18 @@ export enum WebSocketEventType {
   PARTICIPANT_JOINED = 'PARTICIPANT_JOINED',
   PARTICIPANT_LEFT = 'PARTICIPANT_LEFT',
 
-  // System events
   CONNECTION_ACK = 'CONNECTION_ACK',
   ERROR = 'ERROR',
   PING = 'PING',
   PONG = 'PONG',
 }
 
-// Base WebSocket message structure
 const baseWebSocketMessageSchema = z.object({
   event: z.enum(WebSocketEventType),
   timestamp: z.date(),
   requestId: z.uuid().optional(),
 })
 
-// Client to Server Events
 export const joinChatEventSchema = baseWebSocketMessageSchema.extend({
   event: z.literal(WebSocketEventType.JOIN_CHAT),
   data: z.object({
@@ -84,7 +79,6 @@ export const messageReadEventSchema = baseWebSocketMessageSchema.extend({
   }),
 })
 
-// Server to Client Events
 export const messageReceivedEventSchema = baseWebSocketMessageSchema.extend({
   event: z.literal(WebSocketEventType.MESSAGE_RECEIVED),
   data: z.object({
@@ -198,7 +192,6 @@ export const participantLeftEventSchema = baseWebSocketMessageSchema.extend({
   }),
 })
 
-// System Events
 export const connectionAckEventSchema = baseWebSocketMessageSchema.extend({
   event: z.literal(WebSocketEventType.CONNECTION_ACK),
   data: z.object({
@@ -231,9 +224,7 @@ export const pongEventSchema = baseWebSocketMessageSchema.extend({
     .optional(),
 })
 
-// Union type for all WebSocket events
 export const webSocketEventSchema = z.discriminatedUnion('event', [
-  // Client to Server
   joinChatEventSchema,
   leaveChatEventSchema,
   typingStartEventSchema,
@@ -241,7 +232,6 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
   messageSendEventSchema,
   messageReadEventSchema,
 
-  // Server to Client
   messageReceivedEventSchema,
   messageUpdatedEventSchema,
   messageDeletedEventSchema,
@@ -253,13 +243,8 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
   participantJoinedEventSchema,
   participantLeftEventSchema,
 
-  // System
   connectionAckEventSchema,
   errorEventSchema,
   pingEventSchema,
   pongEventSchema,
 ])
-
-// Type exports removed - use types.ts instead
-// This maintains backwards compatibility for inferred types
-// but prefer importing from './types' for the pure TypeScript interfaces

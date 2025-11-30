@@ -21,10 +21,6 @@ import type {
   WebRTCSignalingResponse,
 } from './types'
 
-/**
- * Calls schemas using Zod
- * Implements the interfaces defined in types.ts
- */
 
 const callParticipantSchema = z.object({
   id: z.uuid(),
@@ -56,7 +52,6 @@ const callSchema = z.object({
   updatedAt: z.date(),
 }) satisfies z.ZodType<Call>
 
-// Input Schemas
 export const initiateCallSchema = z.object({
   chatId: z.uuid().optional(),
   participantIds: z.array(z.uuid()).min(1),
@@ -96,7 +91,6 @@ export const callHistoryQuerySchema = paginationSchema.extend({
   type: z.nativeEnum(CallType).optional(),
 }) satisfies z.ZodType<CallHistoryQuery>
 
-// WebRTC Signaling Schemas
 export const webRTCOfferSchema = z.object({
   callId: z.uuid(),
   targetUserId: z.uuid(),
@@ -125,7 +119,6 @@ export const webRTCIceCandidateSchema = z.object({
   }),
 }) satisfies z.ZodType<WebRTCIceCandidate>
 
-// Response Schemas
 export const callResponseSchema = z.object({
   call: callSchema,
 }) satisfies z.ZodType<CallResponse>

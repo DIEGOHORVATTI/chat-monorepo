@@ -19,12 +19,6 @@ import type {
   UsersListResponse,
 } from './types'
 
-/**
- * Identity schemas using Zod
- * Implements the interfaces defined in types.ts
- * Uses 'satisfies' to ensure type compatibility
- */
-
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
 
 export const privacySettingsSchema = z.object({
