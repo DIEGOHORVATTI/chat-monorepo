@@ -1,6 +1,17 @@
+import * as contactsRoutes from './modules/contacts/presentation/http/contacts-routes'
 import * as identityRoutes from './modules/identity/presentation/http/identity-routes'
 
 export const router = {
+  contacts: {
+    addContact: contactsRoutes.addContactRoute,
+    acceptContactRequest: contactsRoutes.acceptContactRequestRoute,
+    rejectContactRequest: contactsRoutes.rejectContactRequestRoute,
+    removeContact: contactsRoutes.removeContactRoute,
+    updateContact: contactsRoutes.updateContactRoute,
+    listContacts: contactsRoutes.listContactsRoute,
+    listContactRequests: contactsRoutes.listContactRequestsRoute,
+    getSentRequests: contactsRoutes.getSentRequestsRoute,
+  },
   identity: {
     login: identityRoutes.loginRoute,
     register: identityRoutes.registerRoute,

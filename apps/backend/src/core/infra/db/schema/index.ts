@@ -1,4 +1,6 @@
 export * from './users.schema'
+export * from './contacts.schema'
 export * from './blocked-users.schema'
 export * from './password-reset.schema'
+export * from './contact-requests.schema'
 export * from './email-verifications.schema'

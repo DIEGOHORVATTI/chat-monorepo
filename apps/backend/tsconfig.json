@@ -13,6 +13,7 @@
     "strict": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@contacts/*": ["./src/modules/contacts/*"],
       "@identity/*": ["./src/modules/identity/*"]
     }
   }
