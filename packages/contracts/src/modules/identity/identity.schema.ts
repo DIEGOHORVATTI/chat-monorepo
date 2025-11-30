@@ -117,17 +117,19 @@ export const registerResponseSchema = z.object({
   message: z.string(),
 }) satisfies z.ZodType<RegisterResponse>
 
-export const userResponseSchema = userSchema
-  .pick({
-    id: true,
-    name: true,
-    email: true,
-    permissions: true,
-  })
-  .extend({
-    exp: z.number().optional(),
-    iat: z.number().optional(),
-  }) satisfies z.ZodType<EncodedJWTUser>
+export const userResponseSchema = z.object({
+  user: userSchema
+    .pick({
+      id: true,
+      name: true,
+      email: true,
+      permissions: true,
+    })
+    .extend({
+      exp: z.number().optional(),
+      iat: z.number().optional(),
+    }),
+}) satisfies z.ZodType<{ user: EncodedJWTUser }>
 
 export const usersListResponseSchema = z.object({
   users: z.array(userSchema.omit({ password: true })),

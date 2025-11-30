@@ -1,8 +1,9 @@
+import type { EncodedJWTUser } from '@repo/contracts'
+import type { JwtService } from '../types'
+
 import { SignJWT, jwtVerify } from 'jose'
 
 import { ENV } from '../config/env'
-
-import type { JwtService, EncodedJWTUser } from '../types'
 
 export const jwtService: JwtService = {
   sign: async (payload) => {
@@ -18,12 +19,15 @@ export const jwtService: JwtService = {
 
   verify: async (token) => {
     try {
-      const { payload } = await jwtVerify(token, new TextEncoder().encode(ENV.JWT.JWT_SECRET))
+      const { payload } = await jwtVerify<EncodedJWTUser>(
+        token,
+        new TextEncoder().encode(ENV.JWT.JWT_SECRET)
+      )
 
       const now = Math.floor(Date.now() / 1000)
       if (payload.exp && payload.exp < now) return null
 
-      return payload as EncodedJWTUser
+      return payload
     } catch {
       return null
     }

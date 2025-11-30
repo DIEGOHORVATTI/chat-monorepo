@@ -53,9 +53,7 @@ export const logoutRoute = auth.identity.logout.handler(async ({ context }) => {
   }
 })
 
-export const meRoute = auth.identity.me.handler(async ({ context }) => ({
-  user: context.user,
-}))
+export const meRoute = auth.identity.me.handler(async ({ context: { user } }) => ({ user }))
 
 export const listUsersRoute = auth.identity.listUsers.handler(async ({ input }) => {
   const result = await listUsers(input.page, input.limit)
