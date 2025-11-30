@@ -6,7 +6,7 @@ import {
   listUsers,
   verifyEmail,
   resendVerification,
-} from '@/modules/identity/container'
+} from '@/modules/identity/di/container'
 
 export const loginRoute = pub.identity.login.handler(async ({ input, context }) => {
   const token = await login(input)

@@ -1,4 +1,4 @@
-import * as identityRoutes from './modules/identity/presentation/routes/identity-routes'
+import * as identityRoutes from './modules/identity/presentation/http/identity-routes'
 
 export const router = {
   identity: {

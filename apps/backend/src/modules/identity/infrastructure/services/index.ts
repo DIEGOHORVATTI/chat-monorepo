@@ -1,1 +1,1 @@
-export * from './email-service'
+export * from './smtp-email-sender'

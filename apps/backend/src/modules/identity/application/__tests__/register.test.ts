@@ -8,7 +8,7 @@ import { conflict } from '@repo/service-core'
 import { it, vi, expect, describe, beforeEach } from 'vitest'
 import { createUser } from '@/modules/identity/domain/entities'
 
-import { makeRegister, type RegisterData } from './index'
+import { makeRegister, type RegisterData } from '../register'
 
 // Mocks
 const mockUserRepository: UserRepository = {
