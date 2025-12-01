@@ -1,8 +1,7 @@
-import type { ORPCContext } from '@repo/service-core'
 import type { NotificationsContainer } from '@/modules/notifications/container'
 
 export const createNotificationsRoutes = (container: NotificationsContainer) => ({
-  getNotifications: async (input: unknown, context: ORPCContext) => {
+  getNotifications: async ({ input, context }) => {
     const {
       page = 1,
       limit = 20,
@@ -42,7 +41,7 @@ export const createNotificationsRoutes = (container: NotificationsContainer) => 
     }
   },
 
-  markAllAsRead: async (_input: unknown, context: ORPCContext) => {
+  markAllAsRead: async (_input, context: ORPCContext) => {
     await container.markAllAsRead(context.user.id)
 
     return {

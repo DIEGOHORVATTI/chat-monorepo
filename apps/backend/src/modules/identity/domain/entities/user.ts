@@ -39,7 +39,6 @@ export type UserProps = {
   isEmailVerified?: boolean
   lastLoginAt?: Date | null
   timezone?: string | null
-  permissions: PermissionType[]
   createdAt: Date
   updatedAt: Date
 }

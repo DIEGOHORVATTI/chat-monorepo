@@ -20,7 +20,6 @@ export const makeUpdatePrivacy =
       isEmailVerified: updatedUser.isEmailVerified,
       isActive: updatedUser.isActive,
       permissions: updatedUser.permissions,
-      privacy: updatedUser.privacy,
       createdAt: updatedUser.createdAt,
       updatedAt: updatedUser.updatedAt,
       lastLoginAt: updatedUser.lastLoginAt,

@@ -75,18 +75,10 @@ export const listUsersRoute = auth.identity.listUsers.handler(async ({ input }) 
   }
 })
 
-export const getUserByIdRoute = auth.identity.getUserById.handler(async ({ input }) => {
-  const user = await getUserById(input.userId)
+export const getUserByIdRoute = auth.identity.getUserById.handler(async ({ input: { userId } }) => {
+  const user = await getUserById(userId)
 
-  return {
-    user,
-    meta: {
-      total: 1,
-      page: 1,
-      limit: 1,
-      pages: 1,
-    },
-  }
+  return { user }
 })
 
 export const updateProfileRoute = auth.identity.updateProfile.handler(
@@ -98,7 +90,6 @@ export const updateProfileRoute = auth.identity.updateProfile.handler(
         id: updatedUser.id,
         name: updatedUser.name,
         email: updatedUser.email,
-        permissions: updatedUser.permissions,
       },
     }
   }
