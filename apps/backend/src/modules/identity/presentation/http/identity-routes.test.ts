@@ -19,6 +19,15 @@ const mockUserRepository: UserRepository = {
   findAll: vi.fn(),
   updateLastLogin: vi.fn(),
   markEmailAsVerified: vi.fn(),
+  blockUser: vi.fn(),
+  unblockUser: vi.fn(),
+  isUserBlocked: vi.fn(),
+  updatePrivacy: vi.fn(),
+  updateStatus: vi.fn(),
+  setCustomStatus: vi.fn(),
+  clearCustomStatus: vi.fn(),
+  getOnlineUsers: vi.fn(),
+  deleteUser: vi.fn(),
 }
 
 const mockEmailVerificationRepository: EmailVerificationRepository = {
@@ -61,7 +70,6 @@ describe('Identity Routes - Login', () => {
       password: hashedPassword,
       isEmailVerified: true,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -84,7 +92,6 @@ describe('Identity Routes - Login', () => {
       id: user.id,
       email: user.email,
       name: user.name,
-      permissions: user.permissions,
     })
   })
 
@@ -126,7 +133,6 @@ describe('Identity Routes - Verify Email', () => {
       password: 'hashed-password',
       isEmailVerified: false,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -188,7 +194,6 @@ describe('Identity Routes - Verify Email', () => {
       password: 'hashed-password',
       isEmailVerified: true,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -213,7 +218,6 @@ describe('Identity Routes - Verify Email', () => {
       password: 'hashed-password',
       isEmailVerified: false,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -252,7 +256,6 @@ describe('Identity Routes - Resend Verification', () => {
       password: 'hashed-password',
       isEmailVerified: false,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -297,7 +300,6 @@ describe('Identity Routes - Resend Verification', () => {
       password: 'hashed-password',
       isEmailVerified: true,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -321,7 +323,6 @@ describe('Identity Routes - Resend Verification', () => {
       password: 'hashed-password',
       isEmailVerified: false,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -386,7 +387,6 @@ describe('Identity Routes - List Users', () => {
         password: 'hashed-password',
         isEmailVerified: true,
         isActive: true,
-        permissions: [],
         createdAt: new Date(),
         updatedAt: new Date(),
       }),
@@ -396,7 +396,6 @@ describe('Identity Routes - List Users', () => {
         password: 'hashed-password',
         isEmailVerified: true,
         isActive: true,
-        permissions: [],
         createdAt: new Date(),
         updatedAt: new Date(),
       }),
@@ -466,7 +465,6 @@ describe('Identity Routes - Get Me', () => {
       password: 'hashed-password',
       isEmailVerified: true,
       isActive: true,
-      permissions: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -483,7 +481,6 @@ describe('Identity Routes - Get Me', () => {
       name: user.name,
       isEmailVerified: user.isEmailVerified,
       isActive: user.isActive,
-      permissions: user.permissions,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       lastLoginAt: user.lastLoginAt,
