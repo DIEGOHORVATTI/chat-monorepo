@@ -48,8 +48,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/chats',
-      summary: 'Create chat',
-      description: 'Create a new chat (direct or group)',
+      summary: 'Criar chat',
+      description: 'Cria um novo chat (direto ou em grupo)',
     })
     .input(createChatSchema)
     .output(chatResponseSchema),
@@ -58,8 +58,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/chats',
-      summary: 'List chats',
-      description: 'List all chats for the current user',
+      summary: 'Listar chats',
+      description: 'Lista todos os chats do usuário atual',
     })
     .input(chatQuerySchema)
     .output(chatsListResponseSchema),
@@ -68,8 +68,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/chats/:chatId',
-      summary: 'Get chat',
-      description: 'Get a specific chat by ID',
+      summary: 'Obter chat',
+      description: 'Obtém um chat específico pelo ID',
     })
     .output(chatResponseSchema),
 
@@ -77,8 +77,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'PATCH',
       path: '/chats/:chatId',
-      summary: 'Update chat',
-      description: 'Update chat details (name, avatar)',
+      summary: 'Atualizar chat',
+      description: 'Atualiza detalhes do chat (nome, avatar)',
     })
     .input(updateChatSchema)
     .output(chatResponseSchema),
@@ -87,8 +87,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'DELETE',
       path: '/chats/:chatId',
-      summary: 'Delete chat',
-      description: 'Delete a chat',
+      summary: 'Excluir chat',
+      description: 'Exclui um chat',
     })
     .output(baseMessageResponseSchema),
 
@@ -96,8 +96,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/chats/:chatId/participants',
-      summary: 'Add participants',
-      description: 'Add participants to a group chat',
+      summary: 'Adicionar participantes',
+      description: 'Adiciona participantes a um chat em grupo',
     })
     .input(addParticipantsSchema)
     .output(chatParticipantsResponseSchema),
@@ -106,8 +106,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'DELETE',
       path: '/chats/:chatId/participants/:participantId',
-      summary: 'Remove participant',
-      description: 'Remove a participant from a group chat',
+      summary: 'Remover participante',
+      description: 'Remove um participante de um chat em grupo',
     })
     .input(removeParticipantSchema)
     .output(baseMessageResponseSchema),
@@ -116,8 +116,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/chats/:chatId/leave',
-      summary: 'Leave chat',
-      description: 'Leave a group chat',
+      summary: 'Sair do chat',
+      description: 'Sai de um chat em grupo',
     })
     .output(baseMessageResponseSchema),
 
@@ -125,8 +125,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages',
-      summary: 'Send message',
-      description: 'Send a new message in a chat',
+      summary: 'Enviar mensagem',
+      description: 'Envia uma nova mensagem em um chat',
     })
     .input(sendMessageSchema)
     .output(chatMessageResponseSchema),
@@ -135,8 +135,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/chats/:chatId/messages',
-      summary: 'List messages',
-      description: 'List messages in a chat with pagination',
+      summary: 'Listar mensagens',
+      description: 'Lista mensagens de um chat com paginação',
     })
     .input(messagesQuerySchema)
     .output(chatMessagesListResponseSchema),
@@ -145,8 +145,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/messages/:messageId',
-      summary: 'Get message',
-      description: 'Get a specific message by ID',
+      summary: 'Obter mensagem',
+      description: 'Obtém uma mensagem específica pelo ID',
     })
     .output(chatMessageResponseSchema),
 
@@ -154,8 +154,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'PATCH',
       path: '/messages/:messageId',
-      summary: 'Update message',
-      description: 'Edit a message',
+      summary: 'Atualizar mensagem',
+      description: 'Edita uma mensagem',
     })
     .input(updateMessageSchema)
     .output(chatMessageResponseSchema),
@@ -164,8 +164,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'DELETE',
       path: '/messages/:messageId',
-      summary: 'Delete message',
-      description: 'Delete a message',
+      summary: 'Excluir mensagem',
+      description: 'Exclui uma mensagem',
     })
     .input(deleteMessageSchema)
     .output(baseMessageResponseSchema),
@@ -174,8 +174,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages/:messageId/read',
-      summary: 'Mark as read',
-      description: 'Mark a message as read',
+      summary: 'Marcar como lida',
+      description: 'Marca uma mensagem como lida',
     })
     .input(markMessageAsReadSchema)
     .output(baseMessageResponseSchema),
@@ -184,8 +184,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/chats/:chatId/typing',
-      summary: 'Send typing indicator',
-      description: 'Send typing indicator to chat participants',
+      summary: 'Enviar indicador de digitação',
+      description: 'Envia indicador de digitação aos participantes do chat',
     })
     .input(typingIndicatorSchema)
     .output(baseMessageResponseSchema),
@@ -194,8 +194,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/search/messages',
-      summary: 'Search messages',
-      description: 'Search messages by content',
+      summary: 'Buscar mensagens',
+      description: 'Busca mensagens por conteúdo',
     })
     .input(searchMessagesQuerySchema)
     .output(chatMessagesListResponseSchema),
@@ -204,8 +204,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/search/chats',
-      summary: 'Search chats',
-      description: 'Search chats by name',
+      summary: 'Buscar chats',
+      description: 'Busca chats por nome',
     })
     .input(searchChatsQuerySchema)
     .output(chatsListResponseSchema),
@@ -214,8 +214,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/search/users',
-      summary: 'Search users',
-      description: 'Search users to start chat',
+      summary: 'Buscar usuários',
+      description: 'Busca usuários para iniciar chat',
     })
     .input(searchUsersQuerySchema)
     .output(usersSearchResponseSchema),
@@ -224,8 +224,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages/:messageId/reactions',
-      summary: 'Add reaction',
-      description: 'Add emoji reaction to message',
+      summary: 'Adicionar reação',
+      description: 'Adiciona reação emoji à mensagem',
     })
     .input(addReactionSchema)
     .output(reactionsResponseSchema),
@@ -234,8 +234,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'DELETE',
       path: '/messages/:messageId/reactions/:reactionId',
-      summary: 'Remove reaction',
-      description: 'Remove reaction from message',
+      summary: 'Remover reação',
+      description: 'Remove reação da mensagem',
     })
     .input(removeReactionSchema)
     .output(baseMessageResponseSchema),
@@ -244,8 +244,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/messages/:messageId/reactions',
-      summary: 'Get reactions',
-      description: 'Get all reactions for a message',
+      summary: 'Obter reações',
+      description: 'Obtém todas as reações de uma mensagem',
     })
     .output(reactionsResponseSchema),
 
@@ -253,8 +253,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages/:messageId/pin',
-      summary: 'Pin message',
-      description: 'Pin an important message in chat',
+      summary: 'Fixar mensagem',
+      description: 'Fixa uma mensagem importante no chat',
     })
     .input(pinMessageSchema)
     .output(baseMessageResponseSchema),
@@ -263,8 +263,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'DELETE',
       path: '/messages/:messageId/pin',
-      summary: 'Unpin message',
-      description: 'Unpin a message',
+      summary: 'Desafixar mensagem',
+      description: 'Desafixa uma mensagem',
     })
     .input(unpinMessageSchema)
     .output(baseMessageResponseSchema),
@@ -273,8 +273,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'PATCH',
       path: '/chats/:chatId/participants/:participantId/role',
-      summary: 'Update participant role',
-      description: 'Promote or demote participant to/from admin',
+      summary: 'Atualizar papel do participante',
+      description: 'Promove ou rebaixa participante para/de admin',
     })
     .input(updateParticipantRoleSchema)
     .output(baseMessageResponseSchema),
@@ -283,8 +283,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/chats/:chatId/settings',
-      summary: 'Get chat settings',
-      description: 'Get group chat settings',
+      summary: 'Obter configurações do chat',
+      description: 'Obtém configurações do chat em grupo',
     })
     .output(chatSettingsResponseSchema),
 
@@ -292,8 +292,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'PATCH',
       path: '/chats/:chatId/settings',
-      summary: 'Update chat settings',
-      description: 'Update group description, rules, permissions',
+      summary: 'Atualizar configurações do chat',
+      description: 'Atualiza descrição, regras e permissões do grupo',
     })
     .input(updateChatSettingsSchema)
     .output(chatSettingsResponseSchema),
@@ -302,8 +302,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages/voice',
-      summary: 'Send voice message',
-      description: 'Send a voice message in a chat',
+      summary: 'Enviar mensagem de voz',
+      description: 'Envia uma mensagem de voz em um chat',
     })
     .input(sendVoiceMessageSchema)
     .output(chatMessageResponseSchema),
@@ -312,8 +312,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages/:messageId/forward',
-      summary: 'Forward message',
-      description: 'Forward a message to one or more chats',
+      summary: 'Encaminhar mensagem',
+      description: 'Encaminha uma mensagem para um ou mais chats',
     })
     .input(forwardMessageSchema)
     .output(forwardMessageResponseSchema),
@@ -322,8 +322,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'PATCH',
       path: '/chats/:chatId/permissions',
-      summary: 'Update group permissions',
-      description: 'Update permissions for group chat',
+      summary: 'Atualizar permissões do grupo',
+      description: 'Atualiza permissões do chat em grupo',
     })
     .input(updateGroupPermissionsSchema)
     .output(groupPermissionsResponseSchema),
@@ -332,8 +332,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/chats/:chatId/permissions',
-      summary: 'Get group permissions',
-      description: 'Get current permissions for group chat',
+      summary: 'Obter permissões do grupo',
+      description: 'Obtém permissões atuais do chat em grupo',
     })
     .output(groupPermissionsResponseSchema),
 
@@ -341,8 +341,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'POST',
       path: '/messages/link-preview',
-      summary: 'Generate link preview',
-      description: 'Generate preview metadata for a URL',
+      summary: 'Gerar preview de link',
+      description: 'Gera metadados de preview para uma URL',
     })
     .input(generateLinkPreviewSchema)
     .output(linkPreviewResponseSchema),
@@ -351,8 +351,8 @@ export const chat = oc.prefix('/chat').router({
     .route({
       method: 'GET',
       path: '/chats/unread-count',
-      summary: 'Get unread count',
-      description: 'Get total unread message count across all chats',
+      summary: 'Obter contador de não lidas',
+      description: 'Obtém total de mensagens não lidas em todos os chats',
     })
     .output(unreadCountResponseSchema),
 })

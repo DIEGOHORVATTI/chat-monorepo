@@ -32,8 +32,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/',
-      summary: 'Initiate call',
-      description: 'Start a new audio or video call with one or more participants',
+      summary: 'Iniciar chamada',
+      description: 'Inicia uma nova chamada de áudio ou vídeo com um ou mais participantes',
     })
     .input(initiateCallSchema)
     .output(callResponseSchema),
@@ -42,8 +42,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/:callId/answer',
-      summary: 'Answer call',
-      description: 'Accept or decline an incoming call',
+      summary: 'Atender chamada',
+      description: 'Aceita ou recusa uma chamada recebida',
     })
     .input(answerCallSchema)
     .output(callResponseSchema),
@@ -52,8 +52,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/:callId/end',
-      summary: 'End call',
-      description: 'End an active call',
+      summary: 'Encerrar chamada',
+      description: 'Encerra uma chamada ativa',
     })
     .input(endCallSchema)
     .output(messageResponseSchema),
@@ -62,8 +62,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'GET',
       path: '/:callId',
-      summary: 'Get call',
-      description: 'Get details of a specific call',
+      summary: 'Obter chamada',
+      description: 'Obtém detalhes de uma chamada específica',
     })
     .output(callResponseSchema),
 
@@ -71,8 +71,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'GET',
       path: '/active',
-      summary: 'List active calls',
-      description: 'List all active calls for the current user',
+      summary: 'Listar chamadas ativas',
+      description: 'Lista todas as chamadas ativas do usuário atual',
     })
     .input(callQuerySchema)
     .output(callsListResponseSchema),
@@ -81,8 +81,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'GET',
       path: '/history',
-      summary: 'Get call history',
-      description: 'Get call history with pagination',
+      summary: 'Obter histórico de chamadas',
+      description: 'Obtém o histórico de chamadas com paginação',
     })
     .input(callHistoryQuerySchema)
     .output(callsListResponseSchema),
@@ -91,8 +91,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/:callId/participants',
-      summary: 'Add participants',
-      description: 'Add more participants to an ongoing call',
+      summary: 'Adicionar participantes',
+      description: 'Adiciona mais participantes a uma chamada em andamento',
     })
     .input(addParticipantsToCallSchema)
     .output(callParticipantsResponseSchema),
@@ -101,8 +101,9 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'PATCH',
       path: '/:callId/media',
-      summary: 'Update media settings',
-      description: 'Update audio/video/screen sharing settings for the current participant',
+      summary: 'Atualizar configurações de mídia',
+      description:
+        'Atualiza configurações de áudio/vídeo/compartilhamento de tela do participante atual',
     })
     .input(updateParticipantMediaSchema)
     .output(messageResponseSchema),
@@ -111,8 +112,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'GET',
       path: '/:callId/participants',
-      summary: 'Get participants',
-      description: 'Get all participants in a call',
+      summary: 'Obter participantes',
+      description: 'Obtém todos os participantes de uma chamada',
     })
     .output(callParticipantsResponseSchema),
 
@@ -120,8 +121,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/signaling/offer',
-      summary: 'Send WebRTC offer',
-      description: 'Send WebRTC offer SDP to establish peer connection',
+      summary: 'Enviar oferta WebRTC',
+      description: 'Envia oferta SDP WebRTC para estabelecer conexão peer-to-peer',
     })
     .input(webRTCOfferSchema)
     .output(webRTCSignalingResponseSchema),
@@ -130,8 +131,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/signaling/answer',
-      summary: 'Send WebRTC answer',
-      description: 'Send WebRTC answer SDP in response to an offer',
+      summary: 'Enviar resposta WebRTC',
+      description: 'Envia resposta SDP WebRTC em resposta a uma oferta',
     })
     .input(webRTCAnswerSchema)
     .output(webRTCSignalingResponseSchema),
@@ -140,8 +141,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/signaling/ice-candidate',
-      summary: 'Send ICE candidate',
-      description: 'Send ICE candidate for WebRTC connection establishment',
+      summary: 'Enviar candidato ICE',
+      description: 'Envia candidato ICE para estabelecimento de conexão WebRTC',
     })
     .input(webRTCIceCandidateSchema)
     .output(webRTCSignalingResponseSchema),
@@ -150,8 +151,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/:callId/recording/start',
-      summary: 'Start recording',
-      description: 'Start recording a call',
+      summary: 'Iniciar gravação',
+      description: 'Inicia a gravação de uma chamada',
     })
     .input(startRecordingSchema)
     .output(recordingResponseSchema),
@@ -160,8 +161,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/:callId/recording/stop',
-      summary: 'Stop recording',
-      description: 'Stop recording a call',
+      summary: 'Parar gravação',
+      description: 'Para a gravação de uma chamada',
     })
     .input(stopRecordingSchema)
     .output(messageResponseSchema),
@@ -170,8 +171,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'GET',
       path: '/recordings',
-      summary: 'Get recordings',
-      description: 'Get call recordings with pagination',
+      summary: 'Obter gravações',
+      description: 'Obtém gravações de chamadas com paginação',
     })
     .input(callRecordingsQuerySchema)
     .output(recordingsListResponseSchema),
@@ -180,8 +181,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'POST',
       path: '/:callId/quality',
-      summary: 'Report call quality',
-      description: 'Report issues and rating for a call',
+      summary: 'Relatar qualidade da chamada',
+      description: 'Relata problemas e avaliação de uma chamada',
     })
     .input(reportCallQualitySchema)
     .output(messageResponseSchema),
@@ -190,8 +191,8 @@ export const calls = oc.prefix('/calls').router({
     .route({
       method: 'GET',
       path: '/:callId/statistics',
-      summary: 'Get call statistics',
-      description: 'Get detailed statistics for a call',
+      summary: 'Obter estatísticas da chamada',
+      description: 'Obtém estatísticas detalhadas de uma chamada',
     })
     .output(callStatisticsResponseSchema),
 })

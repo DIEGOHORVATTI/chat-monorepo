@@ -14,8 +14,8 @@ export const media = oc.prefix('/media').router({
     .route({
       method: 'POST',
       path: '/upload',
-      summary: 'Upload file',
-      description: 'Upload a media file (image, video, audio, document)',
+      summary: 'Fazer upload de arquivo',
+      description: 'Faz upload de um arquivo de mídia (imagem, vídeo, áudio, documento)',
     })
     .input(uploadFileSchema)
     .output(mediaFileResponseSchema),
@@ -24,8 +24,8 @@ export const media = oc.prefix('/media').router({
     .route({
       method: 'GET',
       path: '/:fileId',
-      summary: 'Get file',
-      description: 'Get a specific file by ID',
+      summary: 'Obter arquivo',
+      description: 'Obtém um arquivo específico pelo ID',
     })
     .output(mediaFileResponseSchema),
 
@@ -33,8 +33,8 @@ export const media = oc.prefix('/media').router({
     .route({
       method: 'DELETE',
       path: '/:fileId',
-      summary: 'Delete file',
-      description: 'Delete a media file',
+      summary: 'Excluir arquivo',
+      description: 'Exclui um arquivo de mídia',
     })
     .output(messageResponseSchema),
 
@@ -42,8 +42,8 @@ export const media = oc.prefix('/media').router({
     .route({
       method: 'POST',
       path: '/:fileId/thumbnail',
-      summary: 'Generate thumbnail',
-      description: 'Generate thumbnail for an image or video file',
+      summary: 'Gerar miniatura',
+      description: 'Gera miniatura para um arquivo de imagem ou vídeo',
     })
     .input(generateThumbnailSchema)
     .output(mediaFileResponseSchema),
@@ -52,8 +52,8 @@ export const media = oc.prefix('/media').router({
     .route({
       method: 'GET',
       path: '/chat/:chatId',
-      summary: 'Get chat media',
-      description: 'Get all media files for a specific chat',
+      summary: 'Obter mídias do chat',
+      description: 'Obtém todos os arquivos de mídia de um chat específico',
     })
     .output(mediaFilesListResponseSchema),
 })

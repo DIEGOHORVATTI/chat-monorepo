@@ -17,8 +17,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'GET',
       path: '/',
-      summary: 'Get notifications',
-      description: 'Get paginated list of notifications for the current user',
+      summary: 'Obter notificações',
+      description: 'Obtém lista paginada de notificações do usuário atual',
     })
     .input(getNotificationsQuerySchema)
     .output(notificationsListResponseSchema),
@@ -27,8 +27,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'POST',
       path: '/read',
-      summary: 'Mark as read',
-      description: 'Mark one or more notifications as read',
+      summary: 'Marcar como lida',
+      description: 'Marca uma ou mais notificações como lidas',
     })
     .input(markAsReadSchema)
     .output(messageResponseSchema),
@@ -37,8 +37,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'POST',
       path: '/read-all',
-      summary: 'Mark all as read',
-      description: 'Mark all notifications as read',
+      summary: 'Marcar todas como lidas',
+      description: 'Marca todas as notificações como lidas',
     })
     .output(messageResponseSchema),
 
@@ -46,8 +46,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'GET',
       path: '/settings',
-      summary: 'Get settings',
-      description: 'Get notification settings for the current user',
+      summary: 'Obter configurações',
+      description: 'Obtém configurações de notificações do usuário atual',
     })
     .output(notificationSettingsResponseSchema),
 
@@ -55,8 +55,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'PATCH',
       path: '/settings',
-      summary: 'Update settings',
-      description: 'Update notification settings',
+      summary: 'Atualizar configurações',
+      description: 'Atualiza configurações de notificações',
     })
     .input(updateNotificationSettingsSchema)
     .output(notificationSettingsResponseSchema),
@@ -65,8 +65,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'POST',
       path: '/mute/:chatId',
-      summary: 'Mute chat',
-      description: 'Mute notifications for a specific chat',
+      summary: 'Silenciar chat',
+      description: 'Silencia notificações de um chat específico',
     })
     .output(messageResponseSchema),
 
@@ -74,8 +74,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'DELETE',
       path: '/mute/:chatId',
-      summary: 'Unmute chat',
-      description: 'Unmute notifications for a specific chat',
+      summary: 'Reativar chat',
+      description: 'Reativa notificações de um chat específico',
     })
     .output(messageResponseSchema),
 
@@ -83,8 +83,8 @@ export const notifications = oc.prefix('/notifications').router({
     .route({
       method: 'GET',
       path: '/unread-count',
-      summary: 'Get unread count',
-      description: 'Get total unread notifications count',
+      summary: 'Obter contador de não lidas',
+      description: 'Obtém total de notificações não lidas',
     })
     .output(notificationUnreadCountResponseSchema),
 })

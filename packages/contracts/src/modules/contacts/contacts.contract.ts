@@ -19,8 +19,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'POST',
       path: '/',
-      summary: 'Add contact',
-      description: 'Send a contact request to a user',
+      summary: 'Adicionar contato',
+      description: 'Envia uma solicitação de contato para um usuário',
     })
     .input(addContactSchema)
     .output(contactRequestResponseSchema),
@@ -29,8 +29,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'POST',
       path: '/requests/:requestId/accept',
-      summary: 'Accept contact request',
-      description: 'Accept a pending contact request',
+      summary: 'Aceitar solicitação de contato',
+      description: 'Aceita uma solicitação de contato pendente',
     })
     .input(acceptContactRequestSchema)
     .output(contactResponseSchema),
@@ -39,8 +39,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'POST',
       path: '/requests/:requestId/reject',
-      summary: 'Reject contact request',
-      description: 'Reject a pending contact request',
+      summary: 'Rejeitar solicitação de contato',
+      description: 'Rejeita uma solicitação de contato pendente',
     })
     .input(rejectContactRequestSchema)
     .output(messageResponseSchema),
@@ -49,8 +49,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'DELETE',
       path: '/:contactId',
-      summary: 'Remove contact',
-      description: 'Remove a contact from your list',
+      summary: 'Remover contato',
+      description: 'Remove um contato da sua lista',
     })
     .output(messageResponseSchema),
 
@@ -58,8 +58,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'PATCH',
       path: '/:contactId',
-      summary: 'Update contact',
-      description: 'Update contact nickname or favorite status',
+      summary: 'Atualizar contato',
+      description: 'Atualiza apelido ou status de favorito do contato',
     })
     .input(updateContactSchema)
     .output(contactResponseSchema),
@@ -68,8 +68,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'GET',
       path: '/',
-      summary: 'List contacts',
-      description: 'Get all contacts with pagination',
+      summary: 'Listar contatos',
+      description: 'Obtém todos os contatos com paginação',
     })
     .input(contactsQuerySchema)
     .output(contactsListResponseSchema),
@@ -78,8 +78,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'GET',
       path: '/requests',
-      summary: 'List contact requests',
-      description: 'Get all pending contact requests',
+      summary: 'Listar solicitações de contato',
+      description: 'Obtém todas as solicitações de contato pendentes',
     })
     .input(contactsQuerySchema)
     .output(contactRequestsListResponseSchema),
@@ -88,8 +88,8 @@ export const contacts = oc.prefix('/contacts').router({
     .route({
       method: 'GET',
       path: '/requests/sent',
-      summary: 'List sent requests',
-      description: 'Get all contact requests you sent',
+      summary: 'Listar solicitações enviadas',
+      description: 'Obtém todas as solicitações de contato que você enviou',
     })
     .input(contactsQuerySchema)
     .output(contactRequestsListResponseSchema),

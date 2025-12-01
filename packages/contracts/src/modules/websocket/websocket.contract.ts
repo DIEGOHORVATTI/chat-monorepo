@@ -35,9 +35,9 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'GET',
       path: '/',
-      summary: 'WebSocket connection endpoint',
+      summary: 'Endpoint de conexão WebSocket',
       description:
-        'Establish WebSocket connection for real-time chat updates. Requires authentication via JWT token.',
+        'Estabelece conexão WebSocket para atualizações de chat em tempo real. Requer autenticação via token JWT.',
     })
     .output(connectionAckEventSchema),
 
@@ -45,8 +45,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/join-chat',
-      summary: 'Join chat room',
-      description: 'Subscribe to a specific chat for real-time updates',
+      summary: 'Entrar na sala de chat',
+      description: 'Inscreve-se em um chat específico para atualizações em tempo real',
     })
     .input(joinChatEventSchema)
     .output(connectionAckEventSchema),
@@ -55,8 +55,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/leave-chat',
-      summary: 'Leave chat room',
-      description: 'Unsubscribe from a specific chat',
+      summary: 'Sair da sala de chat',
+      description: 'Cancela inscrição de um chat específico',
     })
     .input(leaveChatEventSchema)
     .output(connectionAckEventSchema),
@@ -65,8 +65,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/typing-start',
-      summary: 'Start typing indicator',
-      description: 'Notify other participants that user started typing',
+      summary: 'Iniciar indicador de digitação',
+      description: 'Notifica outros participantes que o usuário começou a digitar',
     })
     .input(typingStartEventSchema)
     .output(userTypingEventSchema),
@@ -75,8 +75,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/typing-stop',
-      summary: 'Stop typing indicator',
-      description: 'Notify other participants that user stopped typing',
+      summary: 'Parar indicador de digitação',
+      description: 'Notifica outros participantes que o usuário parou de digitar',
     })
     .input(typingStopEventSchema)
     .output(userTypingEventSchema),
@@ -85,8 +85,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/message-send',
-      summary: 'Send message via WebSocket',
-      description: 'Send a new message in real-time',
+      summary: 'Enviar mensagem via WebSocket',
+      description: 'Envia uma nova mensagem em tempo real',
     })
     .input(messageSendEventSchema)
     .output(messageReceivedEventSchema),
@@ -95,8 +95,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/message-read',
-      summary: 'Mark message as read',
-      description: 'Update message status to read and notify sender',
+      summary: 'Marcar mensagem como lida',
+      description: 'Atualiza status da mensagem para lida e notifica o remetente',
     })
     .input(messageReadEventSchema)
     .output(messageStatusChangedEventSchema),
@@ -105,8 +105,8 @@ export const websocket = oc.prefix('/ws').router({
     .route({
       method: 'POST',
       path: '/events/ping',
-      summary: 'Ping server',
-      description: 'Send heartbeat to keep connection alive',
+      summary: 'Ping no servidor',
+      description: 'Envia heartbeat para manter conexão ativa',
     })
     .input(pingEventSchema)
     .output(pongEventSchema),

@@ -35,8 +35,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/login',
-      summary: 'Login user',
-      description: 'Authenticate a user and return a JWT token',
+      summary: 'Fazer login',
+      description: 'Autentica um usuário e retorna um token JWT',
     })
     .input(loginSchema)
     .output(messageResponseSchema),
@@ -45,8 +45,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/register',
-      summary: 'Register user',
-      description: 'Register a new user',
+      summary: 'Registrar usuário',
+      description: 'Registra um novo usuário',
     })
     .input(registerSchema)
     .output(registerResponseSchema),
@@ -55,8 +55,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/verify-email',
-      summary: 'Verify email',
-      description: 'Verify user email with verification code',
+      summary: 'Verificar email',
+      description: 'Verifica o email do usuário com código de verificação',
     })
     .input(verifyEmailSchema)
     .output(messageResponseSchema),
@@ -65,8 +65,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/resend-verification',
-      summary: 'Resend verification code',
-      description: 'Resend email verification code',
+      summary: 'Reenviar código de verificação',
+      description: 'Reenvia o código de verificação por email',
     })
     .input(emailSchema)
     .output(messageResponseSchema),
@@ -75,8 +75,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'GET',
       path: '/logout',
-      summary: 'Logout user',
-      description: 'Clear authentication token',
+      summary: 'Fazer logout',
+      description: 'Remove o token de autenticação',
     })
     .output(messageResponseSchema),
 
@@ -84,8 +84,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'GET',
       path: '/me',
-      summary: 'Get current user',
-      description: 'Get the currently authenticated user',
+      summary: 'Obter usuário atual',
+      description: 'Obtém o usuário autenticado atualmente',
     })
     .output(userResponseSchema),
 
@@ -93,8 +93,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'GET',
       path: '/users',
-      summary: 'List users',
-      description: 'List all users',
+      summary: 'Listar usuários',
+      description: 'Lista todos os usuários',
     })
     .input(userQuerySchema)
     .output(usersListResponseSchema),
@@ -103,8 +103,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'GET',
       path: '/users/:userId',
-      summary: 'Get user by ID',
-      description: 'Get a specific user profile by ID',
+      summary: 'Obter usuário por ID',
+      description: 'Obtém perfil de um usuário específico pelo ID',
     })
     .output(userProfileResponseSchema),
 
@@ -112,8 +112,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/users',
-      summary: 'Create user',
-      description: 'Create a new user',
+      summary: 'Criar usuário',
+      description: 'Cria um novo usuário',
     })
     .input(userCreateSchema)
     .output(userResponseSchema),
@@ -122,8 +122,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'PATCH',
       path: '/me/privacy',
-      summary: 'Update privacy settings',
-      description: 'Update authenticated user privacy settings',
+      summary: 'Atualizar configurações de privacidade',
+      description: 'Atualiza as configurações de privacidade do usuário autenticado',
     })
     .input(privacyUpdateSchema)
     .output(userResponseSchema),
@@ -132,8 +132,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'PATCH',
       path: '/me/profile',
-      summary: 'Update profile info',
-      description: 'Update name, avatar or timezone',
+      summary: 'Atualizar informações do perfil',
+      description: 'Atualiza nome, avatar ou fuso horário',
     })
     .input(updateProfileSchema)
     .output(userResponseSchema),
@@ -142,8 +142,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'PATCH',
       path: '/me/change-password',
-      summary: 'Change password',
-      description: 'Update the user password',
+      summary: 'Alterar senha',
+      description: 'Atualiza a senha do usuário',
     })
     .input(changePasswordSchema)
     .output(messageResponseSchema),
@@ -152,8 +152,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/me/block/:userId',
-      summary: 'Block user',
-      description: 'Block another user',
+      summary: 'Bloquear usuário',
+      description: 'Bloqueia outro usuário',
     })
     .output(messageResponseSchema),
 
@@ -161,8 +161,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'DELETE',
       path: '/me/block/:userId',
-      summary: 'Unblock user',
-      description: 'Unblock previously blocked user',
+      summary: 'Desbloquear usuário',
+      description: 'Desbloqueia um usuário previamente bloqueado',
     })
     .output(messageResponseSchema),
 
@@ -170,8 +170,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'PATCH',
       path: '/me/status',
-      summary: 'Update status',
-      description: 'Update user status (online/away/busy/offline)',
+      summary: 'Atualizar status',
+      description: 'Atualiza o status do usuário (online/ausente/ocupado/offline)',
     })
     .input(updateStatusSchema)
     .output(statusResponseSchema),
@@ -180,8 +180,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'PATCH',
       path: '/me/custom-status',
-      summary: 'Set custom status',
-      description: 'Set custom status message with optional emoji and expiration',
+      summary: 'Definir status personalizado',
+      description: 'Define mensagem de status personalizada com emoji e expiração opcionais',
     })
     .input(setCustomStatusSchema)
     .output(statusResponseSchema),
@@ -190,8 +190,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'DELETE',
       path: '/me/custom-status',
-      summary: 'Clear custom status',
-      description: 'Remove custom status message',
+      summary: 'Limpar status personalizado',
+      description: 'Remove mensagem de status personalizada',
     })
     .output(messageResponseSchema),
 
@@ -199,8 +199,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'GET',
       path: '/users/online',
-      summary: 'Get online users',
-      description: 'List all online users',
+      summary: 'Obter usuários online',
+      description: 'Lista todos os usuários online',
     })
     .output(onlineUsersResponseSchema),
 
@@ -208,8 +208,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/me/export',
-      summary: 'Export user data',
-      description: 'Request export of all user data (GDPR compliance)',
+      summary: 'Exportar dados do usuário',
+      description: 'Solicita exportação de todos os dados do usuário (conformidade LGPD)',
     })
     .input(exportUserDataSchema)
     .output(exportDataResponseSchema),
@@ -218,8 +218,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'DELETE',
       path: '/me/account',
-      summary: 'Delete account',
-      description: 'Permanently delete user account and all associated data',
+      summary: 'Excluir conta',
+      description: 'Exclui permanentemente a conta do usuário e todos os dados associados',
     })
     .input(deleteAccountSchema)
     .output(messageResponseSchema),
@@ -228,8 +228,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/forgot-password',
-      summary: 'Forgot password',
-      description: 'Request password reset email',
+      summary: 'Esqueci a senha',
+      description: 'Solicita email de redefinição de senha',
     })
     .input(forgotPasswordSchema)
     .output(messageResponseSchema),
@@ -238,8 +238,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/reset-password',
-      summary: 'Reset password',
-      description: 'Reset password with token from email',
+      summary: 'Redefinir senha',
+      description: 'Redefine a senha usando token do email',
     })
     .input(resetPasswordSchema)
     .output(messageResponseSchema),
@@ -248,8 +248,8 @@ export const identity = oc.prefix('/identity').router({
     .route({
       method: 'POST',
       path: '/refresh-token',
-      summary: 'Refresh token',
-      description: 'Refresh access token using refresh token',
+      summary: 'Atualizar token',
+      description: 'Atualiza o token de acesso usando refresh token',
     })
     .input(refreshTokenSchema)
     .output(refreshTokenResponseSchema),

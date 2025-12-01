@@ -17,8 +17,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'POST',
       path: '/reports',
-      summary: 'Create report',
-      description: 'Report a user or message for violation',
+      summary: 'Criar denúncia',
+      description: 'Denuncia um usuário ou mensagem por violação',
     })
     .input(createReportSchema)
     .output(reportResponseSchema),
@@ -27,8 +27,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'GET',
       path: '/reports',
-      summary: 'Get reports',
-      description: 'Get paginated list of reports (admin only)',
+      summary: 'Obter denúncias',
+      description: 'Obtém lista paginada de denúncias (apenas admin)',
     })
     .input(getReportsQuerySchema)
     .output(reportsListResponseSchema),
@@ -37,8 +37,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'POST',
       path: '/mute',
-      summary: 'Mute chat',
-      description: 'Mute notifications for a chat',
+      summary: 'Silenciar chat',
+      description: 'Silencia notificações de um chat',
     })
     .input(muteChatSchema)
     .output(messageResponseSchema),
@@ -47,8 +47,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'DELETE',
       path: '/mute/:chatId',
-      summary: 'Unmute chat',
-      description: 'Unmute notifications for a chat',
+      summary: 'Reativar chat',
+      description: 'Reativa notificações de um chat',
     })
     .output(messageResponseSchema),
 
@@ -56,8 +56,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'POST',
       path: '/archive',
-      summary: 'Archive chat',
-      description: 'Archive a chat to hide it from active list',
+      summary: 'Arquivar chat',
+      description: 'Arquiva um chat para ocultá-lo da lista ativa',
     })
     .input(archiveChatSchema)
     .output(messageResponseSchema),
@@ -66,8 +66,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'DELETE',
       path: '/archive/:chatId',
-      summary: 'Unarchive chat',
-      description: 'Unarchive a chat to show it in active list',
+      summary: 'Desarquivar chat',
+      description: 'Desarquiva um chat para mostrá-lo na lista ativa',
     })
     .output(messageResponseSchema),
 
@@ -75,8 +75,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'POST',
       path: '/block',
-      summary: 'Block user',
-      description: 'Block a user from contacting you',
+      summary: 'Bloquear usuário',
+      description: 'Bloqueia um usuário impedindo contato',
     })
     .input(blockUserSchema)
     .output(messageResponseSchema),
@@ -85,8 +85,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'DELETE',
       path: '/block/:userId',
-      summary: 'Unblock user',
-      description: 'Unblock a previously blocked user',
+      summary: 'Desbloquear usuário',
+      description: 'Desbloqueia um usuário previamente bloqueado',
     })
     .output(messageResponseSchema),
 
@@ -94,8 +94,8 @@ export const moderation = oc.prefix('/moderation').router({
     .route({
       method: 'GET',
       path: '/blocked',
-      summary: 'Get blocked users',
-      description: 'Get list of blocked users',
+      summary: 'Obter usuários bloqueados',
+      description: 'Obtém lista de usuários bloqueados',
     })
     .output(reportsListResponseSchema),
 })
