@@ -8,9 +8,16 @@ export interface MessageRepository {
     page: number,
     limit: number
   ): Promise<PaginateResult<MessageProps>>
+  searchByContent(
+    query: string,
+    chatId: string | undefined,
+    page: number,
+    limit: number
+  ): Promise<PaginateResult<MessageProps>>
   save(message: MessageProps): Promise<MessageProps>
   update(message: MessageProps): Promise<MessageProps>
   delete(id: string): Promise<void>
   markAsRead(messageId: string): Promise<void>
   countUnreadByUserId(userId: string): Promise<number>
+  countUnreadByChatIds(chatIds: string[]): Promise<Array<{ chatId: string; unreadCount: number }>>
 }

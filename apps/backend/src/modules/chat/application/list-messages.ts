@@ -1,6 +1,9 @@
-import type { ChatParticipantRepository, MessageRepository } from '@/modules/chat/domain/repositories'
-import type { MessageProps } from '@/modules/chat/domain/entities'
 import type { PaginateResult } from '@/utils/paginate'
+import type { MessageProps } from '@/modules/chat/domain/entities'
+import type {
+  MessageRepository,
+  ChatParticipantRepository,
+} from '@/modules/chat/domain/repositories'
 
 import { forbidden } from '@repo/service-core'
 

@@ -3,9 +3,9 @@ import type { MessageProps } from '@/modules/chat/domain/entities'
 import type { MessageRepository } from '@/modules/chat/domain/repositories'
 
 import { db } from '@/core/infra/db'
-import { eq, desc } from 'drizzle-orm'
 import { paginate } from '@/utils/paginate'
 import { messages } from '@/core/infra/db/schema'
+import { eq, desc, count, ilike, inArray } from 'drizzle-orm'
 import { MessageMapper } from '@/modules/chat/infrastructure/mappers'
 
 export class DrizzleMessageRepository implements MessageRepository {
@@ -61,9 +61,54 @@ export class DrizzleMessageRepository implements MessageRepository {
     await db.update(messages).set({ status: 'READ' }).where(eq(messages.id, messageId))
   }
 
+  async searchByContent(
+    query: string,
+    chatId: string | undefined,
+    page: number,
+    limit: number
+  ): Promise<PaginateResult<MessageProps>> {
+    let dbQuery = db
+      .select()
+      .from(messages)
+      .where(ilike(messages.content, `%${query}%`))
+      .orderBy(desc(messages.createdAt))
+      .$dynamic()
+
+    if (chatId) {
+      dbQuery = dbQuery.where(eq(messages.chatId, chatId))
+    }
+
+    const result = await paginate(dbQuery, page, limit)
+
+    return {
+      data: result.data.map(MessageMapper.toDomain),
+      meta: result.meta,
+    }
+  }
+
   async countUnreadByUserId(userId: string): Promise<number> {
     // Este método precisaria de uma tabela de leitura de mensagens
     // Por simplicidade, vamos retornar 0 por enquanto
     return 0
+  }
+
+  async countUnreadByChatIds(
+    chatIds: string[]
+  ): Promise<Array<{ chatId: string; unreadCount: number }>> {
+    if (chatIds.length === 0) return []
+
+    const result = await db
+      .select({
+        chatId: messages.chatId,
+        unreadCount: count(),
+      })
+      .from(messages)
+      .where(inArray(messages.chatId, chatIds))
+      .groupBy(messages.chatId)
+
+    return result.map((r) => ({
+      chatId: r.chatId,
+      unreadCount: r.unreadCount,
+    }))
   }
 }

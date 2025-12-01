@@ -1,3 +1,7 @@
 export * from './chat-mapper'
 export * from './message-mapper'
+export * from './reaction-mapper'
+export * from './chat-settings-mapper'
+export * from './pinned-message-mapper'
 export * from './chat-participant-mapper'
+export * from './group-permissions-mapper'

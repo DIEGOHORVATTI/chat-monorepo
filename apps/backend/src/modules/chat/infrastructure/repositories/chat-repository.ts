@@ -1,11 +1,11 @@
 import type { PaginateResult } from '@/utils/paginate'
-import type { ChatProps } from '@/modules/chat/domain/entities'
 import type { ChatRepository } from '@/modules/chat/domain/repositories'
+import type { ChatType, ChatProps } from '@/modules/chat/domain/entities'
 
 import { db } from '@/core/infra/db'
 import { paginate } from '@/utils/paginate'
-import { eq, and, inArray } from 'drizzle-orm'
 import { chats } from '@/core/infra/db/schema'
+import { eq, and, ilike, inArray } from 'drizzle-orm'
 import { ChatMapper } from '@/modules/chat/infrastructure/mappers'
 
 export class DrizzleChatRepository implements ChatRepository {
@@ -69,6 +69,30 @@ export class DrizzleChatRepository implements ChatRepository {
 
   async delete(id: string): Promise<void> {
     await db.delete(chats).where(eq(chats.id, id))
+  }
+
+  async searchByName(
+    query: string,
+    type: ChatType | undefined,
+    page: number,
+    limit: number
+  ): Promise<PaginateResult<ChatProps>> {
+    let dbQuery = db
+      .select()
+      .from(chats)
+      .where(ilike(chats.name, `%${query}%`))
+      .$dynamic()
+
+    if (type) {
+      dbQuery = dbQuery.where(eq(chats.type, type))
+    }
+
+    const result = await paginate(dbQuery, page, limit)
+
+    return {
+      data: result.data.map(ChatMapper.toDomain),
+      meta: result.meta,
+    }
   }
 
   async updateLastMessageAt(chatId: string, timestamp: Date): Promise<void> {

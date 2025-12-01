@@ -1,3 +1,7 @@
 export * from './chat'
 export * from './message'
+export * from './reaction'
+export * from './chat-settings'
+export * from './pinned-message'
 export * from './chat-participant'
+export * from './group-permissions'
