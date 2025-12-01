@@ -279,6 +279,42 @@ export interface CallParticipantMediaChangedEvent extends BaseWebSocketMessage {
   }
 }
 
+export interface NotificationReceivedEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.NOTIFICATION_RECEIVED
+  data: {
+    notificationId: string
+    type:
+      | 'new_message'
+      | 'mention'
+      | 'new_participant'
+      | 'participant_left'
+      | 'call_missed'
+      | 'call_incoming'
+      | 'reaction'
+      | 'pin_message'
+    title: string
+    body: string
+    data?: Record<string, unknown>
+    createdAt: Date
+  }
+}
+
+export interface NotificationReadEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.NOTIFICATION_READ
+  data: {
+    notificationIds: string[]
+    readAt: Date
+  }
+}
+
+export interface NotificationDeletedEvent extends BaseWebSocketMessage {
+  event: WebSocketEventType.NOTIFICATION_DELETED
+  data: {
+    notificationId: string
+    deletedAt: Date
+  }
+}
+
 export interface ConnectionAckEvent extends BaseWebSocketMessage {
   event: WebSocketEventType.CONNECTION_ACK
   data: {
@@ -340,3 +376,6 @@ export type WebSocketEvent =
   | CallParticipantJoinedEvent
   | CallParticipantLeftEvent
   | CallParticipantMediaChangedEvent
+  | NotificationReceivedEvent
+  | NotificationReadEvent
+  | NotificationDeletedEvent

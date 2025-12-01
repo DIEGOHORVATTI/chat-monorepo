@@ -29,6 +29,11 @@ export enum WebSocketEventType {
   CALL_PARTICIPANT_LEFT = 'CALL_PARTICIPANT_LEFT',
   CALL_PARTICIPANT_MEDIA_CHANGED = 'CALL_PARTICIPANT_MEDIA_CHANGED',
 
+  // Notification events
+  NOTIFICATION_RECEIVED = 'NOTIFICATION_RECEIVED',
+  NOTIFICATION_READ = 'NOTIFICATION_READ',
+  NOTIFICATION_DELETED = 'NOTIFICATION_DELETED',
+
   CONNECTION_ACK = 'CONNECTION_ACK',
   RECONNECT = 'RECONNECT',
   SYNC_MISSED_EVENTS = 'SYNC_MISSED_EVENTS',
@@ -355,6 +360,43 @@ export const callParticipantMediaChangedEventSchema = baseWebSocketMessageSchema
   }),
 })
 
+export const notificationReceivedEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.NOTIFICATION_RECEIVED),
+  data: z.object({
+    notificationId: z.string().uuid(),
+    type: z.enum([
+      'new_message',
+      'mention',
+      'new_participant',
+      'participant_left',
+      'call_missed',
+      'call_incoming',
+      'reaction',
+      'pin_message',
+    ]),
+    title: z.string(),
+    body: z.string(),
+    data: z.record(z.string(), z.unknown()).optional(),
+    createdAt: z.coerce.date(),
+  }),
+})
+
+export const notificationReadEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.NOTIFICATION_READ),
+  data: z.object({
+    notificationIds: z.array(z.string().uuid()),
+    readAt: z.coerce.date(),
+  }),
+})
+
+export const notificationDeletedEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.NOTIFICATION_DELETED),
+  data: z.object({
+    notificationId: z.string().uuid(),
+    deletedAt: z.coerce.date(),
+  }),
+})
+
 export const webSocketEventSchema = z.discriminatedUnion('event', [
   joinChatEventSchema,
   leaveChatEventSchema,
@@ -388,4 +430,7 @@ export const webSocketEventSchema = z.discriminatedUnion('event', [
   callParticipantJoinedEventSchema,
   callParticipantLeftEventSchema,
   callParticipantMediaChangedEventSchema,
+  notificationReceivedEventSchema,
+  notificationReadEventSchema,
+  notificationDeletedEventSchema,
 ])
