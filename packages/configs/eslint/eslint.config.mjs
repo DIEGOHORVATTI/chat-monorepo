@@ -258,6 +258,11 @@ export default [
         ...globals.browser,
         ...globals.node
       },
+      parserOptions: {
+        // Define o diretório raiz do tsconfig para evitar ambiguidade em monorepos
+        // Usa o diretório atual onde o ESLint está sendo executado (ex.: apps/frontend)
+        tsconfigRootDir: process.cwd(),
+      },
     },
     settings: { react: { version: 'detect' } },
   },
