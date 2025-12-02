@@ -18,6 +18,11 @@ export const paginationSchema = z.object({
   limit: z.number().min(1).max(100).default(10),
 }) satisfies z.ZodType<PaginationQuery>
 
+// Generic message response schema used across modules
+export const messageResponseSchema = z.object({
+  message: z.string(),
+})
+
 /**
  * Helper to create a schema validator from Zod schema
  * This abstraction makes it easier to swap Zod for another library

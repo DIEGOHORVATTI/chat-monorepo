@@ -1,45 +1,305 @@
 import { oc } from '@orpc/contract'
+import { z } from 'zod'
 
 import {
-  sendMessageSchema,
-  updateMessageSchema,
-  deleteMessageSchema,
-  markMessageAsReadSchema,
-  messagesQuerySchema,
-  chatMessageResponseSchema,
-  chatMessagesListResponseSchema,
-  createChatSchema,
-  chatQuerySchema,
-  chatResponseSchema,
-  chatsListResponseSchema,
-  addParticipantsSchema,
-  removeParticipantSchema,
-  updateChatSchema,
-  chatParticipantsResponseSchema,
-  typingIndicatorSchema,
-  searchMessagesQuerySchema,
-  searchChatsQuerySchema,
-  searchUsersQuerySchema,
-  addReactionSchema,
-  removeReactionSchema,
-  pinMessageSchema,
-  unpinMessageSchema,
-  updateParticipantRoleSchema,
-  updateChatSettingsSchema,
-  reactionsResponseSchema,
-  chatSettingsResponseSchema,
-  usersSearchResponseSchema,
-  sendVoiceMessageSchema,
-  forwardMessageSchema,
-  forwardMessageResponseSchema,
-  updateGroupPermissionsSchema,
-  groupPermissionsResponseSchema,
-  generateLinkPreviewSchema,
-  linkPreviewResponseSchema,
-  leaveChatSchema,
-  unreadCountResponseSchema,
-} from './chat.schema'
-import { messageResponseSchema as baseMessageResponseSchema } from '../identity/identity.schema'
+  meta,
+  paginationSchema,
+  messageResponseSchema as baseMessageResponseSchema,
+} from '../shared/base.schema'
+
+enum MessageType {
+  TEXT = 'TEXT',
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
+  AUDIO = 'AUDIO',
+  FILE = 'FILE',
+  VOICE = 'VOICE',
+  LOCATION = 'LOCATION',
+}
+
+enum MessageStatus {
+  SENT = 'SENT',
+  DELIVERED = 'DELIVERED',
+  READ = 'READ',
+  FAILED = 'FAILED',
+}
+
+enum ChatType {
+  DIRECT = 'DIRECT',
+  GROUP = 'GROUP',
+}
+
+const messageSchema = z.object({
+  id: z.uuid(),
+  chatId: z.uuid(),
+  senderId: z.uuid(),
+  content: z.string(),
+  type: z.enum(MessageType),
+  status: z.enum(MessageStatus),
+  replyToId: z.uuid().nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  deletedAt: z.date().nullable().optional(),
+})
+
+const chatSchema = z.object({
+  id: z.uuid(),
+  type: z.enum(ChatType),
+  name: z.string().nullable().optional(),
+  avatarUrl: z.url().nullable().optional(),
+  participantIds: z.array(z.uuid()),
+  createdBy: z.uuid(),
+  lastMessageAt: z.date().nullable().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
+
+const chatParticipantSchema = z.object({
+  id: z.uuid(),
+  chatId: z.uuid(),
+  userId: z.uuid(),
+  role: z.enum(['admin', 'member']),
+  joinedAt: z.date(),
+  leftAt: z.date().nullable().optional(),
+})
+
+export const createChatSchema = z.object({
+  type: z.enum(ChatType),
+  name: z.string().min(1).max(100).optional(),
+  participantIds: z.array(z.uuid()).min(1),
+})
+
+export const sendMessageSchema = z.object({
+  chatId: z.uuid(),
+  content: z.string().min(1),
+  type: z.enum(MessageType).default(MessageType.TEXT),
+  replyToId: z.uuid().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
+
+export const updateMessageSchema = z.object({
+  messageId: z.uuid(),
+  content: z.string().min(1),
+})
+
+export const deleteMessageSchema = z.object({
+  messageId: z.uuid(),
+})
+
+export const markMessageAsReadSchema = z.object({
+  messageId: z.uuid(),
+})
+
+export const chatQuerySchema = paginationSchema.extend({
+  type: z.enum(ChatType).optional(),
+})
+
+export const messagesQuerySchema = paginationSchema.extend({
+  chatId: z.uuid(),
+  before: z.date().optional(),
+  after: z.date().optional(),
+})
+
+export const addParticipantsSchema = z.object({
+  chatId: z.uuid(),
+  participantIds: z.array(z.uuid()).min(1),
+})
+
+export const removeParticipantSchema = z.object({
+  chatId: z.uuid(),
+  participantId: z.uuid(),
+})
+
+export const updateChatSchema = z.object({
+  chatId: z.uuid(),
+  name: z.string().min(1).max(100).optional(),
+  avatarUrl: z.url().optional(),
+})
+
+export const typingIndicatorSchema = z.object({
+  chatId: z.uuid(),
+  isTyping: z.boolean(),
+})
+
+export const searchMessagesQuerySchema = paginationSchema.extend({
+  query: z.string().min(1),
+  chatId: z.uuid().optional(),
+  fromDate: z.date().optional(),
+  toDate: z.date().optional(),
+})
+
+export const searchChatsQuerySchema = paginationSchema.extend({
+  query: z.string().min(1),
+  type: z.enum(ChatType).optional(),
+})
+
+export const searchUsersQuerySchema = paginationSchema.extend({
+  query: z.string().min(1),
+  excludeBlocked: z.boolean().optional(),
+})
+
+const reactionSchema = z.object({
+  id: z.uuid(),
+  messageId: z.uuid(),
+  userId: z.uuid(),
+  emoji: z.string(),
+  createdAt: z.date(),
+})
+
+export const addReactionSchema = z.object({
+  messageId: z.uuid(),
+  emoji: z.string().min(1).max(10),
+})
+
+export const removeReactionSchema = z.object({
+  messageId: z.uuid(),
+  reactionId: z.uuid(),
+})
+
+export const pinMessageSchema = z.object({
+  messageId: z.uuid(),
+  chatId: z.uuid(),
+})
+
+export const unpinMessageSchema = z.object({
+  messageId: z.uuid(),
+  chatId: z.uuid(),
+})
+
+export const updateParticipantRoleSchema = z.object({
+  chatId: z.uuid(),
+  participantId: z.uuid(),
+  role: z.enum(['admin', 'member']),
+})
+
+const chatSettingsSchema = z.object({
+  description: z.string().optional(),
+  rules: z.string().optional(),
+  allowMemberInvites: z.boolean(),
+  allowMemberMessages: z.boolean(),
+  muteNotifications: z.boolean(),
+})
+
+export const updateChatSettingsSchema = z.object({
+  chatId: z.uuid(),
+  settings: chatSettingsSchema.partial(),
+})
+
+export const chatMessageResponseSchema = z.object({
+  message: messageSchema,
+})
+
+export const chatMessagesListResponseSchema = z.object({
+  messages: z.array(messageSchema),
+  meta,
+})
+
+export const chatResponseSchema = z.object({
+  chat: chatSchema,
+})
+
+export const chatsListResponseSchema = z.object({
+  chats: z.array(chatSchema),
+  meta,
+})
+
+export const chatParticipantsResponseSchema = z.object({
+  participants: z.array(chatParticipantSchema),
+})
+
+export const reactionsResponseSchema = z.object({
+  reactions: z.array(reactionSchema),
+})
+
+export const chatSettingsResponseSchema = z.object({
+  settings: chatSettingsSchema,
+})
+
+const userSearchResultSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  email: z.email(),
+  avatarUrl: z.url().nullable().optional(),
+  isOnline: z.boolean(),
+})
+
+export const usersSearchResponseSchema = z.object({
+  users: z.array(userSearchResultSchema),
+  meta,
+})
+
+export const sendVoiceMessageSchema = z.object({
+  chatId: z.uuid(),
+  audioUrl: z.url(),
+  duration: z.number().positive(),
+  waveform: z.array(z.number()).optional(),
+})
+
+export const forwardMessageSchema = z.object({
+  messageId: z.uuid(),
+  toChatIds: z.array(z.uuid()).min(1),
+})
+
+export const forwardMessageResponseSchema = z.object({
+  forwardedMessages: z.array(messageSchema),
+  meta,
+})
+
+const groupPermissionsSchema = z.object({
+  canSendMessages: z.boolean(),
+  canAddMembers: z.boolean(),
+  canRemoveMembers: z.boolean(),
+  canEditGroupInfo: z.boolean(),
+  canPinMessages: z.boolean(),
+  canDeleteMessages: z.boolean(),
+})
+
+export const updateGroupPermissionsSchema = z.object({
+  chatId: z.uuid(),
+  permissions: groupPermissionsSchema.partial(),
+})
+
+export const groupPermissionsResponseSchema = z.object({
+  permissions: groupPermissionsSchema,
+  meta,
+})
+
+const linkPreviewSchema = z.object({
+  url: z.url(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  image: z.url().optional(),
+  siteName: z.string().optional(),
+})
+
+export const generateLinkPreviewSchema = z.object({
+  url: z.url(),
+})
+
+export const linkPreviewResponseSchema = z.object({
+  preview: linkPreviewSchema,
+  meta,
+})
+
+export const leaveChatSchema = z.object({
+  chatId: z.uuid(),
+})
+
+const unreadCountSchema = z.object({
+  total: z.number(),
+  chats: z.array(
+    z.object({
+      chatId: z.uuid(),
+      unreadCount: z.number(),
+    })
+  ),
+})
+
+export const unreadCountResponseSchema = z.object({
+  unreadCount: unreadCountSchema,
+  meta,
+})
 
 const prefix = oc.route({ tags: ['Chat'] })
 

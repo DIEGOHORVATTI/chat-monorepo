@@ -23,7 +23,7 @@ import {
   reportCallQualitySchema,
   callStatisticsResponseSchema,
 } from './calls.schema'
-import { messageResponseSchema } from '../identity/identity.schema'
+import { messageResponseSchema } from '../../shared/base.schema'
 
 const prefix = oc.route({ tags: ['Calls'] })
 

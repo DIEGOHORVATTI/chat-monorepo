@@ -1,5 +1,5 @@
 import { oc } from '@orpc/contract'
-import { messageResponseSchema } from '../identity/identity.schema'
+import { messageResponseSchema } from '../../shared/base.schema'
 import {
   uploadFileSchema,
   generateThumbnailSchema,
