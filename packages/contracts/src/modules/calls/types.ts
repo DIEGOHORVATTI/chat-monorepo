@@ -123,20 +123,23 @@ export interface WebRTCIceCandidate {
 }
 
 export interface CallResponse {
-  call: Call
+  data: Call
+  meta: Meta
 }
 
 export interface CallsListResponse {
-  calls: Call[]
+  data: Call[]
   meta: Meta
 }
 
 export interface CallParticipantResponse {
-  participant: CallParticipant
+  data: CallParticipant
+  meta: Meta
 }
 
 export interface CallParticipantsResponse {
-  participants: CallParticipant[]
+  data: CallParticipant[]
+  meta: Meta
 }
 
 export interface WebRTCSignalingResponse {
@@ -172,11 +175,12 @@ export interface CallRecordingsQuery extends PaginationQuery {
 }
 
 export interface RecordingResponse {
-  recording: CallRecording
+  data: CallRecording
+  meta: Meta
 }
 
 export interface RecordingsListResponse {
-  recordings: CallRecording[]
+  data: CallRecording[]
   meta: Meta
 }
 
@@ -207,6 +211,6 @@ export interface CallStatistics {
 }
 
 export interface CallStatisticsResponse {
-  statistics: CallStatistics
+  data: CallStatistics
   meta: Meta
 }

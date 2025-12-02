@@ -10,6 +10,15 @@ enum UserStatus {
   OFFLINE = 'OFFLINE',
 }
 
+export type EncodedJWTUser = {
+  id: string
+  email: string
+  name: string
+  permissions: string[]
+  exp?: number
+  iat?: number
+}
+
 const privacyVisibility = z.enum(['everyone', 'contacts', 'contacts_except', 'nobody'])
 
 const userSchema = z.object({

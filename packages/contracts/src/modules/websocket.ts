@@ -1,19 +1,87 @@
 import { oc } from '@orpc/contract'
-import {
-  joinChatEventSchema,
-  leaveChatEventSchema,
-  typingStartEventSchema,
-  typingStopEventSchema,
-  messageSendEventSchema,
-  messageReadEventSchema,
-  messageReceivedEventSchema,
-  messageStatusChangedEventSchema,
-  userTypingEventSchema,
-  connectionAckEventSchema,
-  pingEventSchema,
-  pongEventSchema,
-  WebSocketEventType,
-} from './websocket.schema'
+import { z } from 'zod'
+
+enum MessageType {
+  TEXT = 'TEXT',
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
+  AUDIO = 'AUDIO',
+  FILE = 'FILE',
+  VOICE = 'VOICE',
+  LOCATION = 'LOCATION',
+}
+
+enum MessageStatus {
+  SENT = 'SENT',
+  DELIVERED = 'DELIVERED',
+  READ = 'READ',
+  FAILED = 'FAILED',
+}
+
+enum WebSocketEventType {
+  JOIN_CHAT = 'JOIN_CHAT',
+  LEAVE_CHAT = 'LEAVE_CHAT',
+  TYPING_START = 'TYPING_START',
+  TYPING_STOP = 'TYPING_STOP',
+  MESSAGE_SEND = 'MESSAGE_SEND',
+  MESSAGE_READ = 'MESSAGE_READ',
+
+  MESSAGE_RECEIVED = 'MESSAGE_RECEIVED',
+  MESSAGE_UPDATED = 'MESSAGE_UPDATED',
+  MESSAGE_DELETED = 'MESSAGE_DELETED',
+  MESSAGE_STATUS_CHANGED = 'MESSAGE_STATUS_CHANGED',
+  MESSAGE_DELIVERED = 'MESSAGE_DELIVERED',
+  MESSAGE_SEEN = 'MESSAGE_SEEN',
+  USER_TYPING = 'USER_TYPING',
+  USER_ONLINE = 'USER_ONLINE',
+  USER_OFFLINE = 'USER_OFFLINE',
+  CHAT_UPDATED = 'CHAT_UPDATED',
+  PARTICIPANT_JOINED = 'PARTICIPANT_JOINED',
+  PARTICIPANT_LEFT = 'PARTICIPANT_LEFT',
+
+  CALL_INCOMING = 'CALL_INCOMING',
+  CALL_STARTED = 'CALL_STARTED',
+  CALL_ENDED = 'CALL_ENDED',
+  CALL_PARTICIPANT_JOINED = 'CALL_PARTICIPANT_JOINED',
+  CALL_PARTICIPANT_LEFT = 'CALL_PARTICIPANT_LEFT',
+  CALL_PARTICIPANT_MEDIA_CHANGED = 'CALL_PARTICIPANT_MEDIA_CHANGED',
+
+  NOTIFICATION_RECEIVED = 'NOTIFICATION_RECEIVED',
+  NOTIFICATION_READ = 'NOTIFICATION_READ',
+  NOTIFICATION_DELETED = 'NOTIFICATION_DELETED',
+
+  CONNECTION_ACK = 'CONNECTION_ACK',
+  RECONNECT = 'RECONNECT',
+  SYNC_MISSED_EVENTS = 'SYNC_MISSED_EVENTS',
+  ERROR = 'ERROR',
+  PING = 'PING',
+  PONG = 'PONG',
+}
+
+const baseWebSocketMessageSchema = z.object({
+  event: z.enum(WebSocketEventType),
+  timestamp: z.date(),
+  requestId: z.uuid().optional(),
+})
+
+const userTypingEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.USER_TYPING),
+  data: z.object({
+    chatId: z.uuid(),
+    userId: z.uuid(),
+    userName: z.string(),
+    isTyping: z.boolean(),
+  }),
+})
+
+const connectionAckEventSchema = baseWebSocketMessageSchema.extend({
+  event: z.literal(WebSocketEventType.CONNECTION_ACK),
+  data: z.object({
+    userId: z.uuid(),
+    sessionId: z.uuid(),
+    connectedAt: z.date(),
+  }),
+})
 
 const prefix = oc.route({ tags: ['WebSocket'] })
 
@@ -48,7 +116,14 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Entrar na sala de chat',
       description: 'Inscreve-se em um chat específico para atualizações em tempo real',
     })
-    .input(joinChatEventSchema)
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.JOIN_CHAT),
+        data: z.object({
+          chatId: z.uuid(),
+        }),
+      })
+    )
     .output(connectionAckEventSchema),
 
   leaveChat: prefix
@@ -58,7 +133,14 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Sair da sala de chat',
       description: 'Cancela inscrição de um chat específico',
     })
-    .input(leaveChatEventSchema)
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.LEAVE_CHAT),
+        data: z.object({
+          chatId: z.uuid(),
+        }),
+      })
+    )
     .output(connectionAckEventSchema),
 
   startTyping: prefix
@@ -68,7 +150,14 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Iniciar indicador de digitação',
       description: 'Notifica outros participantes que o usuário começou a digitar',
     })
-    .input(typingStartEventSchema)
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.TYPING_START),
+        data: z.object({
+          chatId: z.uuid(),
+        }),
+      })
+    )
     .output(userTypingEventSchema),
 
   stopTyping: prefix
@@ -78,7 +167,14 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Parar indicador de digitação',
       description: 'Notifica outros participantes que o usuário parou de digitar',
     })
-    .input(typingStopEventSchema)
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.TYPING_STOP),
+        data: z.object({
+          chatId: z.uuid(),
+        }),
+      })
+    )
     .output(userTypingEventSchema),
 
   sendMessage: prefix
@@ -88,8 +184,36 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Enviar mensagem via WebSocket',
       description: 'Envia uma nova mensagem em tempo real',
     })
-    .input(messageSendEventSchema)
-    .output(messageReceivedEventSchema),
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.MESSAGE_SEND),
+        data: z.object({
+          chatId: z.uuid(),
+          content: z.string().min(1),
+          type: z.enum(MessageType).default(MessageType.TEXT),
+          replyToId: z.uuid().optional(),
+          metadata: z.record(z.string(), z.unknown()).optional(),
+        }),
+      })
+    )
+    .output(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.MESSAGE_RECEIVED),
+        data: z.object({
+          messageId: z.uuid(),
+          chatId: z.uuid(),
+          senderId: z.uuid(),
+          senderName: z.string(),
+          senderAvatar: z.url().nullable().optional(),
+          content: z.string(),
+          type: z.enum(MessageType),
+          status: z.enum(MessageStatus),
+          replyToId: z.uuid().nullable().optional(),
+          metadata: z.record(z.string(), z.unknown()).optional(),
+          createdAt: z.date(),
+        }),
+      })
+    ),
 
   markAsRead: prefix
     .route({
@@ -98,8 +222,33 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Marcar mensagem como lida',
       description: 'Atualiza status da mensagem para lida e notifica o remetente',
     })
-    .input(messageReadEventSchema)
-    .output(messageStatusChangedEventSchema),
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.MESSAGE_READ),
+        data: z.object({
+          messageId: z.uuid(),
+          chatId: z.uuid(),
+        }),
+      })
+    )
+    .output(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.MESSAGE_STATUS_CHANGED),
+        data: z.object({
+          messageId: z.uuid(),
+          chatId: z.uuid(),
+          status: z.enum(MessageStatus),
+          readBy: z
+            .array(
+              z.object({
+                userId: z.uuid(),
+                readAt: z.date(),
+              })
+            )
+            .optional(),
+        }),
+      })
+    ),
 
   ping: prefix
     .route({
@@ -108,8 +257,22 @@ export const websocket = oc.prefix('/ws').router({
       summary: 'Ping no servidor',
       description: 'Envia heartbeat para manter conexão ativa',
     })
-    .input(pingEventSchema)
-    .output(pongEventSchema),
+    .input(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.PING),
+        data: z.object({}).optional(),
+      })
+    )
+    .output(
+      baseWebSocketMessageSchema.extend({
+        event: z.literal(WebSocketEventType.PONG),
+        data: z
+          .object({
+            latency: z.number().optional(),
+          })
+          .optional(),
+      })
+    ),
 })
 
 /**
@@ -150,7 +313,7 @@ export const websocket = oc.prefix('/ws').router({
  * - PONG: Response to ping
  *
  */
-export const websocketEvents = {
+const websocketEvents = {
   types: WebSocketEventType,
 
   clientEvents: [
