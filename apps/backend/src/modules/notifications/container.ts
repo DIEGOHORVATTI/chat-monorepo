@@ -18,11 +18,9 @@ import {
 } from '@/modules/notifications/application'
 
 export const createNotificationsContainer = (db: NodePgDatabase) => {
-  // Repositories
   const notificationRepository = new DrizzleNotificationRepository(db)
   const settingsRepository = new DrizzleNotificationSettingsRepository(db)
 
-  // Use Cases
   return {
     createNotification: makeCreateNotification(
       notificationRepository,
