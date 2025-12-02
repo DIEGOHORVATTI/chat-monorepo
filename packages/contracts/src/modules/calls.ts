@@ -1,39 +1,31 @@
 import { oc } from '@orpc/contract'
 import { z } from 'zod'
-import {
-  messageResponseSchema,
-  meta as metaSchema,
-  paginationSchema,
-} from '../../shared/base.schema'
-import type {
-  Call,
-  CallParticipant,
-  InitiateCall,
-  AnswerCall,
-  EndCall,
-  UpdateParticipantMedia,
-  AddParticipantsToCall,
-  CallRecording,
-  StartRecording,
-  StopRecording,
-  CallRecordingsQuery,
-  ReportCallQuality,
-  CallStatistics,
-  CallQuery,
-  CallHistoryQuery,
-  WebRTCOffer,
-  WebRTCAnswer,
-  WebRTCIceCandidate,
-  CallResponse,
-  CallsListResponse,
-  CallParticipantResponse,
-  CallParticipantsResponse,
-  WebRTCSignalingResponse,
-  RecordingResponse,
-  RecordingsListResponse,
-  CallStatisticsResponse,
-} from './types'
-import { CallType, CallStatus, ParticipantStatus, CallQualityIssue } from './types'
+import { messageResponseSchema, meta as metaSchema, paginationSchema } from '../shared/base.schema'
+
+enum CallType {
+  AUDIO = 'AUDIO',
+  VIDEO = 'VIDEO',
+}
+
+enum CallStatus {
+  RINGING = 'RINGING',
+  CONNECTING = 'CONNECTING',
+  CONNECTED = 'CONNECTED',
+  ENDED = 'ENDED',
+  MISSED = 'MISSED',
+  DECLINED = 'DECLINED',
+  FAILED = 'FAILED',
+  BUSY = 'BUSY',
+}
+
+enum ParticipantStatus {
+  INVITED = 'INVITED',
+  RINGING = 'RINGING',
+  JOINED = 'JOINED',
+  LEFT = 'LEFT',
+  DECLINED = 'DECLINED',
+  MISSED = 'MISSED',
+}
 
 const callParticipantSchema = z.object({
   id: z.uuid(),
@@ -47,7 +39,7 @@ const callParticipantSchema = z.object({
   isMuted: z.boolean().default(false),
   isVideoEnabled: z.boolean().default(false),
   isSharingScreen: z.boolean().default(false),
-}) satisfies z.ZodType<CallParticipant>
+})
 
 const callSchema = z.object({
   id: z.uuid(),
@@ -63,66 +55,66 @@ const callSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
-}) satisfies z.ZodType<Call>
+})
 
-export const initiateCallSchema = z.object({
+const initiateCallSchema = z.object({
   chatId: z.uuid().optional(),
   participantIds: z.array(z.uuid()).min(1),
   type: z.enum(CallType),
-}) satisfies z.ZodType<InitiateCall>
+})
 
-export const answerCallSchema = z.object({
+const answerCallSchema = z.object({
   callId: z.uuid(),
   accept: z.boolean(),
-}) satisfies z.ZodType<AnswerCall>
+})
 
-export const endCallSchema = z.object({
+const endCallSchema = z.object({
   callId: z.uuid(),
-}) satisfies z.ZodType<EndCall>
+})
 
-export const updateParticipantMediaSchema = z.object({
+const updateParticipantMediaSchema = z.object({
   callId: z.uuid(),
   isMuted: z.boolean().optional(),
   isVideoEnabled: z.boolean().optional(),
   isSharingScreen: z.boolean().optional(),
-}) satisfies z.ZodType<UpdateParticipantMedia>
+})
 
-export const addParticipantsToCallSchema = z.object({
+const addParticipantsToCallSchema = z.object({
   callId: z.uuid(),
   participantIds: z.array(z.uuid()).min(1),
-}) satisfies z.ZodType<AddParticipantsToCall>
+})
 
-export const callQuerySchema = paginationSchema.extend({
+const callQuerySchema = paginationSchema.extend({
   status: z.enum(CallStatus).optional(),
   type: z.enum(CallType).optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
-}) satisfies z.ZodType<CallQuery>
+})
 
-export const callHistoryQuerySchema = paginationSchema.extend({
+const callHistoryQuerySchema = paginationSchema.extend({
   chatId: z.uuid().optional(),
   type: z.enum(CallType).optional(),
-}) satisfies z.ZodType<CallHistoryQuery>
+})
 
-export const webRTCOfferSchema = z.object({
+const webRTCOfferSchema = z.object({
   callId: z.uuid(),
   targetUserId: z.uuid(),
   offer: z.object({
     type: z.literal('offer'),
     sdp: z.string(),
   }),
-}) satisfies z.ZodType<WebRTCOffer>
+})
 
-export const webRTCAnswerSchema = z.object({
+const webRTCAnswerSchema = z.object({
   callId: z.uuid(),
   targetUserId: z.uuid(),
   answer: z.object({
     type: z.literal('answer'),
     sdp: z.string(),
   }),
-}) satisfies z.ZodType<WebRTCAnswer>
+})
 
-export const webRTCIceCandidateSchema = z.object({
+const webRTCIceCandidateSchema = z.object({
   callId: z.uuid(),
   targetUserId: z.uuid().optional(),
   candidate: z.object({
@@ -130,32 +122,32 @@ export const webRTCIceCandidateSchema = z.object({
     sdpMid: z.string().nullable(),
     sdpMLineIndex: z.number().nullable(),
   }),
-}) satisfies z.ZodType<WebRTCIceCandidate>
+})
 
-export const callResponseSchema = z.object({
+const callResponseSchema = z.object({
   data: callSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<CallResponse>
+})
 
-export const callsListResponseSchema = z.object({
+const callsListResponseSchema = z.object({
   data: z.array(callSchema),
   meta: metaSchema,
-}) satisfies z.ZodType<CallsListResponse>
+})
 
-export const callParticipantResponseSchema = z.object({
+const callParticipantResponseSchema = z.object({
   data: callParticipantSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<CallParticipantResponse>
+})
 
-export const callParticipantsResponseSchema = z.object({
+const callParticipantsResponseSchema = z.object({
   data: z.array(callParticipantSchema),
   meta: metaSchema,
-}) satisfies z.ZodType<CallParticipantsResponse>
+})
 
-export const webRTCSignalingResponseSchema = z.object({
+const webRTCSignalingResponseSchema = z.object({
   success: z.boolean(),
   message: z.string().optional(),
-}) satisfies z.ZodType<WebRTCSignalingResponse>
+})
 
 const callRecordingSchema = z.object({
   id: z.uuid(),
@@ -167,39 +159,41 @@ const callRecordingSchema = z.object({
   fileSize: z.number().nullable().optional(),
   status: z.enum(['recording', 'processing', 'completed', 'failed']),
   createdAt: z.date(),
-}) satisfies z.ZodType<CallRecording>
+})
 
-export const startRecordingSchema = z.object({
+const startRecordingSchema = z.object({
   callId: z.uuid(),
-}) satisfies z.ZodType<StartRecording>
+})
 
-export const stopRecordingSchema = z.object({
+const stopRecordingSchema = z.object({
   callId: z.uuid(),
   recordingId: z.uuid(),
-}) satisfies z.ZodType<StopRecording>
+})
 
-export const callRecordingsQuerySchema = paginationSchema.extend({
+const callRecordingsQuerySchema = paginationSchema.extend({
   callId: z.uuid().optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
-}) satisfies z.ZodType<CallRecordingsQuery>
+})
 
-export const recordingResponseSchema = z.object({
+const recordingResponseSchema = z.object({
   data: callRecordingSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<RecordingResponse>
+})
 
-export const recordingsListResponseSchema = z.object({
+const recordingsListResponseSchema = z.object({
   data: z.array(callRecordingSchema),
   meta: metaSchema,
-}) satisfies z.ZodType<RecordingsListResponse>
+})
 
-export const reportCallQualitySchema = z.object({
+const reportCallQualitySchema = z.object({
   callId: z.uuid(),
   rating: z.number().min(1).max(5),
-  issues: z.array(z.enum(CallQualityIssue)).optional(),
+  issues: z
+    .array(z.enum(['AUDIO_ISSUES', 'VIDEO_ISSUES', 'CONNECTION_ISSUES', 'OTHER']))
+    .optional(),
   feedback: z.string().max(500).optional(),
-}) satisfies z.ZodType<ReportCallQuality>
+})
 
 const callStatisticsSchema = z.object({
   callId: z.uuid(),
@@ -209,12 +203,12 @@ const callStatisticsSchema = z.object({
   packetLoss: z.number(),
   jitter: z.number(),
   bitrate: z.number(),
-}) satisfies z.ZodType<CallStatistics>
+})
 
-export const callStatisticsResponseSchema = z.object({
+const callStatisticsResponseSchema = z.object({
   data: callStatisticsSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<CallStatisticsResponse>
+})
 
 const prefix = oc.route({ tags: ['Calls'] })
 

@@ -1,13 +1,6 @@
 import { oc } from '@orpc/contract'
 import { z } from 'zod'
-import { messageResponseSchema, metaSchema } from '../../shared/base.schema'
-import type {
-  MediaFile,
-  UploadFile,
-  GenerateThumbnail,
-  MediaFileResponse,
-  MediaFilesListResponse,
-} from './types'
+import { messageResponseSchema, metaSchema } from '../shared/base.schema'
 
 const mediaFileSchema = z.object({
   id: z.uuid(),
@@ -20,33 +13,12 @@ const mediaFileSchema = z.object({
   uploadedAt: z.coerce.date(),
   chatId: z.uuid().optional(),
   messageId: z.uuid().optional(),
-}) satisfies z.ZodType<MediaFile>
+})
 
-export const uploadFileSchema = z.object({
-  name: z.string().min(1).max(255),
-  mimeType: z.string(),
-  size: z
-    .number()
-    .positive()
-    .max(100 * 1024 * 1024),
-  chatId: z.uuid().optional(),
-}) satisfies z.ZodType<UploadFile>
-
-export const generateThumbnailSchema = z.object({
-  fileId: z.uuid(),
-  width: z.number().positive().max(1920).optional(),
-  height: z.number().positive().max(1920).optional(),
-}) satisfies z.ZodType<GenerateThumbnail>
-
-export const mediaFileResponseSchema = z.object({
+const mediaFileResponseSchema = z.object({
   data: mediaFileSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<MediaFileResponse>
-
-export const mediaFilesListResponseSchema = z.object({
-  data: z.array(mediaFileSchema),
-  meta: metaSchema,
-}) satisfies z.ZodType<MediaFilesListResponse>
+})
 
 const prefix = oc.route({ tags: ['Media'] })
 
@@ -58,7 +30,17 @@ export const media = oc.prefix('/media').router({
       summary: 'Fazer upload de arquivo',
       description: 'Faz upload de um arquivo de mídia (imagem, vídeo, áudio, documento)',
     })
-    .input(uploadFileSchema)
+    .input(
+      z.object({
+        name: z.string().min(1).max(255),
+        mimeType: z.string(),
+        size: z
+          .number()
+          .positive()
+          .max(100 * 1024 * 1024),
+        chatId: z.uuid().optional(),
+      })
+    )
     .output(mediaFileResponseSchema),
 
   getFile: prefix
@@ -86,7 +68,13 @@ export const media = oc.prefix('/media').router({
       summary: 'Gerar miniatura',
       description: 'Gera miniatura para um arquivo de imagem ou vídeo',
     })
-    .input(generateThumbnailSchema)
+    .input(
+      z.object({
+        fileId: z.uuid(),
+        width: z.number().positive().max(1920).optional(),
+        height: z.number().positive().max(1920).optional(),
+      })
+    )
     .output(mediaFileResponseSchema),
 
   getChatMedia: prefix
@@ -96,5 +84,5 @@ export const media = oc.prefix('/media').router({
       summary: 'Obter mídias do chat',
       description: 'Obtém todos os arquivos de mídia de um chat específico',
     })
-    .output(mediaFilesListResponseSchema),
+    .output(mediaFileResponseSchema),
 })
