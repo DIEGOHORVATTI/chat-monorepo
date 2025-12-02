@@ -1,5 +1,5 @@
 import { oc } from '@orpc/contract'
-import { messageResponseSchema } from '../identity/identity.schema'
+
 import {
   addContactSchema,
   acceptContactRequestSchema,
@@ -10,7 +10,10 @@ import {
   contactRequestResponseSchema,
   contactsListResponseSchema,
   contactRequestsListResponseSchema,
+  messageResponseSchema,
 } from './contacts.schema'
+
+import z from 'zod'
 
 const prefix = oc.route({ tags: ['Contacts'] })
 
@@ -52,6 +55,7 @@ export const contacts = oc.prefix('/contacts').router({
       summary: 'Remover contato',
       description: 'Remove um contato da sua lista',
     })
+    .input(z.object({ contactId: z.string().uuid() }))
     .output(messageResponseSchema),
 
   updateContact: prefix

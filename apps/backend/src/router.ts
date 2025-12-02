@@ -1,5 +1,6 @@
 import * as contactsRoutes from './modules/contacts/presentation/http/contacts-routes'
 import * as identityRoutes from './modules/identity/presentation/http/identity-routes'
+import * as notificationsRoutes from './modules/notifications/presentation/http/notifications-routes'
 
 export const router = {
   contacts: {
@@ -25,5 +26,15 @@ export const router = {
     changePassword: identityRoutes.changePasswordRoute,
     blockUser: identityRoutes.blockUserRoute,
     unblockUser: identityRoutes.unblockUserRoute,
+  },
+  notifications: {
+    getNotifications: notificationsRoutes.getNotificationsRoute,
+    markAsRead: notificationsRoutes.markAsReadRoute,
+    markAllAsRead: notificationsRoutes.markAllAsReadRoute,
+    getSettings: notificationsRoutes.getSettingsRoute,
+    updateSettings: notificationsRoutes.updateSettingsRoute,
+    muteChat: notificationsRoutes.muteChatRoute,
+    unmuteChat: notificationsRoutes.unmuteChatRoute,
+    getUnreadCount: notificationsRoutes.getUnreadCountRoute,
   },
 }

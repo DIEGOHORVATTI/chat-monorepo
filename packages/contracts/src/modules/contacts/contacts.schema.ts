@@ -1,18 +1,3 @@
-import type {
-  Contact,
-  ContactRequest,
-  AddContact,
-  AcceptContactRequest,
-  RejectContactRequest,
-  RemoveContact,
-  UpdateContact,
-  ContactsQuery,
-  ContactResponse,
-  ContactRequestResponse,
-  ContactsListResponse,
-  ContactRequestsListResponse,
-} from './types'
-
 import { z } from 'zod'
 import { metaSchema, paginationSchema } from '../../shared/base.schema'
 
@@ -26,7 +11,7 @@ const contactSchema = z.object({
   favorite: z.boolean(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-}) satisfies z.ZodType<Contact>
+})
 
 const contactRequestSchema = z.object({
   id: z.uuid(),
@@ -36,48 +21,53 @@ const contactRequestSchema = z.object({
   message: z.string().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-}) satisfies z.ZodType<ContactRequest>
+})
 
 export const addContactSchema = z.object({
   userId: z.uuid(),
   message: z.string().max(200).optional(),
-}) satisfies z.ZodType<AddContact>
+})
 
 export const acceptContactRequestSchema = z.object({
   requestId: z.uuid(),
-}) satisfies z.ZodType<AcceptContactRequest>
+})
 
 export const rejectContactRequestSchema = z.object({
   requestId: z.uuid(),
-}) satisfies z.ZodType<RejectContactRequest>
+})
 
 export const updateContactSchema = z.object({
   contactId: z.uuid(),
   nickname: z.string().min(1).max(50).optional(),
   favorite: z.boolean().optional(),
-}) satisfies z.ZodType<UpdateContact>
+})
 
 export const contactsQuerySchema = paginationSchema.extend({
   search: z.string().optional(),
   favorites: z.boolean().optional(),
-}) satisfies z.ZodType<ContactsQuery>
+})
 
 export const contactResponseSchema = z.object({
   data: contactSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<ContactResponse>
+})
 
 export const contactRequestResponseSchema = z.object({
   data: contactRequestSchema,
   meta: metaSchema,
-}) satisfies z.ZodType<ContactRequestResponse>
+})
 
 export const contactsListResponseSchema = z.object({
   data: z.array(contactSchema),
   meta: metaSchema,
-}) satisfies z.ZodType<ContactsListResponse>
+})
 
 export const contactRequestsListResponseSchema = z.object({
   data: z.array(contactRequestSchema),
   meta: metaSchema,
-}) satisfies z.ZodType<ContactRequestsListResponse>
+})
+
+export const messageResponseSchema = z.object({
+  message: z.string(),
+  meta: metaSchema,
+})

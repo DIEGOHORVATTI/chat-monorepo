@@ -1,112 +1,99 @@
-import type { NotificationsContainer } from '@/modules/notifications/container'
+import { auth } from '@repo/service-core'
+import {
+  muteChat,
+  markAsRead,
+  unmuteChat,
+  getSettings,
+  markAllAsRead,
+  updateSettings,
+  getUnreadCount,
+  getNotifications,
+} from '@notifications/di/container'
 
-export const createNotificationsRoutes = (container: NotificationsContainer) => ({
-  getNotifications: async ({ input, context }) => {
-    const {
-      page = 1,
-      limit = 20,
-      isRead,
-      type,
-    } = input as {
-      page?: number
-      limit?: number
-      isRead?: boolean
-      type?:
-        | 'new_message'
-        | 'mention'
-        | 'new_participant'
-        | 'participant_left'
-        | 'call_missed'
-        | 'call_incoming'
-        | 'reaction'
-        | 'pin_message'
-    }
-
-    const result = await container.getNotifications(context.user.id, page, limit, isRead, type)
+export const getNotificationsRoute = auth.notifications.getNotifications.handler(
+  async ({ input, context: { user } }) => {
+    const page = input.page ?? 1
+    const limit = input.limit ?? 20
+    const result = await getNotifications(user.id, page, limit, input.isRead, input.type)
 
     return {
       data: result.data,
       meta: result.meta,
     }
-  },
+  }
+)
 
-  markAsRead: async (input: unknown, context: ORPCContext) => {
-    const { notificationIds } = input as { notificationIds: string[] }
-
-    await container.markAsRead(context.user.id, notificationIds)
+export const markAsReadRoute = auth.notifications.markAsRead.handler(
+  async ({ input, context: { user } }) => {
+    await markAsRead(user.id, input.notificationIds)
 
     return {
       message: 'Notifications marked as read',
-      meta: { timestamp: new Date() },
     }
-  },
+  }
+)
 
-  markAllAsRead: async (_input, context: ORPCContext) => {
-    await container.markAllAsRead(context.user.id)
+export const markAllAsReadRoute = auth.notifications.markAllAsRead.handler(
+  async ({ context: { user } }) => {
+    await markAllAsRead(user.id)
 
     return {
       message: 'All notifications marked as read',
-      meta: { timestamp: new Date() },
     }
-  },
+  }
+)
 
-  getSettings: async (_input: unknown, context: ORPCContext) => {
-    const settings = await container.getSettings(context.user.id)
+export const getSettingsRoute = auth.notifications.getSettings.handler(
+  async ({ context: { user } }) => {
+    const settings = await getSettings(user.id)
 
     return {
       data: settings,
-      meta: { timestamp: new Date() },
+      meta: { total: 1, page: 1, limit: 1, pages: 1 },
     }
-  },
+  }
+)
 
-  updateSettings: async (input: unknown, context: ORPCContext) => {
-    const data = input as {
-      pushEnabled?: boolean
-      emailEnabled?: boolean
-      messageNotifications?: boolean
-      mentionNotifications?: boolean
-      callNotifications?: boolean
-      reactionNotifications?: boolean
-      muteAll?: boolean
-      mutedUntil?: Date
-    }
-
-    const settings = await container.updateSettings(context.user.id, data)
+export const updateSettingsRoute = auth.notifications.updateSettings.handler(
+  async ({ input, context: { user } }) => {
+    const settings = await updateSettings(user.id, input)
 
     return {
       data: settings,
-      meta: { timestamp: new Date() },
+      meta: { total: 1, page: 1, limit: 1, pages: 1 },
     }
-  },
+  }
+)
 
-  muteChat: async (input: unknown, context: ORPCContext) => {
+export const muteChatRoute = auth.notifications.muteChat.handler(
+  async ({ input, context: { user } }) => {
     const { chatId } = input as { chatId: string }
-
-    await container.muteChat(context.user.id, chatId)
+    await muteChat(user.id, chatId)
 
     return {
       message: 'Chat muted successfully',
-      meta: { timestamp: new Date() },
     }
-  },
+  }
+)
 
-  unmuteChat: async (input: unknown, context: ORPCContext) => {
+export const unmuteChatRoute = auth.notifications.unmuteChat.handler(
+  async ({ input, context: { user } }) => {
     const { chatId } = input as { chatId: string }
-
-    await container.unmuteChat(context.user.id, chatId)
+    await unmuteChat(user.id, chatId)
 
     return {
       message: 'Chat unmuted successfully',
-      meta: { timestamp: new Date() },
     }
-  },
+  }
+)
 
-  getUnreadCount: async (_input: unknown, context: ORPCContext) => {
-    const result = await container.getUnreadCount(context.user.id)
+export const getUnreadCountRoute = auth.notifications.getUnreadCount.handler(
+  async ({ context: { user } }) => {
+    const unread = await getUnreadCount(user.id)
 
     return {
-      unreadCount: result,
-      meta: { timestamp: new Date() },
+      unreadCount: unread,
+      meta: { total: 1, page: 1, limit: 1, pages: 1 },
     }
-  },
-})
+  }
+)

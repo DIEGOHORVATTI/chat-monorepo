@@ -14,7 +14,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@contacts/*": ["./src/modules/contacts/*"],
-      "@identity/*": ["./src/modules/identity/*"]
+      "@identity/*": ["./src/modules/identity/*"],
+      "@notifications/*": ["./src/modules/notifications/*"],
+      "@chat/*": ["./src/modules/chat/*"]
     }
   }
 }

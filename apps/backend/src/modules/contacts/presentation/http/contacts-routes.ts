@@ -15,12 +15,12 @@ export const addContactRoute = auth.contacts.addContact.handler(
     const contactRequest = await addContact(user.id, input)
 
     return {
-      contactRequest: {
+      data: {
         id: contactRequest.id,
         senderId: contactRequest.senderId,
         receiverId: contactRequest.receiverId,
         status: contactRequest.status,
-        message: contactRequest.message,
+        message: contactRequest.message ?? undefined,
         createdAt: contactRequest.createdAt,
         updatedAt: contactRequest.updatedAt,
       },
@@ -39,11 +39,11 @@ export const acceptContactRequestRoute = auth.contacts.acceptContactRequest.hand
     const contact = await acceptContactRequest(user.id, input.requestId)
 
     return {
-      contact: {
+      data: {
         id: contact.id,
         userId: contact.userId,
         contactId: contact.contactId,
-        nickname: contact.nickname,
+        nickname: contact.nickname ?? undefined,
         favorite: contact.favorite,
         createdAt: contact.createdAt,
         updatedAt: contact.updatedAt,
@@ -64,6 +64,7 @@ export const rejectContactRequestRoute = auth.contacts.rejectContactRequest.hand
 
     return {
       message: 'Contact request rejected successfully',
+      meta: { total: 1, page: 1, limit: 1, pages: 1 },
     }
   }
 )
@@ -74,6 +75,7 @@ export const removeContactRoute = auth.contacts.removeContact.handler(
 
     return {
       message: 'Contact removed successfully',
+      meta: { total: 1, page: 1, limit: 1, pages: 1 },
     }
   }
 )
@@ -83,11 +85,11 @@ export const updateContactRoute = auth.contacts.updateContact.handler(
     const contact = await updateContact(user.id, input.contactId, input)
 
     return {
-      contact: {
+      data: {
         id: contact.id,
         userId: contact.userId,
         contactId: contact.contactId,
-        nickname: contact.nickname,
+        nickname: contact.nickname ?? undefined,
         favorite: contact.favorite,
         createdAt: contact.createdAt,
         updatedAt: contact.updatedAt,
@@ -104,10 +106,25 @@ export const updateContactRoute = auth.contacts.updateContact.handler(
 
 export const listContactsRoute = auth.contacts.listContacts.handler(
   async ({ input, context: { user } }) => {
-    const result = await listContacts(user.id, input.page, input.limit)
+    const { page, limit } = input as {
+      page: number
+      limit: number
+      search?: string
+      favorites?: boolean
+    }
+
+    const result = await listContacts(user.id, page, limit)
 
     return {
-      contacts: result.data,
+      data: result.data.map((c) => ({
+        id: c.id,
+        userId: c.userId,
+        contactId: c.contactId,
+        favorite: c.favorite,
+        createdAt: c.createdAt,
+        updatedAt: c.updatedAt,
+        nickname: c.nickname ?? undefined,
+      })),
       meta: result.meta,
     }
   }
@@ -115,10 +132,25 @@ export const listContactsRoute = auth.contacts.listContacts.handler(
 
 export const listContactRequestsRoute = auth.contacts.listContactRequests.handler(
   async ({ input, context: { user } }) => {
-    const result = await listContactRequests(user.id, input.page, input.limit)
+    const { page, limit } = input as {
+      page: number
+      limit: number
+      search?: string
+      favorites?: boolean
+    }
+
+    const result = await listContactRequests(user.id, page, limit)
 
     return {
-      contactRequests: result.data,
+      data: result.data.map((cr) => ({
+        id: cr.id,
+        senderId: cr.senderId,
+        receiverId: cr.receiverId,
+        status: cr.status,
+        createdAt: cr.createdAt,
+        updatedAt: cr.updatedAt,
+        message: cr.message ?? undefined,
+      })),
       meta: result.meta,
     }
   }
@@ -126,10 +158,25 @@ export const listContactRequestsRoute = auth.contacts.listContactRequests.handle
 
 export const getSentRequestsRoute = auth.contacts.getSentRequests.handler(
   async ({ input, context: { user } }) => {
-    const result = await listSentRequests(user.id, input.page, input.limit)
+    const { page, limit } = input as {
+      page: number
+      limit: number
+      search?: string
+      favorites?: boolean
+    }
+
+    const result = await listSentRequests(user.id, page, limit)
 
     return {
-      contactRequests: result.data,
+      data: result.data.map((cr) => ({
+        id: cr.id,
+        senderId: cr.senderId,
+        receiverId: cr.receiverId,
+        status: cr.status,
+        createdAt: cr.createdAt,
+        updatedAt: cr.updatedAt,
+        message: cr.message ?? undefined,
+      })),
       meta: result.meta,
     }
   }
