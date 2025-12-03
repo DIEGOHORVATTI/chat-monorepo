@@ -1,13 +1,10 @@
-import { ENV } from '@repo/service-core'
 import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
-  schema: './src/core/infra/db/schema/index.ts',
+  schema: './src/modules/chat/infra/database/schema.ts',
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
-    url: ENV.DATABASE.POSTGRES_URL,
+    url: process.env.DATABASE_URL!,
   },
-  verbose: true,
-  strict: true,
 })

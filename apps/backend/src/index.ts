@@ -1,5 +1,3 @@
-import type { User } from '@/modules/identity/domain/entities'
-
 import { createServer } from 'node:http'
 import { ENV } from '@repo/service-core'
 import { PORT, VERSION } from '@/constants/config'
@@ -10,6 +8,7 @@ import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins'
 import { CORSPlugin, RequestHeadersPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins'
 
 import { router } from './router'
+import './websocket' // Inicia o servidor WebSocket
 
 const prefix = '/api'
 
@@ -42,7 +41,7 @@ const openAPIHandler = new OpenAPIHandler(router, {
 const server = createServer(async (req, res) => {
   const { matched } = await openAPIHandler.handle(req, res, {
     prefix,
-    context: { user: {} as User },
+    context: {}, // Contexto vazio, sem autenticação
   })
 
   if (!matched) {
@@ -56,7 +55,6 @@ server.listen(PORT, () => {
   console.log(`
 ───────────────────────────୨ৎ────────────────────────
 𖤍 Server: ${url}
-
 𖤍 Documentation: ${url}/docs
 ───────────────────────────୨ৎ────────────────────────
 `)

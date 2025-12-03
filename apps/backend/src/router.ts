@@ -1,40 +1,5 @@
-import * as contactsRoutes from './modules/contacts/presentation/http/contacts-routes'
-import * as identityRoutes from './modules/identity/presentation/http/identity-routes'
-import * as notificationsRoutes from './modules/notifications/presentation/http/notifications-routes'
+import { chatRoutes } from './modules/chat/presentation/http/chat-routes'
 
 export const router = {
-  contacts: {
-    addContact: contactsRoutes.addContactRoute,
-    acceptContactRequest: contactsRoutes.acceptContactRequestRoute,
-    rejectContactRequest: contactsRoutes.rejectContactRequestRoute,
-    removeContact: contactsRoutes.removeContactRoute,
-    updateContact: contactsRoutes.updateContactRoute,
-    listContacts: contactsRoutes.listContactsRoute,
-    listContactRequests: contactsRoutes.listContactRequestsRoute,
-    getSentRequests: contactsRoutes.getSentRequestsRoute,
-  },
-  identity: {
-    login: identityRoutes.loginRoute,
-    register: identityRoutes.registerRoute,
-    verifyEmail: identityRoutes.verifyEmailRoute,
-    resendVerification: identityRoutes.resendVerificationRoute,
-    logout: identityRoutes.logoutRoute,
-    me: identityRoutes.meRoute,
-    listUsers: identityRoutes.listUsersRoute,
-    getUserById: identityRoutes.getUserByIdRoute,
-    updateProfile: identityRoutes.updateProfileRoute,
-    changePassword: identityRoutes.changePasswordRoute,
-    blockUser: identityRoutes.blockUserRoute,
-    unblockUser: identityRoutes.unblockUserRoute,
-  },
-  notifications: {
-    getNotifications: notificationsRoutes.getNotificationsRoute,
-    markAsRead: notificationsRoutes.markAsReadRoute,
-    markAllAsRead: notificationsRoutes.markAllAsReadRoute,
-    getSettings: notificationsRoutes.getSettingsRoute,
-    updateSettings: notificationsRoutes.updateSettingsRoute,
-    muteChat: notificationsRoutes.muteChatRoute,
-    unmuteChat: notificationsRoutes.unmuteChatRoute,
-    getUnreadCount: notificationsRoutes.getUnreadCountRoute,
-  },
+  chat: chatRoutes,
 }
